@@ -6,6 +6,8 @@
 
 四份文献备忘录合计列出 40 项论文／数据集研究，以及 5 个官方模型卡和发布佐证。重心包括语言学风格与同质化、AI 来源检测及偏差、编辑与风格迁移、人类／LLM 评价、参数高效训练、偏好优化和行业写作实验。
 
+同日 follow-up 增加 literature-first 导读，并补齐首轮弱覆盖的 direct humanization prior art：DIPPER、HUMPA、CoPA 三篇论文，以及单列证据级别的社区 Unslopper model card。CoPA 的人评表和 Unslopper 的质量表已回读，明确相对原稿与相对弱 baseline 的不同结论；没有据此宣称已复现效果。
+
 原始来源主要为 ACL Anthology、arXiv 作者版本、PNAS、Nature、Science Advances、ICML/ICLR 及出版社正文。模型配置来自发布者组织的模型卡与官方发布说明。搜索中的商业宣传、社交帖子及二手解读不承担结论证据。
 
 每份备忘录记录了阅读范围和限制；部分数据集只核查官方摘要与元数据，未伪称完整复现。所有文献分数属于论文指定模型、任务和人群，不属于 Plainvoice。部分 2026 研究尚为 preprint，或正式版与作者版阅读范围不同，已注明。
