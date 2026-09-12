@@ -13,3 +13,7 @@ runs/
 *.pt
 *.bin
 *.log
+*.sqlite
+*.sqlite-*
+*.db
+*.bundle

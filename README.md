@@ -6,6 +6,7 @@
 
 ## 从这里开始
 
+- **[统一 Data Viewer](09-12-unified-data-viewer.md)**：全部 1,247,043 条本地记录、24 个分组，支持全文对照、筛选、参考答案、trace、评审导入导出。[本机入口](http://127.0.0.1:8876) 需要先启动资料库；[网上入口](https://plainvoice-data-review.jason62-h.chatgpt.site) 提供来源目录与获许可的示例，访问受 Sites 账户权限控制。
 - [全文重写 v2：内容抽取、乱序与独立成文](09-12-article-reconstruction-v2.md)：最新方法、六篇来源、完整性与结构变化的局限，以及可复用的 prompts 和脚本。桌面最新入口为 `human-rewrite-pairs/article-v2/review.html`。
 - [桌面数据包与第一次改写采样](09-12-local-data-and-rewrite-pilot.md)：已下载数据、agentic／技术写作样本，以及可逐组审阅的六个改写候选。
 - [Existing literature：研究脉络与最相关论文](research/09-12-literature-review.md)：先看已有研究做了什么、发现什么、哪些问题仍未解决。

@@ -1,0 +1,449 @@
+{
+  "schema_version": "plainvoice-viewer-1",
+  "total_records": 1247043,
+  "collections": [
+    {
+      "id": "rewrite-paragraph-v1",
+      "title": "Paragraph rewrite experiment · v1",
+      "family": "rewrite-experiment",
+      "count": 6,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "local-only": 6
+      },
+      "pair_types": {
+        "rewrite": 6
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "rewrite-article-v2",
+      "title": "Full article rewrite experiment · v2",
+      "family": "rewrite-experiment",
+      "count": 6,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "local-only": 6
+      },
+      "pair_types": {
+        "rewrite": 6
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "swe-hero-openhands",
+      "title": "SWE-Hero · agent engineering summaries and traces",
+      "family": "agentic-technical",
+      "count": 3,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "public-license-candidate-with-attribution": 3
+      },
+      "pair_types": {
+        "trace": 3
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "swe-smith",
+      "title": "SWE-smith · tool traces and QA counterexamples",
+      "family": "agentic-technical",
+      "count": 3,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "local-demo-default; repository-license-attribution-review-needed": 3
+      },
+      "pair_types": {
+        "trace": 3
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "deepresearch-bench-ii",
+      "title": "DeepResearch Bench II · bilingual technical reports",
+      "family": "agentic-technical",
+      "count": 10,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "public-license-candidate-with-attribution": 10
+      },
+      "pair_types": {
+        "unpaired": 10
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "coggen-owid",
+      "title": "CogGen · OWID references and released AI reports",
+      "family": "agentic-technical",
+      "count": 21,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "public-license-candidate-with-attribution": 19,
+        "local-demo-default; AI-example-license-scope-review-needed": 2
+      },
+      "pair_types": {
+        "unpaired": 20,
+        "same-task": 1
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "freshwiki",
+      "title": "FreshWiki · reference articles",
+      "family": "agentic-technical",
+      "count": 10,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "public-license-candidate-with-attribution": 10
+      },
+      "pair_types": {
+        "unpaired": 10
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "code2doc",
+      "title": "Code2Doc · existing technical documentation",
+      "family": "agentic-technical",
+      "count": 20,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "local-demo-default; repository-license-attribution-review-needed": 20
+      },
+      "pair_types": {
+        "unpaired": 20
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "researcherbench",
+      "title": "ResearcherBench · answers with expert rubrics",
+      "family": "agentic-technical",
+      "count": 10,
+      "description": "",
+      "source_url": null,
+      "license": {
+        "local-only": 10
+      },
+      "pair_types": {
+        "unpaired": 10
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "adparaphrase-v2.0-main",
+      "title": "AdParaphrase · equivalence and appeal",
+      "family": "published-dataset",
+      "count": 22337,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Japanese advertising text with equivalence and attractiveness votes; rejected equivalence candidates, ties and skips retained.",
+      "source_url": "https://github.com/CyberAgentAILab/AdParaphrase-v2.0",
+      "license": {
+        "declared_license": "CC-BY-NC-SA-4.0",
+        "evidence": "LICENSE; explicit dataset declaration in README.md",
+        "status": "training_use_not_cleared",
+        "note": "Noncommercial/share-alike terms; no commercial training permission inferred.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "preference": 16460,
+        "same-task": 5877
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "adparaphrase-v2.0-preferences",
+      "title": "AdParaphrase · preference tuning",
+      "family": "published-dataset",
+      "count": 8721,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Japanese advertising text with equivalence and attractiveness votes; rejected equivalence candidates, ties and skips retained.",
+      "source_url": "https://github.com/CyberAgentAILab/AdParaphrase-v2.0",
+      "license": {
+        "declared_license": "CC-BY-NC-SA-4.0",
+        "evidence": "LICENSE; explicit dataset declaration in README.md",
+        "status": "training_use_not_cleared",
+        "note": "Noncommercial/share-alike terms; no commercial training permission inferred.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "preference": 8721
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "iterater-full-doc",
+      "title": "IteraTeR · FULL · document",
+      "family": "published-dataset",
+      "count": 31281,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Human revision text; HUMAN intent annotations are human labels, FULL intent labels are automatic. Revisions may change meaning. Sentence/document views overlap.",
+      "source_url": "https://github.com/vipulraheja/iterater",
+      "license": {
+        "declared_license": "Apache-2.0 at repository root; underlying text sources vary",
+        "evidence": "LICENSE and dataset/README.md",
+        "status": "training_use_not_cleared",
+        "note": "Root license is not treated as blanket clearance of third-party source text. Plus/v2 require separately acquired Newsela access.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 31281
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "iterater-human-doc",
+      "title": "IteraTeR · HUMAN · document",
+      "family": "published-dataset",
+      "count": 559,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Human revision text; HUMAN intent annotations are human labels, FULL intent labels are automatic. Revisions may change meaning. Sentence/document views overlap.",
+      "source_url": "https://github.com/vipulraheja/iterater",
+      "license": {
+        "declared_license": "Apache-2.0 at repository root; underlying text sources vary",
+        "evidence": "LICENSE and dataset/README.md",
+        "status": "training_use_not_cleared",
+        "note": "Root license is not treated as blanket clearance of third-party source text. Plus/v2 require separately acquired Newsela access.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 559
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "iterater-full-sent",
+      "title": "IteraTeR · FULL · sentence",
+      "family": "published-dataset",
+      "count": 194283,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Human revision text; HUMAN intent annotations are human labels, FULL intent labels are automatic. Revisions may change meaning. Sentence/document views overlap.",
+      "source_url": "https://github.com/vipulraheja/iterater",
+      "license": {
+        "declared_license": "Apache-2.0 at repository root; underlying text sources vary",
+        "evidence": "LICENSE and dataset/README.md",
+        "status": "training_use_not_cleared",
+        "note": "Root license is not treated as blanket clearance of third-party source text. Plus/v2 require separately acquired Newsela access.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 194283
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "iterater-human-sent",
+      "title": "IteraTeR · HUMAN · sentence",
+      "family": "published-dataset",
+      "count": 4018,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Human revision text; HUMAN intent annotations are human labels, FULL intent labels are automatic. Revisions may change meaning. Sentence/document views overlap.",
+      "source_url": "https://github.com/vipulraheja/iterater",
+      "license": {
+        "declared_license": "Apache-2.0 at repository root; underlying text sources vary",
+        "evidence": "LICENSE and dataset/README.md",
+        "status": "training_use_not_cleared",
+        "note": "Root license is not treated as blanket clearance of third-party source text. Plus/v2 require separately acquired Newsela access.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 4018
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "arxivedits-alignment",
+      "title": "arXivEdits · aligned sentences",
+      "family": "published-dataset",
+      "count": 157057,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Scientific paper sentence revisions and unaligned text. Alignment methods vary; changes can alter scientific claims. Source math/citation placeholders retained.",
+      "source_url": "https://github.com/chaojiang06/arXivEdits",
+      "license": {
+        "declared_license": "mixed_per_paper_version",
+        "evidence": "data/sentence_alignment/*.json license fields; license-summary.json; upstream README.md",
+        "status": "training_use_not_cleared",
+        "note": "No upstream root LICENSE file exists in the pinned tree. Includes arXiv distribution licenses and multiple Creative Commons variants; check each paper/version.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 157057
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "arxivedits-unaligned",
+      "title": "arXivEdits · unaligned text",
+      "family": "published-dataset",
+      "count": 62519,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Scientific paper sentence revisions and unaligned text. Alignment methods vary; changes can alter scientific claims. Source math/citation placeholders retained.",
+      "source_url": "https://github.com/chaojiang06/arXivEdits",
+      "license": {
+        "declared_license": "mixed_per_paper_version",
+        "evidence": "data/sentence_alignment/*.json license fields; license-summary.json; upstream README.md",
+        "status": "training_use_not_cleared",
+        "note": "No upstream root LICENSE file exists in the pinned tree. Includes arXiv distribution licenses and multiple Creative Commons variants; check each paper/version.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "unpaired": 62519
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "arxivedits-edits",
+      "title": "arXivEdits · unmatched annotated edits",
+      "family": "published-dataset",
+      "count": 22,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Scientific paper sentence revisions and unaligned text. Alignment methods vary; changes can alter scientific claims. Source math/citation placeholders retained.",
+      "source_url": "https://github.com/chaojiang06/arXivEdits",
+      "license": {
+        "declared_license": "mixed_per_paper_version",
+        "evidence": "data/sentence_alignment/*.json license fields; license-summary.json; upstream README.md",
+        "status": "training_use_not_cleared",
+        "note": "No upstream root LICENSE file exists in the pinned tree. Includes arXiv distribution licenses and multiple Creative Commons variants; check each paper/version.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 22
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "mcts-references",
+      "title": "MCTS · human references",
+      "family": "published-dataset",
+      "count": 723,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Chinese sentence simplification. Human multi-reference evaluation and machine-constructed pseudo training pairs remain distinct. Simplification can omit information.",
+      "source_url": "https://github.com/blcuicall/mcts",
+      "license": {
+        "declared_license": "GPL-3.0 license text at repository root; exact applicability to source news not established",
+        "evidence": "LICENSE (resolved Git LFS object, 35823 bytes)",
+        "status": "training_use_not_cleared",
+        "note": "The actual upstream license text is GNU GPL v3. No claim is made about a separate blanket license for all source news or resulting model weights.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "multi-reference": 723
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "mcts-pseudo",
+      "title": "MCTS · machine pseudo pairs",
+      "family": "published-dataset",
+      "count": 691474,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Chinese sentence simplification. Human multi-reference evaluation and machine-constructed pseudo training pairs remain distinct. Simplification can omit information.",
+      "source_url": "https://github.com/blcuicall/mcts",
+      "license": {
+        "declared_license": "GPL-3.0 license text at repository root; exact applicability to source news not established",
+        "evidence": "LICENSE (resolved Git LFS object, 35823 bytes)",
+        "status": "training_use_not_cleared",
+        "note": "The actual upstream license text is GNU GPL v3. No claim is made about a separate blanket license for all source news or resulting model weights.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 691474
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "asset-references",
+      "title": "ASSET · human references",
+      "family": "published-dataset",
+      "count": 2359,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. English multi-reference sentence simplification plus all released rating and cross-dataset preference annotations. No training split.",
+      "source_url": "https://github.com/facebookresearch/asset",
+      "license": {
+        "declared_license": "CC-BY-NC-4.0",
+        "evidence": "LICENSE",
+        "status": "training_use_not_cleared",
+        "note": "Noncommercial terms; no commercial training permission inferred.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "multi-reference": 2359
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "asset-ratings",
+      "title": "ASSET · simplification ratings",
+      "family": "published-dataset",
+      "count": 100,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. English multi-reference sentence simplification plus all released rating and cross-dataset preference annotations. No training split.",
+      "source_url": "https://github.com/facebookresearch/asset",
+      "license": {
+        "declared_license": "CC-BY-NC-4.0",
+        "evidence": "LICENSE",
+        "status": "training_use_not_cleared",
+        "note": "Noncommercial terms; no commercial training permission inferred.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 100
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "asset-preferences",
+      "title": "ASSET · cross-dataset preferences",
+      "family": "published-dataset",
+      "count": 718,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. English multi-reference sentence simplification plus all released rating and cross-dataset preference annotations. No training split.",
+      "source_url": "https://github.com/facebookresearch/asset",
+      "license": {
+        "declared_license": "CC-BY-NC-4.0",
+        "evidence": "LICENSE",
+        "status": "training_use_not_cleared",
+        "note": "Noncommercial terms; no commercial training permission inferred.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "preference": 718
+      },
+      "data_local_only": true
+    },
+    {
+      "id": "coedit",
+      "title": "CoEdIT · instruction editing",
+      "family": "published-dataset",
+      "count": 70783,
+      "description": "Adjacent editing/revision data; not validated human-versus-AI or de-AI-ese ground truth. Instruction-based English editing from existing datasets. Only released 69k training set; restricted paper instances are absent.",
+      "source_url": "https://huggingface.co/datasets/grammarly/coedit",
+      "license": {
+        "declared_license": "Apache-2.0 declared in upstream dataset card",
+        "evidence": "README.md YAML license: apache-2.0",
+        "status": "training_use_not_cleared",
+        "note": "No separate upstream LICENSE file exists in the pinned Hugging Face tree. Preserve the card declaration and source-dataset provenance; restricted original-paper data was excluded by the authors.",
+        "status_meaning": "Public download and inspection completed; this manifest does not approve training or redistribution under all underlying source licenses."
+      },
+      "pair_types": {
+        "rewrite": 70783
+      },
+      "data_local_only": true
+    }
+  ],
+  "languages": {
+    "en": 523779,
+    "zh": 692206,
+    "ja": 31058
+  },
+  "pair_types": {
+    "rewrite": 1149589,
+    "trace": 6,
+    "unpaired": 62589,
+    "same-task": 5878,
+    "preference": 25899,
+    "multi-reference": 3082
+  },
+  "default_collection": "coggen-owid",
+  "scope": "all normalized records in the downloaded local bundle",
+  "generated_at": "2026-09-12T23:18:17Z",
+  "mode": "catalog",
+  "search_scope": "Title and all comparison/reference text. Trace/context metadata is viewable separately.",
+  "sample_file": "public-samples.json",
+  "local_url": "http://127.0.0.1:8876"
+}
