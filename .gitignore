@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+__pycache__/
+.venv/
+raw/
+data/private/
+data/downloads/
+checkpoints/
+runs/
+*.safetensors
+*.pt
+*.bin
+*.log
