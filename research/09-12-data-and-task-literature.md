@@ -6,7 +6,7 @@
 
 | 工作 | 原始证据与范围 | 对项目的用途和限制 |
 |---|---|---|
-| Raheja et al., 2023, **CoEdIT: Text Editing by Task-Specific Instruction Tuning** | 82K 编辑指令；含简化、语气和其他编辑任务。论文明确承认主要覆盖句子级编辑，长文效果待验证，统一提示格式也未充分控制每个模型的提示敏感性。[论文](https://aclanthology.org/2023.findings-emnlp.350/) | 支持训练“输入文本＋编辑要求→改稿”。其历史基线表现不能用来预测今天强模型在中英双语长文上的胜负。已读 PDF 方法、实验与 Limitations。 |
+| Raheja et al., 2023, **CoEdIT: Text Editing by Task-Specific Instruction Tuning** | 论文训练使用 82K 编辑指令；[公开 train 约 69K](https://github.com/vipulraheja/coedit)，部分样本因许可未公开。含简化、语气和其他编辑任务。论文明确承认主要覆盖句子级编辑，长文效果待验证，统一提示格式也未充分控制每个模型的提示敏感性。[论文](https://aclanthology.org/2023.findings-emnlp.350/) | 支持训练“输入文本＋编辑要求→改稿”。其历史基线表现不能用来预测今天强模型在中英双语长文上的胜负。已读 PDF 方法、实验与 Limitations。 |
 | Du et al., 2022, **Understanding Iterative Revision from Human-Written Text** | IteraTeR 从 Wikipedia、arXiv、Wikinews 收集约 31K 文档修订，并标注编辑意图。后续版本数量不同，应锁定版本。[论文](https://aclanthology.org/2022.acl-long.250/)、[作者代码](https://github.com/vipulraheja/iterater) | 借鉴 edit intent 和多粒度修订；不是营销文案、API 文档或中英混写的现成 gold。后一个版本也不必然在所有维度优于前一个版本。已读方法、语料统计及作者 README。 |
 | Rao & Tetreault, 2018, **Dear Sir or Madam, May I Introduce the GYAFC Dataset: Corpus, Benchmarks and Metrics for Formality Style Transfer** | 从 Yahoo Answers 构建正式／非正式平行改写数据。[论文](https://aclanthology.org/N18-1012/) | 可学多种合法改写及独立评价意义保留；正式程度不是自然感，不能把 informal 当作正例。仅核查官方摘要和元数据；实际使用前需读完整协议及数据条款。 |
 | Wu et al., 2025, **WritingBench: A Comprehensive Benchmark for Generative Writing** | v4：1,000 条任务，445 中文、555 英文，6 大领域、100 子领域；动态任务 rubric。其 300 个独立任务的人评用于检验 judge。[论文](https://arxiv.org/html/2503.05244v4) | 适合借鉴“任务相关评价”。它研究生成写作，并非改写自然感。writer 用 critic 筛选的合成数据训练，相关评测仍处于相同评价体系，必须加独立人工终测。已读 §§3–4 及附录 D。 |

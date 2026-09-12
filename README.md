@@ -8,6 +8,7 @@
 
 - [Existing literature：研究脉络与最相关论文](research/09-12-literature-review.md)：先看已有研究做了什么、发现什么、哪些问题仍未解决。
 - [直接相关的 humanizer prior art](research/09-12-humanization-prior-art.md)：DIPPER、HUMPA、CoPA 和社区 Unslopper；区分检测器指标与写作质量。
+- [Ground truth 获取方案](09-12-ground-truth-acquisition.md)：已核查数据集、真实模型稿与人工编辑、盲评和 80 项采集 pilot，以及 SFT／DPO 数据形状。
 - [研究结论与实验方案](09-12-research-and-experiment-plan.md)：批判性审视 ground truth、evaluator、训练方法、模型规模与实验成本。
 - [风格与行业文献](research/09-12-style-literature.md)：AI 味儿的语言学证据、反证、中文和行业边界。
 - [评价文献](research/09-12-evaluation-literature.md)：检测器、人工评价、judge bias 和保真。
