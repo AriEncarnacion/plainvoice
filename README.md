@@ -2,10 +2,11 @@
 
 研究如何让内容改写更自然、更有信息价值，同时保留事实、用途和作者声音。中文、英文以及 technical docs、marketing 四个场景同等优先。
 
-当前阶段：背景研究和实验设计。没有已训练模型、已验证 judge、真实 benchmark 分数或可直接训练的 gold 数据。仓库内的门槛和规模均为待验证建议。
+当前阶段：背景研究、实验设计和首次数据采集。六套公开数据已下载到桌面，并生成六组短片段改写候选；没有已训练模型、已验证 judge、真实 benchmark 分数或经独立人评确认的 gold。仓库内的实验门槛和拟议规模仍待验证。
 
 ## 从这里开始
 
+- [桌面数据包与第一次改写采样](09-12-local-data-and-rewrite-pilot.md)：已下载数据、agentic／技术写作样本，以及可逐组审阅的六个改写候选。
 - [Existing literature：研究脉络与最相关论文](research/09-12-literature-review.md)：先看已有研究做了什么、发现什么、哪些问题仍未解决。
 - [直接相关的 humanizer prior art](research/09-12-humanization-prior-art.md)：DIPPER、HUMPA、CoPA 和社区 Unslopper；区分检测器指标与写作质量。
 - [Ground truth 获取方案](09-12-ground-truth-acquisition.md)：已核查数据集、真实模型稿与人工编辑、盲评和 80 项采集 pilot，以及 SFT／DPO 数据形状。

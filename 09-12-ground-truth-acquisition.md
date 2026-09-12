@@ -18,14 +18,14 @@
 
 ## 2. 已有论文和公开数据：能拿到什么
 
-以下入口在本轮核查；未批量下载文本。论文数据可提供候选和辅助任务，复用时仍需补做本项目的人评。
+以下入口在最初研究轮核查；同日后续已按用户要求下载公开数据到桌面，见[实际采集记录](09-12-local-data-and-rewrite-pilot.md)。论文数据可提供候选和辅助任务，复用时仍需补做本项目的人评。
 
 | 数据与入口 | 实际数据 | 本项目用途与边界 |
 |---|---|---|
 | [AdParaphrase v2.0，Findings ACL 2025](https://aclanthology.org/2025.findings-acl.788/)；[作者数据仓库](https://github.com/CyberAgentAILab/AdParaphrase-v2.0) | 日文广告，16,460 对语义等价文案，每对有 10 人的吸引力偏好；另有 8,721 个供 preference tuning 使用的同输入双候选记录。 | 最贴近本项目的数据构造方法，但不是中英文，也没有 AI 味标签。借鉴方法，不能直接当四格 gold。仓库标 CC BY-NC-SA 4.0；商用训练用途不能默认获准。 |
 | [IteraTeR，ACL 2022](https://aclanthology.org/2022.acl-long.250/)；[作者仓库](https://github.com/vipulraheja/iterater) | 英文真实修订。HUMAN 子集 4,018 句对，含人工编辑意图标签；FULL 为 196,987 句对，意图标签由模型预测。 | 优先筛语言与清晰度修改，排除 meaning-changed，再复核后稿是否更好。不能把真人修改视作保证。原版公开；Plus/v2 另需 Newsela 访问与联系作者。根仓库 Apache-2.0 不自动说明各来源原文均适用同一许可。 |
 | [arXivEdits，EMNLP 2022](https://arxiv.org/abs/2210.15067)；[作者仓库](https://github.com/chaojiang06/arXivEdits) | 751 篇论文的 1,039 对相邻版本；另有 1,000 句对中的 2,122 处人工意图标注编辑。 | Improve Language 子集可提供技术写作候选；论文与产品文档仍有领域差异。更新实验或论断的修改须分开。原文许可按论文／版本提供，不能以一个仓库许可覆盖所有文本。 |
-| [MCTS，LREC-COLING 2024](https://aclanthology.org/2024.lrec-main.969/)；[作者仓库](https://github.com/blcuicall/mcts) | 723 个中文新闻原句，每句 5 个人工简化参考。另有 691,474 个机器构造的伪平行训练句对。 | 可读性辅助评价，不是营销／技术文档 gold。简化允许删非重要信息，需重查信息保留。伪平行训练数据不能算人工 gold。本轮未读到完整数据许可，导入前补核。 |
+| [MCTS，LREC-COLING 2024](https://aclanthology.org/2024.lrec-main.969/)；[作者仓库](https://github.com/blcuicall/mcts) | 723 个中文新闻原句，每句 5 个人工简化参考。另有 691,474 个机器构造的伪平行训练句对。 | 可读性辅助评价，不是营销／技术文档 gold。简化允许删非重要信息，需重查信息保留。伪平行训练数据不能算人工 gold。同日下载 follow-up 已获取 Git LFS 中的 GPLv3 LICENSE 正文；上游新闻文本的具体用途仍需逐源确认。 |
 | [ASSET，ACL 2020](https://aclanthology.org/2020.acl-main.424/)；[作者仓库](https://github.com/facebookresearch/asset) | 2,359 个英文原句，每句 10 个人工简化参考；官方为 dev/test，没有 train split。 | 展示“一稿可有多个合理改写”，适合简化诊断；不是 AI 味标签，也不能把删减默认视作保真。CC BY-NC 4.0。 |
 | [CoEdIT，EMNLP 2023](https://aclanthology.org/2023.findings-emnlp.350/)；[数据卡](https://huggingface.co/datasets/grammarly/coedit)；[公开版说明](https://github.com/vipulraheja/coedit) | 英文编辑指令／原文／目标改写。论文训练集 82K，公开 train 约 69K；约 13K train 和 1.5K validation 因许可未公开。 | 辅助编辑 SFT。语法、正式化、简化等任务须分开，不能统一当自然风格正例。数据卡标 Apache-2.0，仍记录来源和任务；不要混淆数据与模型权重许可。 |
 
