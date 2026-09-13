@@ -1,6 +1,6 @@
 {
   "schema_version": "plainvoice-viewer-1",
-  "total_records": 1247043,
+  "total_records": 1247891,
   "collections": [
     {
       "id": "rewrite-paragraph-v1",
@@ -89,8 +89,8 @@
         "local-demo-default; AI-example-license-scope-review-needed": 2
       },
       "pair_types": {
-        "unpaired": 20,
-        "same-task": 1
+        "same-task": 1,
+        "unpaired": 20
       },
       "data_local_only": true
     },
@@ -424,20 +424,72 @@
         "rewrite": 70783
       },
       "data_local_only": true
+    },
+    {
+      "id": "ai-enrichment-units",
+      "title": "AI 补全 · 数据集与技术片段 · Gemini 2.5 Flash Lite",
+      "family": "rewrite-experiment",
+      "count": 808,
+      "pair_types": {
+        "rewrite": 808
+      },
+      "description": "AI-generated comparison candidates from local enrichment runs. Not independently human-validated gold; provenance and generation details remain in each record.",
+      "source_url": null,
+      "license": null,
+      "data_local_only": true
+    },
+    {
+      "id": "ai-enrichment-diagnostics",
+      "title": "AI 补全 · 早期 pilot 诊断",
+      "family": "rewrite-experiment",
+      "count": 5,
+      "pair_types": {
+        "rewrite": 5
+      },
+      "description": "AI-generated comparison candidates from local enrichment runs. Not independently human-validated gold; provenance and generation details remain in each record.",
+      "source_url": null,
+      "license": null,
+      "data_local_only": true
+    },
+    {
+      "id": "ai-enrichment-articles",
+      "title": "AI 补全 · 整篇文章 · Gemini 2.5 Flash Lite",
+      "family": "rewrite-experiment",
+      "count": 29,
+      "pair_types": {
+        "rewrite": 29
+      },
+      "description": "AI-generated comparison candidates from local enrichment runs. Not independently human-validated gold; provenance and generation details remain in each record.",
+      "source_url": null,
+      "license": null,
+      "data_local_only": true
+    },
+    {
+      "id": "ai-enrichment-comparison",
+      "title": "AI 模型对比 · Gemini 3.1 Flash Lite",
+      "family": "rewrite-experiment",
+      "count": 6,
+      "pair_types": {
+        "rewrite": 6
+      },
+      "description": "AI-generated comparison candidates from local enrichment runs. Not independently human-validated gold; provenance and generation details remain in each record.",
+      "source_url": null,
+      "license": null,
+      "data_local_only": true
     }
   ],
   "languages": {
-    "en": 523779,
-    "zh": 692206,
-    "ja": 31058
+    "ja": 31058,
+    "en": 524275,
+    "zh": 692558
   },
   "pair_types": {
-    "rewrite": 1149589,
-    "trace": 6,
-    "unpaired": 62589,
-    "same-task": 5878,
     "preference": 25899,
-    "multi-reference": 3082
+    "same-task": 5878,
+    "rewrite": 1150437,
+    "unpaired": 62589,
+    "multi-reference": 3082,
+    "trace": 6
   },
   "default_collection": "coggen-owid",
   "scope": "all normalized records in the downloaded local bundle",
@@ -445,5 +497,17 @@
   "mode": "catalog",
   "search_scope": "Title and all comparison/reference text. Trace/context metadata is viewable separately.",
   "sample_file": "public-samples.json",
-  "local_url": "http://127.0.0.1:8876"
+  "local_url": "http://127.0.0.1:8876",
+  "enrichment": {
+    "pairs": 848,
+    "collections": {
+      "ai-enrichment-units": 808,
+      "ai-enrichment-diagnostics": 5,
+      "ai-enrichment-articles": 29,
+      "ai-enrichment-comparison": 6
+    },
+    "known_spent_usd": "1.08076450",
+    "unresolved_reserved_usd": "0.16447055",
+    "gold_status": "none; all generated records are candidates awaiting human review"
+  }
 }

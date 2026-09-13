@@ -2,11 +2,12 @@
 
 研究如何让内容改写更自然、更有信息价值，同时保留事实、用途和作者声音。中文、英文以及 technical docs、marketing 四个场景同等优先。
 
-当前阶段：背景研究、数据采集和全文改写试验。六套公开数据已下载到桌面；第一版短片段试验后，第二版对六篇完整文章抽取 579 条主谓宾内容卡，再打乱顺序、由新会话独立成文。没有已训练模型、已验证 judge、真实 benchmark 分数或经独立人评确认的 gold。
+当前阶段：背景研究、数据采集和内容改写试验。最新用 Gemini Flash-Lite 增加 848 条可审阅候选，包含完整文章、句段、模型比较和早期诊断；均采用内容抽取后乱序成文。没有已训练模型、已验证 judge、真实 benchmark 分数或经独立人评确认的 gold。
 
 ## 从这里开始
 
-- **[统一 Data Viewer](09-12-unified-data-viewer.md)**：全部 1,247,043 条本地记录、24 个分组，支持全文对照、筛选、参考答案、trace、评审导入导出。[本机入口](http://127.0.0.1:8876) 需要先启动资料库；[网上入口](https://plainvoice-data-review.jason62-h.chatgpt.site) 提供来源目录与获许可的示例，访问受 Sites 账户权限控制。
+- **[统一 Data Viewer](09-12-unified-data-viewer.md)**：全部 1,247,891 条本地记录、28 个分组，支持全文对照、筛选、参考答案、trace、评审导入导出。[本机入口](http://127.0.0.1:8876) 需要先启动资料库；[网上入口](https://plainvoice-data-review.jason62-h.chatgpt.site) 提供来源目录与获许可的示例，访问受 Sites 账户权限控制。
+- **[双语 AI 候选补全与模型对照](09-12-low-cost-ai-enrichment.md)**：新增数量、来源覆盖、实际费用、缺项及语义 QA；先在本机 viewer 的新分组审阅。
 - [全文重写 v2：内容抽取、乱序与独立成文](09-12-article-reconstruction-v2.md)：最新方法、六篇来源、完整性与结构变化的局限，以及可复用的 prompts 和脚本。桌面最新入口为 `human-rewrite-pairs/article-v2/review.html`。
 - [桌面数据包与第一次改写采样](09-12-local-data-and-rewrite-pilot.md)：已下载数据、agentic／技术写作样本，以及可逐组审阅的六个改写候选。
 - [Existing literature：研究脉络与最相关论文](research/09-12-literature-review.md)：先看已有研究做了什么、发现什么、哪些问题仍未解决。

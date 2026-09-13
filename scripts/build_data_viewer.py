@@ -3,6 +3,7 @@
 import argparse, collections, hashlib, json, os, sqlite3, time, zlib
 from pathlib import Path
 import export_dataset_records, export_other_records
+import plainvoice_ingest_enrichment
 
 def build(root, output, catalog_path=None, skip_published=False):
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -32,8 +33,9 @@ def build(root, output, catalog_path=None, skip_published=False):
     other_report=export_other_records.export.last_report
     published={'collections':[],'total_records':0}
     if not skip_published:published=export_dataset_records.export(root,emit)
+    enrichment=plainvoice_ingest_enrichment.export(root,emit)
     cols=[]
-    for c in other+published['collections']:
+    for c in other+published['collections']+enrichment:
         ident=c.get('collection') or c.get('slug') or c.get('id')
         assert ident in counts,(ident,c.keys())
         cols.append({'id':ident,'title':c.get('title') or c.get('collection_title') or ident,'family':c.get('family','agentic-technical'),'count':counts[ident],'description':c.get('description',''),'source_url':c.get('source_url'),'license':c.get('license') or c.get('rights'),'pair_types':c.get('pair_types',{}),'data_local_only':True})
@@ -44,11 +46,12 @@ def build(root, output, catalog_path=None, skip_published=False):
     db.execute('CREATE INDEX type_records ON records(pair_type,rid)')
     db.execute('CREATE INDEX language_records ON records(language,rid)')
     catalog={'schema_version':'plainvoice-viewer-1','total_records':total,'collections':cols,'languages':dict(languages),'pair_types':dict(types),'default_collection':'rewrite-article-v2','scope':'all normalized records in the downloaded local bundle','generated_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'mode':'local','search_scope':'Title and all comparison/reference text. Trace/context metadata is viewable separately.'}
+    catalog['default_collection']=plainvoice_ingest_enrichment.default_collection(cols,catalog['default_collection'])
     db.execute('INSERT INTO metadata VALUES (?,?)',('catalog',json.dumps(catalog,ensure_ascii=False)))
     db.commit()
     assert db.execute('PRAGMA quick_check').fetchone()[0]=='ok'
     db.close();os.replace(temp,output)
-    (output.parent/'source-coverage.json').write_text(json.dumps({'published_datasets':published,'other_collections':other_report},ensure_ascii=False,indent=2)+'\n')
+    (output.parent/'source-coverage.json').write_text(json.dumps({'published_datasets':published,'other_collections':other_report,'ai_enrichment':{'collections':enrichment}},ensure_ascii=False,indent=2)+'\n')
     (output.parent/'catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n')
     if catalog_path:
         public={**catalog,'mode':'catalog','default_collection':'coggen-owid','sample_file':'public-samples.json','local_url':'http://127.0.0.1:8876'}

@@ -1,0 +1,748 @@
+{
+  "schema_version": "plainvoice-enrichment-delivery-1",
+  "pairs": 848,
+  "main_and_comparison_pairs": 843,
+  "diagnostic_pairs": 5,
+  "unique_target_sources_with_new_ai": 839,
+  "target_sources": 930,
+  "uncovered_targets": [
+    {
+      "source_id": "coggen-owid:owid_main_006",
+      "source_unit_type": "complete-downloaded-article",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-v3",
+          "reason": "duplicate_or_missing_unit_assessments"
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "coggen-owid:owid_main_012",
+      "source_unit_type": "complete-downloaded-article",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-v3",
+          "reason": "empty_claim"
+        },
+        {
+          "run": "2026-09-12-gemini31-articles",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "coggen-owid:owid_main_019",
+      "source_unit_type": "complete-downloaded-article",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-v3",
+          "reason": "empty_claim"
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "freshwiki:Silicon_Valley_Bank",
+      "source_unit_type": "complete-downloaded-article",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-v3",
+          "reason": "Paid response rejected: truncated_or_nonfinal; charge recorded."
+        },
+        {
+          "run": "2026-09-12-gemini31-articles",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:4be6079e6a5d3b6af8cfc7bc",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-v3",
+          "reason": "Client halted by unresolved request or ledger failure."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:0785738d3b8074999bbb0f43",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:ff335d00514d64e0ee12d09a",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:b69ae9f31b41ba8aedaac15f",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:5e70a715318de305f8f923f6",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:285dec934d1c19b003700838",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:b2b6c002533faf4847428c41",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:1edcf7140115929c9785a623",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:17749bf1b3fa8093dca12a45",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-units",
+          "reason": "Request outcome/cost unknown; reservation held and client halted."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:bbff6688f2e9560d7de73b23",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-balanced",
+          "reason": "Paid response rejected: refusal_or_filter; charge recorded."
+        }
+      ],
+      "status": "failed_or_interrupted"
+    },
+    {
+      "source_id": "iterater-human-doc:7aa8abbc56b1770e0664b3e3",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:6c757a03ca470d04aa9f458e",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:75efe4b6c0f829dfa51c055f",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:ef335962cb8474077a7c3535",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:63916b30e5140ac79ba256cb",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:02af63f2f4fa3a98fddffd54",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:473a77df7f3a36c37397d07a",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:41d532764306e1c8fb0a9683",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:af70ddbe9bc051007bbd6258",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:652bc0df1edc060b0ba6ed3e",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:6e861f0cab1efc93cabfd922",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:579747b33df1b89bfd6070b4",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:fed6d702a151a1ba73522e07",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:6cd5b783128eb25a3e9f948e",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:c04ce40805b90d45e4e54eb5",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:43e9b0ee2a28a1752036172f",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:fa2dcd6382ee80fa68a4209b",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:e82719a4ac91756ad6a748d3",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:86eec9c043618c2a99fce069",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:9eb7d6a52bb6883a79de73a1",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:30d8dc975c0df4734e1d24e1",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "iterater-human-doc:0a0b2171949b5ad2b337f6b4",
+      "source_unit_type": "human-document-revision-unit",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:ff1fff722198d879428f7c20",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:7a7a25ef43c6e60c5d2e442e",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:3e1fd09e183be8be9a652c56",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:0a553422486974df1bb85510",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:b5e616f6db8f2d6240454864",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:d25530ff36317bff3a193b6f",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:184409631576608aad572a19",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:4efecb2b0bf178a8ad9ca213",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:0a7676a390d0b44896e4586b",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:8b60368cd7c69d957e6edb5f",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:e7444df32edc48694671c92f",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:fd7c56bd88a883373c791b4b",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:e8c51bc2ed2deffcb7be4a3f",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:b755071ad80b098019d4b3a8",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:4ed3e4d850b525b04c66de70",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:b00ab543f3698f07a223494e",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:3917c492e17531cefe4d48ec",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:d9fc15490c1f1e84d06f7a94",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:d1ead78c86b99cfb0599acdd",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:c60bc635879f6737579afa53",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:18e823d8989341797bc6a631",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:12d6f212515e9346c425996c",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:d1b67e1932d1ff4ecdad8305",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:5559eeede769b27c057818db",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:50b80837995b23a4b4c728ed",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:ca0f7303ec979a1d77f486ba",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:2202a6b47cbf7354793f47f9",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:87f327fcfde8ba1586385742",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:5649d0eac281948bada0c587",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:2bf591a8e8d6f77c3a2deffb",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:42a89b5bff1e30d13c9934e8",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:2d9cf342eb09b971db60f7ec",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:0273bd4ce7b6024fd3444883",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:75addb7869847284c49ee0b0",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:38fef673dc82ca2976a959e6",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:60b34739bb2ef724e92fee7b",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:b6fde92f2af021c4b44c30f6",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:1594792e59ad1fb1bcc99c4b",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:4f870c8d77c3be554fb84525",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:de3f14f34e5a5fb86ad50d85",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:0fa8915ee690e766b3982654",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:59bc0fbace5f2f84f06f2c42",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:971866f5f4c9de2e935d2bb0",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:fe052300bc53130370bb894c",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:1f6d6c3d425f1b21f3c01066",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:fec7225bf01d62a212dac058",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:3d8fac11aa64a10ea09cb8b7",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:85272b6739a11faec2d5d599",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:c63c3ffbd00c232807b31700",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:3894a1e7475a7f7fa5834ae6",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:bb8fac4712525481621283b2",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:ce6302a97fe068ab4f507bb4",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:42421c0d4332ac9bef7a89c3",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "mcts-references:02a82ae1633d859dd378de4a",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [],
+      "status": "not_attempted"
+    },
+    {
+      "source_id": "asset-references:3162f410e95e03305958f8dd",
+      "source_unit_type": "human-reference-sentence",
+      "failures": [
+        {
+          "run": "2026-09-12-gemini25-balanced",
+          "reason": "empty_claim"
+        }
+      ],
+      "status": "failed_or_interrupted"
+    }
+  ],
+  "collections": {
+    "ai-enrichment-units": 808,
+    "ai-enrichment-diagnostics": 5,
+    "ai-enrichment-articles": 29,
+    "ai-enrichment-comparison": 6
+  },
+  "languages": {
+    "zh": 352,
+    "en": 496
+  },
+  "source_collections": {
+    "mcts-references": 346,
+    "iterater-human-doc": 268,
+    "asset-references": 59,
+    "arxivedits-alignment": 60,
+    "coedit": 60,
+    "code2doc": 15,
+    "freshwiki": 9,
+    "coggen-owid": 16,
+    "rewrite-article-v2": 10
+  },
+  "scoped_independent_agent_defect_flags": 11,
+  "known_spent_usd": "1.08076450",
+  "unresolved_reserved_usd": "0.16447055",
+  "maximum_recorded_exposure_usd": "1.24523505",
+  "ledgers": [
+    {
+      "run": "2026-09-12-gemini25-balanced",
+      "model": "google/gemini-2.5-flash-lite",
+      "calls": 1371,
+      "spent_usd": "0.3678670",
+      "held_usd": "0",
+      "request_states": {
+        "settled": 1371
+      }
+    },
+    {
+      "run": "2026-09-12-gemini25-batch",
+      "model": "google/gemini-2.5-flash-lite",
+      "calls": 10,
+      "spent_usd": "0.0108157",
+      "held_usd": "0",
+      "request_states": {
+        "settled": 10
+      }
+    },
+    {
+      "run": "2026-09-12-gemini25-units",
+      "model": "google/gemini-2.5-flash-lite",
+      "calls": 219,
+      "spent_usd": "0.0969891",
+      "held_usd": "0.0219830",
+      "request_states": {
+        "settled": 211,
+        "unknown": 8
+      }
+    },
+    {
+      "run": "2026-09-12-gemini25-v2",
+      "model": "google/gemini-2.5-flash-lite",
+      "calls": 8,
+      "spent_usd": "0.0006166",
+      "held_usd": "0.0355796",
+      "request_states": {
+        "unknown": 3,
+        "settled": 5
+      }
+    },
+    {
+      "run": "2026-09-12-gemini25-v3",
+      "model": "google/gemini-2.5-flash-lite",
+      "calls": 107,
+      "spent_usd": "0.4109831",
+      "held_usd": "0.0329667",
+      "request_states": {
+        "settled": 106,
+        "unknown": 1
+      }
+    },
+    {
+      "run": "2026-09-12-gemini31-articles",
+      "model": "google/gemini-3.1-flash-lite",
+      "calls": 4,
+      "spent_usd": "0.03418500",
+      "held_usd": "0.07394125",
+      "request_states": {
+        "settled": 2,
+        "unknown": 2
+      }
+    },
+    {
+      "run": "2026-09-12-gemini31-comparison",
+      "model": "google/gemini-3.1-flash-lite",
+      "calls": 12,
+      "spent_usd": "0.15930800",
+      "held_usd": "0",
+      "request_states": {
+        "settled": 12
+      }
+    }
+  ],
+  "gold_status": "none; all generated records are candidates awaiting human review",
+  "delivery_notes": {
+    "status": "partial_target_coverage_delivered",
+    "uncovered_with_failure_records": 15,
+    "unattempted_at_cutoff": 76,
+    "unattempted_reason": "Browser session reset removed the memory-only credential before the final untouched queue started. No requests or charges were made for that queue.",
+    "active_generation_workers": 0
+  }
+}
