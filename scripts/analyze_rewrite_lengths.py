@@ -73,7 +73,7 @@ def analyze(root, output):
     summary = {key: summarize(rows) for key, rows in sorted(grouped.items())}
     output.mkdir(parents=True, exist_ok=True)
     with (output / 'pair-lengths.csv').open('w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=list(records[0]))
+        writer = csv.DictWriter(f, fieldnames=list(records[0]), lineterminator='\n')
         writer.writeheader()
         writer.writerows(records)
     (output / 'summary.json').write_text(json.dumps({'inputs': inputs, 'saved_records': len(records),
