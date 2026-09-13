@@ -18,8 +18,9 @@ from typing import Any, Iterable
 import zlib
 
 DEFAULT_DB = Path.home() / 'Desktop/plainvoice-data-2026-09-12/data-viewer/review.sqlite'
+CLEAN_DB = DEFAULT_DB.parent.parent / 'clean-text-v1/review.sqlite'
 DEFAULT_OUTPUT = Path('/private/tmp/plainvoice-enrichment-queue.jsonl')
-SELECTION_VERSION = 'plainvoice-enrichment-queue-v2'
+SELECTION_VERSION = 'plainvoice-enrichment-queue-v3-clean-text'
 SEED = 'plainvoice-2026-09-12-enrichment-1'
 BAD_CODE = {
     'code2doc:test-7': 'Docstring describes jarmode inclusion setter; code writes native-image args.',
@@ -80,7 +81,28 @@ class QueueBuilder:
         if not selected or not selected.get('text', '').strip():
             self.rejections['empty_selected_text'] += 1
             return False
+        cleaning_warnings = record.get('extra', {}).get('cleaning', {}).get('warnings', [])
+        blocked_source_warnings = {
+            'structured_json_preserved_not_prose',
+            'source_latex_diff_markup_preserved_not_prose',
+            'ascii_art_or_corrupted_markup_preserved_not_prose',
+            'source_wiki_editing_markup_preserved_review_required',
+            'source_formula_placeholders_preserved_review_required',
+            'nonempty_source_became_empty',
+        }
+        if blocked_source_warnings.intersection(cleaning_warnings):
+            self.rejections['source_capture_requires_repair'] += 1
+            return False
         selected_text = selected['text']
+        if selected_text.lstrip().startswith(('{', '[')):
+            try:
+                structured = json.loads(selected_text)
+            except ValueError:
+                pass
+            else:
+                if isinstance(structured, (dict, list)):
+                    self.rejections['structured_data_not_prose'] += 1
+                    return False
         selected_hash = sha256(normalize(selected_text))
         original_text = (record.get('left') or {}).get('text', '')
         original_hash = sha256(normalize(original_text))
@@ -129,7 +151,11 @@ class QueueBuilder:
                 'Preserve original split and source license; queue inclusion is not training or redistribution clearance.',
             ],
             'source_record': record,
+            'source_cleaning_version': record.get('extra', {}).get('cleaning', {}).get('version'),
+            'source_raw_content_hash': record.get('extra', {}).get('cleaning', {}).get('raw_content_hash'),
         }
+        if cleaning_warnings:
+            row['quality_notes'].append('Source cleaning review flags: ' + ', '.join(cleaning_warnings))
         if record['collection'] == 'coedit':
             row['original_edit_instruction'] = record.get('extra', {}).get('instruction')
             row['quality_notes'].append(
@@ -345,12 +371,13 @@ def write_outputs(rows: list[dict[str, Any]], summary: dict[str, Any], output_pa
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--db', type=Path, default=DEFAULT_DB)
+    parser.add_argument('--db', type=Path, help='Defaults to cleaned archive when available, otherwise raw. Explicit path reproduces that input version.')
     parser.add_argument('--output', type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument('--manifest', type=Path)
     parser.add_argument('--exclude-japanese', action='store_true')
     args = parser.parse_args(argv)
-    rows, summary = prepare_queue(args.db, include_japanese=not args.exclude_japanese)
+    selected_db = args.db or (CLEAN_DB if CLEAN_DB.is_file() else DEFAULT_DB)
+    rows, summary = prepare_queue(selected_db, include_japanese=not args.exclude_japanese)
     output = args.output.expanduser().resolve()
     manifest = args.manifest.expanduser().resolve() if args.manifest else output.with_suffix('.manifest.json')
     write_outputs(rows, summary, output, manifest)

@@ -1,0 +1,318 @@
+{
+  "inputs": [
+    {
+      "file": "ai-enrichment/2026-09-12-gemini25-balanced/pairs.jsonl",
+      "sha256": "edf1e9c9f75dd778981bc7358abecf261f12e545e3ce37fe6a284a9affd0c826"
+    },
+    {
+      "file": "ai-enrichment/2026-09-12-gemini25-batch/pairs.jsonl",
+      "sha256": "d50ca292d5cb86ad4c46ced6d5fa2a03b52451b04a8c9961ad17ec63d258b01f"
+    },
+    {
+      "file": "ai-enrichment/2026-09-12-gemini25-units/pairs.jsonl",
+      "sha256": "435b1c3a4e936d54cd54ec5878c26dc92250322e3dc50ac3c9647ba92080235b"
+    },
+    {
+      "file": "ai-enrichment/2026-09-12-gemini25-v2/pairs.jsonl",
+      "sha256": "c9da54d9b534e609ab554da0fb1bf7963d4d5295baefd5e6693834ae2d8f1390"
+    },
+    {
+      "file": "ai-enrichment/2026-09-12-gemini25-v3/pairs.jsonl",
+      "sha256": "defb428617321790cfd0f7ccea583dbed06fd7c7a288a76962c1acdaea56631c"
+    },
+    {
+      "file": "ai-enrichment/2026-09-12-gemini31-comparison/pairs.jsonl",
+      "sha256": "9be867b301a88213b59f6783d1093b0b7840044b06eaaaf08472abd75d60ebe7"
+    }
+  ],
+  "saved_records": 848,
+  "baseline_after_known_failure_exclusion": 836,
+  "groups": {
+    "ai-enrichment-articles/en": {
+      "n": 26,
+      "longer": 1,
+      "equal": 0,
+      "shorter": 25,
+      "original_mean": 2317.3076923076924,
+      "rewritten_mean": 1251.2692307692307,
+      "median_pair_change_pct": -43.57162827423144,
+      "mean_pair_change_pct": -42.57571169143195,
+      "total_length_change_pct": -46.00331950207469,
+      "more_than_10pct_longer": 1,
+      "more_than_10pct_shorter": 24
+    },
+    "ai-enrichment-articles/zh": {
+      "n": 2,
+      "longer": 1,
+      "equal": 0,
+      "shorter": 1,
+      "original_mean": 1196.5,
+      "rewritten_mean": 1302.5,
+      "median_pair_change_pct": 17.459443648609124,
+      "mean_pair_change_pct": 17.459443648609124,
+      "total_length_change_pct": 8.85917258671125,
+      "more_than_10pct_longer": 1,
+      "more_than_10pct_shorter": 1
+    },
+    "ai-enrichment-comparison/en": {
+      "n": 4,
+      "longer": 0,
+      "equal": 0,
+      "shorter": 4,
+      "original_mean": 4559.75,
+      "rewritten_mean": 493.25,
+      "median_pair_change_pct": -76.36165130630238,
+      "mean_pair_change_pct": -66.54902482123555,
+      "total_length_change_pct": -89.18252097154449,
+      "more_than_10pct_longer": 0,
+      "more_than_10pct_shorter": 4
+    },
+    "ai-enrichment-comparison/zh": {
+      "n": 2,
+      "longer": 0,
+      "equal": 0,
+      "shorter": 2,
+      "original_mean": 1196.5,
+      "rewritten_mean": 750,
+      "median_pair_change_pct": -33.35505838764597,
+      "mean_pair_change_pct": -33.35505838764597,
+      "total_length_change_pct": -37.317175094024236,
+      "more_than_10pct_longer": 0,
+      "more_than_10pct_shorter": 2
+    },
+    "ai-enrichment-diagnostics/en": {
+      "n": 3,
+      "longer": 1,
+      "equal": 0,
+      "shorter": 2,
+      "original_mean": 37.333333333333336,
+      "rewritten_mean": 35.666666666666664,
+      "median_pair_change_pct": -8.333333333333337,
+      "mean_pair_change_pct": 7.6388888888888875,
+      "total_length_change_pct": -4.46428571428571,
+      "more_than_10pct_longer": 1,
+      "more_than_10pct_shorter": 1
+    },
+    "ai-enrichment-diagnostics/zh": {
+      "n": 2,
+      "longer": 0,
+      "equal": 0,
+      "shorter": 2,
+      "original_mean": 17,
+      "rewritten_mean": 15,
+      "median_pair_change_pct": -11.764705882352944,
+      "mean_pair_change_pct": -11.764705882352944,
+      "total_length_change_pct": -11.764705882352944,
+      "more_than_10pct_longer": 0,
+      "more_than_10pct_shorter": 2
+    },
+    "ai-enrichment-units/en": {
+      "n": 462,
+      "longer": 228,
+      "equal": 43,
+      "shorter": 191,
+      "original_mean": 129.26839826839827,
+      "rewritten_mean": 127.0930735930736,
+      "median_pair_change_pct": 0.0,
+      "mean_pair_change_pct": 2.4828917562579202,
+      "total_length_change_pct": -1.6827969592445036,
+      "more_than_10pct_longer": 99,
+      "more_than_10pct_shorter": 60
+    },
+    "ai-enrichment-units/zh": {
+      "n": 346,
+      "longer": 240,
+      "equal": 23,
+      "shorter": 83,
+      "original_mean": 45.66763005780347,
+      "rewritten_mean": 49.73410404624278,
+      "median_pair_change_pct": 6.897463002114157,
+      "mean_pair_change_pct": 9.131080139685892,
+      "total_length_change_pct": 8.904499715207903,
+      "more_than_10pct_longer": 141,
+      "more_than_10pct_shorter": 34
+    },
+    "all_saved/en": {
+      "n": 496,
+      "longer": 230,
+      "equal": 43,
+      "shorter": 223,
+      "original_mean": 290.2741935483871,
+      "rewritten_mean": 188.16935483870967,
+      "median_pair_change_pct": 0.0,
+      "mean_pair_change_pct": -0.6111221083867023,
+      "total_length_change_pct": -35.17530699561038,
+      "more_than_10pct_longer": 101,
+      "more_than_10pct_shorter": 90
+    },
+    "all_saved/zh": {
+      "n": 352,
+      "longer": 241,
+      "equal": 23,
+      "shorter": 88,
+      "original_mean": 58.58238636363637,
+      "rewritten_mean": 60.63352272727273,
+      "median_pair_change_pct": 6.798921417565484,
+      "mean_pair_change_pct": 8.818275815592441,
+      "total_length_change_pct": 3.5012850977159227,
+      "more_than_10pct_longer": 142,
+      "more_than_10pct_shorter": 39
+    },
+    "baseline/en": {
+      "n": 488,
+      "longer": 229,
+      "equal": 43,
+      "shorter": 216,
+      "original_mean": 245.84426229508196,
+      "rewritten_mean": 186.9877049180328,
+      "median_pair_change_pct": 0.0,
+      "mean_pair_change_pct": 0.08222845781542718,
+      "total_length_change_pct": -23.94058613676524,
+      "more_than_10pct_longer": 100,
+      "more_than_10pct_shorter": 84
+    },
+    "baseline/zh": {
+      "n": 348,
+      "longer": 241,
+      "equal": 23,
+      "shorter": 84,
+      "original_mean": 52.2816091954023,
+      "rewritten_mean": 56.93390804597701,
+      "median_pair_change_pct": 6.897463002114157,
+      "mean_pair_change_pct": 9.178944297783152,
+      "total_length_change_pct": 8.898537979553689,
+      "more_than_10pct_longer": 142,
+      "more_than_10pct_shorter": 35
+    },
+    "baseline_source/arxivedits-alignment/en": {
+      "n": 60,
+      "longer": 23,
+      "equal": 8,
+      "shorter": 29,
+      "original_mean": 27.116666666666667,
+      "rewritten_mean": 27.666666666666668,
+      "median_pair_change_pct": 0.0,
+      "mean_pair_change_pct": 1.002251617241272,
+      "total_length_change_pct": 2.0282728948985973,
+      "more_than_10pct_longer": 14,
+      "more_than_10pct_shorter": 13
+    },
+    "baseline_source/asset-references/en": {
+      "n": 59,
+      "longer": 23,
+      "equal": 20,
+      "shorter": 16,
+      "original_mean": 16.610169491525422,
+      "rewritten_mean": 17.084745762711865,
+      "median_pair_change_pct": 0.0,
+      "mean_pair_change_pct": 2.503966496320669,
+      "total_length_change_pct": 2.857142857142847,
+      "more_than_10pct_longer": 11,
+      "more_than_10pct_shorter": 8
+    },
+    "baseline_source/code2doc/en": {
+      "n": 15,
+      "longer": 10,
+      "equal": 0,
+      "shorter": 5,
+      "original_mean": 60.06666666666667,
+      "rewritten_mean": 74.66666666666667,
+      "median_pair_change_pct": 17.391304347826097,
+      "mean_pair_change_pct": 22.203031478345,
+      "total_length_change_pct": 24.30632630410654,
+      "more_than_10pct_longer": 9,
+      "more_than_10pct_shorter": 1
+    },
+    "baseline_source/coedit/en": {
+      "n": 60,
+      "longer": 29,
+      "equal": 10,
+      "shorter": 21,
+      "original_mean": 22.883333333333333,
+      "rewritten_mean": 24.25,
+      "median_pair_change_pct": 0.0,
+      "mean_pair_change_pct": 5.893192222803225,
+      "total_length_change_pct": 5.972323379461031,
+      "more_than_10pct_longer": 22,
+      "more_than_10pct_shorter": 9
+    },
+    "baseline_source/coggen-owid/en": {
+      "n": 15,
+      "longer": 0,
+      "equal": 0,
+      "shorter": 15,
+      "original_mean": 2619.4,
+      "rewritten_mean": 1074.8666666666666,
+      "median_pair_change_pct": -59.82680722891567,
+      "mean_pair_change_pct": -58.334445935707386,
+      "total_length_change_pct": -58.96515741518413,
+      "more_than_10pct_longer": 0,
+      "more_than_10pct_shorter": 15
+    },
+    "baseline_source/freshwiki/en": {
+      "n": 9,
+      "longer": 1,
+      "equal": 0,
+      "shorter": 8,
+      "original_mean": 2126.1111111111113,
+      "rewritten_mean": 1681.888888888889,
+      "median_pair_change_pct": -18.821936357481384,
+      "mean_pair_change_pct": -21.17757850730008,
+      "total_length_change_pct": -20.893650378886854,
+      "more_than_10pct_longer": 1,
+      "more_than_10pct_shorter": 8
+    },
+    "baseline_source/iterater-human-doc/en": {
+      "n": 268,
+      "longer": 143,
+      "equal": 5,
+      "shorter": 120,
+      "original_mean": 204.63059701492537,
+      "rewritten_mean": 199.52985074626866,
+      "median_pair_change_pct": 0.7137776874619028,
+      "mean_pair_change_pct": 0.9424994982477422,
+      "total_length_change_pct": -2.492660600645502,
+      "more_than_10pct_longer": 43,
+      "more_than_10pct_shorter": 29
+    },
+    "baseline_source/mcts-references/zh": {
+      "n": 346,
+      "longer": 240,
+      "equal": 23,
+      "shorter": 83,
+      "original_mean": 45.66763005780347,
+      "rewritten_mean": 49.73410404624278,
+      "median_pair_change_pct": 6.897463002114157,
+      "mean_pair_change_pct": 9.131080139685892,
+      "total_length_change_pct": 8.904499715207903,
+      "more_than_10pct_longer": 141,
+      "more_than_10pct_shorter": 34
+    },
+    "baseline_source/rewrite-article-v2/en": {
+      "n": 2,
+      "longer": 0,
+      "equal": 0,
+      "shorter": 2,
+      "original_mean": 912,
+      "rewritten_mean": 636.5,
+      "median_pair_change_pct": -20.67680418795962,
+      "mean_pair_change_pct": -20.67680418795962,
+      "total_length_change_pct": -30.208333333333336,
+      "more_than_10pct_longer": 0,
+      "more_than_10pct_shorter": 1
+    },
+    "baseline_source/rewrite-article-v2/zh": {
+      "n": 2,
+      "longer": 1,
+      "equal": 0,
+      "shorter": 1,
+      "original_mean": 1196.5,
+      "rewritten_mean": 1302.5,
+      "median_pair_change_pct": 17.459443648609124,
+      "mean_pair_change_pct": 17.459443648609124,
+      "total_length_change_pct": 8.85917258671125,
+      "more_than_10pct_longer": 1,
+      "more_than_10pct_shorter": 1
+    }
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "version": "plainvoice-text-cleaning-v1",
+  "rules_sha256": "ec3783638cc9f0473fd5087f0cc29c863f09f25a0ebc4a6a87a40f4480c7d11c",
+  "raw_database_sha256": "a8b2572fbc88853b424ed4b1f8840f605bb32ec6bd251b7b794725b144d47188",
+  "counts": {
+    "records": 1247891,
+    "text_fields": 2466749,
+    "changed_records": 214048,
+    "changed_text_fields": 397342,
+    "review_candidate": 600,
+    "quarantined": 260,
+    "archive_only": 1247031
+  },
+  "collections": {
+    "rewrite-paragraph-v1": {
+      "records": 6,
+      "changed_records": 6,
+      "review_candidate": 6
+    },
+    "rewrite-article-v2": {
+      "records": 6,
+      "changed_records": 6,
+      "quarantined": 2,
+      "review_candidate": 4
+    },
+    "swe-hero-openhands": {
+      "records": 3,
+      "changed_records": 3,
+      "archive_only": 3
+    },
+    "swe-smith": {
+      "records": 3,
+      "changed_records": 0,
+      "archive_only": 3
+    },
+    "deepresearch-bench-ii": {
+      "records": 10,
+      "changed_records": 2,
+      "archive_only": 10
+    },
+    "coggen-owid": {
+      "records": 21,
+      "changed_records": 21,
+      "archive_only": 21
+    },
+    "freshwiki": {
+      "records": 10,
+      "changed_records": 10,
+      "archive_only": 10
+    },
+    "code2doc": {
+      "records": 20,
+      "changed_records": 7,
+      "archive_only": 20
+    },
+    "researcherbench": {
+      "records": 10,
+      "changed_records": 10,
+      "archive_only": 10
+    },
+    "adparaphrase-v2.0-main": {
+      "records": 22337,
+      "changed_records": 14,
+      "archive_only": 22337
+    },
+    "adparaphrase-v2.0-preferences": {
+      "records": 8721,
+      "changed_records": 5,
+      "archive_only": 8721
+    },
+    "iterater-full-doc": {
+      "records": 31281,
+      "changed_records": 24108,
+      "archive_only": 31281
+    },
+    "iterater-human-doc": {
+      "records": 559,
+      "changed_records": 503,
+      "archive_only": 559
+    },
+    "iterater-full-sent": {
+      "records": 194283,
+      "changed_records": 168425,
+      "archive_only": 194283
+    },
+    "iterater-human-sent": {
+      "records": 4018,
+      "changed_records": 3773,
+      "archive_only": 4018
+    },
+    "arxivedits-alignment": {
+      "records": 157057,
+      "changed_records": 1467,
+      "archive_only": 157057
+    },
+    "arxivedits-unaligned": {
+      "records": 62519,
+      "changed_records": 14179,
+      "archive_only": 62519
+    },
+    "arxivedits-edits": {
+      "records": 22,
+      "changed_records": 8,
+      "archive_only": 22
+    },
+    "mcts-references": {
+      "records": 723,
+      "changed_records": 6,
+      "archive_only": 723
+    },
+    "mcts-pseudo": {
+      "records": 691474,
+      "changed_records": 0,
+      "archive_only": 691474
+    },
+    "asset-references": {
+      "records": 2359,
+      "changed_records": 795,
+      "archive_only": 2359
+    },
+    "asset-ratings": {
+      "records": 100,
+      "changed_records": 0,
+      "archive_only": 100
+    },
+    "asset-preferences": {
+      "records": 718,
+      "changed_records": 4,
+      "archive_only": 718
+    },
+    "coedit": {
+      "records": 70783,
+      "changed_records": 428,
+      "archive_only": 70783
+    },
+    "ai-enrichment-units": {
+      "records": 808,
+      "changed_records": 231,
+      "review_candidate": 584,
+      "quarantined": 224
+    },
+    "ai-enrichment-diagnostics": {
+      "records": 5,
+      "changed_records": 2,
+      "review_candidate": 5
+    },
+    "ai-enrichment-articles": {
+      "records": 29,
+      "changed_records": 29,
+      "quarantined": 29
+    },
+    "ai-enrichment-comparison": {
+      "records": 6,
+      "changed_records": 6,
+      "quarantined": 5,
+      "review_candidate": 1
+    }
+  },
+  "actions": {
+    "scoped_web_metadata": 175,
+    "blank_lines": 314,
+    "document_title_to_metadata": 69,
+    "horizontal_whitespace": 332596,
+    "pdf_soft_wrap_joins": 1456,
+    "heading_markup": 14842,
+    "markdown_link": 585,
+    "markdown_link_destination": 431,
+    "prose_punctuation_spacing": 192879,
+    "separator": 135,
+    "emphasis_markup": 1260,
+    "html_entities": 8,
+    "quote_markup": 71,
+    "breadcrumb": 35,
+    "frontmatter": 36,
+    "image": 187,
+    "orphan_source_endnote_anchor": 545,
+    "html_tag": 655,
+    "html_pre_to_fence": 2,
+    "line_endings": 3,
+    "zero_width_characters": 41,
+    "publication_date": 2,
+    "byline": 4,
+    "unicode_nfc": 5,
+    "link_reference_definition": 1
+  },
+  "warnings": {
+    "pdf_line_end_hyphen_preserved_review_required": 4,
+    "structured_json_preserved_not_prose": 5,
+    "ascii_art_or_corrupted_markup_preserved_not_prose": 80,
+    "unmarked_tex_preserved_review_required": 7560,
+    "source_endnotes_missing": 36,
+    "image_removed_review_surrounding_references": 37,
+    "inline_rule_or_fraction_bar_preserved_review_required": 13,
+    "high_deletion_ratio_review_required": 4,
+    "possible_residual_boilerplate_review_required": 195,
+    "source_latex_diff_markup_preserved_not_prose": 7202,
+    "source_wiki_editing_markup_preserved_review_required": 157,
+    "empty_after_cleaning": 5,
+    "nonempty_source_became_empty": 5,
+    "possible_residual_metadata_review_required": 3,
+    "source_math_or_citation_placeholders": 113343,
+    "source_formula_placeholders_preserved_review_required": 105240,
+    "source_reference_placeholders_preserved_review_required": 26819,
+    "scientific_notation_preserved_review_required": 1127
+  },
+  "quarantine_reasons": {
+    "pdf_line_end_hyphen_preserved_review_required": 4,
+    "existing_article_mechanical_review_required": 1,
+    "identical_text_no_style_contrast": 13,
+    "source_math_or_citation_placeholders": 13,
+    "source_reference_placeholders_preserved_review_required": 13,
+    "existing_qa:literal_numbers_missing_or_reformatted": 123,
+    "existing_normalization_requires_review": 142,
+    "existing_qa:normalization_warnings_require_human_review": 142,
+    "existing_qa:writer_reported_unresolved_or_issues": 162,
+    "existing_qa:literal_numbers_added_or_reformatted": 37,
+    "existing_qa:substantial_expansion_check_additions": 4,
+    "semantic_omission": 2,
+    "existing_independent_fidelity_issues": 11,
+    "existing_qa:independent_agent_found_fidelity_issues": 11,
+    "wrong_language": 1,
+    "source_endnotes_missing": 16,
+    "existing_qa:substantial_compression_check_omissions": 11,
+    "metadata_mixed_with_substantive_sentence": 5,
+    "inline_rule_or_fraction_bar_preserved_review_required": 2,
+    "extreme_compression_review_required": 3,
+    "failed_stub": 1,
+    "unmarked_tex_preserved_review_required": 1,
+    "extreme_article_compression": 2
+  },
+  "elapsed_seconds": 196,
+  "qa": {
+    "raw_unchanged": true,
+    "changed_fields_idempotent": true,
+    "all_records_and_references_preserved": true
+  },
+  "scope": "Formatting-clean archive and unreviewed rewrite candidates; not training gold."
+}
