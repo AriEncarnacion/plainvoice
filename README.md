@@ -4,6 +4,18 @@
 
 当前阶段：背景研究、数据采集和内容改写试验。最新用 Gemini Flash-Lite 保存 848 条候选与诊断输出，包含完整文章、句段、模型比较和早期诊断；均采用内容抽取后乱序成文。没有已训练模型、已验证 judge、真实 benchmark 分数或经独立人评确认的 gold。
 
+## 本地目录与启动
+
+2026-09-15：完整 Git 仓库迁至 `~/Desktop/plainvoice`，保留原有 Git 历史及 `origin`。代码在 `scripts/`，文献调研在 `research/`。原桌面数据包已移入 `data/local/`，该目录整体由 `.gitignore` 排除；`data/README.md` 继续纳入版本管理。
+
+双击仓库根目录的 `Open Plainvoice Viewer.command`，或在仓库目录运行：
+
+```bash
+python3 scripts/serve_data_viewer.py --database data/local/data-viewer/review.sqlite
+```
+
+浏览器打开 <http://127.0.0.1:8876/?view=clean>。历史数据和 QA 中的旧绝对路径保留为采集时的 provenance；查找对应文件时，把 `~/Desktop/plainvoice-data-2026-09-12/` 替换为本仓库的 `data/local/`。
+
 ## 从这里开始
 
 - **[全库正文清理](09-12-text-cleaning.md)**：统一原文／AI 格式、正文导出、原始版本切换与质量隔离。

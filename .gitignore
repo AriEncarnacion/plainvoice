@@ -17,3 +17,6 @@ runs/
 *.sqlite-*
 *.db
 *.bundle
+
+# Local corpus: originals, generated pairs, review databases, and exports.
+/data/local/

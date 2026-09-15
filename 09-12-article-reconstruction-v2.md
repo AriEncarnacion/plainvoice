@@ -1,6 +1,6 @@
 # 全文重写 v2：SVO 内容抽取 → 乱序 → 独立成文
 
-用户要求重做第一轮六篇来源：先从全文抽出 pure content，再由 AI 自行组织语言，评价单位改为整篇文章。原文、内容包、生成结果和对照页面保存在桌面 `plainvoice-data-2026-09-12/human-rewrite-pairs/article-v2/`。本文件记录方法；不把未经人评的结果称为 gold。
+用户要求重做第一轮六篇来源：先从全文抽出 pure content，再由 AI 自行组织语言，评价单位改为整篇文章。原文、内容包、生成结果和对照页面保存在桌面 `plainvoice/data/local/human-rewrite-pairs/article-v2/`。本文件记录方法；不把未经人评的结果称为 gold。
 
 ## 本次改变
 

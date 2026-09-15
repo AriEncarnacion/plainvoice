@@ -8,7 +8,7 @@
 
 [本机 viewer](http://127.0.0.1:8876/?view=clean) 默认显示清理后的 A/B 正文。详情的「文本版本」可切换原始采集／生成稿，「清理记录」显示删掉的内容、原因和待复核问题。左侧可筛选改写候选、已隔离记录和其他原始任务。单条可下载当前所见正文。
 
-完整文件位于桌面 `plainvoice-data-2026-09-12/clean-text-v1/`：
+完整文件位于桌面 `plainvoice/data/local/clean-text-v1/`：
 
 | 文件 | 用途 |
 |---|---|
@@ -50,19 +50,19 @@
 
 ```sh
 python3 scripts/clean_data_corpus.py \
-  --database "$HOME/Desktop/plainvoice-data-2026-09-12/data-viewer/review.sqlite" \
-  --output "$HOME/Desktop/plainvoice-data-2026-09-12/clean-text-v2" \
-  --removals "$HOME/Desktop/plainvoice-data-2026-09-12/clean-text-v1/qa/scoped-removals.json" \
-  --defects "$HOME/Desktop/plainvoice-data-2026-09-12/clean-text-v1/qa/scoped-defects.json" \
-  --warnings "$HOME/Desktop/plainvoice-data-2026-09-12/clean-text-v1/qa/review-warnings.json"
+  --database "$HOME/Desktop/plainvoice/data/local/data-viewer/review.sqlite" \
+  --output "$HOME/Desktop/plainvoice/data/local/clean-text-v2" \
+  --removals "$HOME/Desktop/plainvoice/data/local/clean-text-v1/qa/scoped-removals.json" \
+  --defects "$HOME/Desktop/plainvoice/data/local/clean-text-v1/qa/scoped-defects.json" \
+  --warnings "$HOME/Desktop/plainvoice/data/local/clean-text-v1/qa/review-warnings.json"
 ```
 
 正文构建后，可单独导出便于训练适配器读取的来源警告：
 
 ```sh
 python3 scripts/export_cleaning_flags.py \
-  --database "$HOME/Desktop/plainvoice-data-2026-09-12/clean-text-v2/review.sqlite" \
-  --output "$HOME/Desktop/plainvoice-data-2026-09-12/clean-text-v2/format-flags.jsonl.gz"
+  --database "$HOME/Desktop/plainvoice/data/local/clean-text-v2/review.sqlite" \
+  --output "$HOME/Desktop/plainvoice/data/local/clean-text-v2/format-flags.jsonl.gz"
 ```
 
 输出目录必须不存在；脚本校验 raw 文件 hash、清理幂等性、全量行数及 SQLite 完整性后才发布派生目录。更新版本可通过 viewer 的 `--clean-database` 参数选择。

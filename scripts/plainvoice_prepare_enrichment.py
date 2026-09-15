@@ -17,7 +17,7 @@ import sqlite3
 from typing import Any, Iterable
 import zlib
 
-DEFAULT_DB = Path.home() / 'Desktop/plainvoice-data-2026-09-12/data-viewer/review.sqlite'
+DEFAULT_DB = Path(__file__).resolve().parents[1] / 'data/local/data-viewer/review.sqlite'
 CLEAN_DB = DEFAULT_DB.parent.parent / 'clean-text-v1/review.sqlite'
 DEFAULT_OUTPUT = Path('/private/tmp/plainvoice-enrichment-queue.jsonl')
 SELECTION_VERSION = 'plainvoice-enrichment-queue-v3-clean-text'

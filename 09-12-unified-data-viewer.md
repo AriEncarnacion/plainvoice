@@ -39,11 +39,11 @@
 
 ```sh
 python3 scripts/build_data_viewer.py \
-  --root "$HOME/Desktop/plainvoice-data-2026-09-12" \
-  --output "$HOME/Desktop/plainvoice-data-2026-09-12/data-viewer/review.sqlite"
+  --root "$HOME/Desktop/plainvoice/data/local" \
+  --output "$HOME/Desktop/plainvoice/data/local/data-viewer/review.sqlite"
 
 python3 scripts/serve_data_viewer.py \
-  --database "$HOME/Desktop/plainvoice-data-2026-09-12/data-viewer/review.sqlite"
+  --database "$HOME/Desktop/plainvoice/data/local/data-viewer/review.sqlite"
 ```
 
 打开 [本机全量 viewer](http://127.0.0.1:8876)。首次构建读取所有来源，创建约 2.51 GB 的派生索引；之后直接启动第二条命令。输入文件不被修改。服务器仅绑定 loopback，API 为只读，评审不上传服务器。停止后再次运行启动命令即可。

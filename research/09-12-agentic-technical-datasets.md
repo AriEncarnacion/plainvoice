@@ -4,7 +4,7 @@
 
 **结论：已经取得可观测工具轨迹和最终工程总结，也找到一个已核实同一 prompt 的 AI 报告—人类参考文章对；没有找到可直接称为「同内容、事实不变、真人精修 AI 初稿」的现成 gold 数据。** 工具轨迹最合适的入口是 NVIDIA 的 SWE-Hero；研究报告可先看 DeepResearch Bench II 与 CogGen。代码注释数据更接近技术文档，但人类来源和质量仍需逐条核查。
 
-数据实际保存在用户指定的桌面目录：`~/Desktop/plainvoice-data-2026-09-12/agentic-technical/`。`source-manifest.json` 记录来源、revision、选样、许可说明和文件校验；第三方正文仅保存在桌面，不纳入本仓库。
+数据实际保存在用户指定的桌面目录：`~/Desktop/plainvoice/data/local/agentic-technical/`。`source-manifest.json` 记录来源、revision、选样、许可说明和文件校验；第三方正文仅保存在桌面，不纳入本仓库。
 
 ## 1. 先区分四种“配对”
 
