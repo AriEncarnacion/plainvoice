@@ -8,6 +8,13 @@ drift. Standard library only, matching the rest of scripts/.
     python3 scripts/check_translation.py README.md    # one pair
     python3 scripts/check_translation.py --baseline   # record current findings
     python3 scripts/check_translation.py --compare    # fail only on NEW findings
+    python3 scripts/check_translation.py --selftest   # check the merge logic
+
+`--baseline` merges, refreshing only the pairs it just checked, so a single-file
+run does not discard the rest. Regenerate it whenever findings are fixed: a
+baseline entry that no longer reproduces still whitelists that exact finding,
+so reintroducing it would pass `--compare`. `--compare` now says when that has
+happened.
 
 HARD failures are structural and always actionable. SOFT findings need a human
 to look at the line; they are expected to be non-zero even on good files.
@@ -166,9 +173,34 @@ def check(en_path):
     return hard, soft
 
 
+def merge_baseline(existing, fresh):
+    """Refresh only the pairs just checked; leave every other entry alone.
+
+    A single-file run (`check_translation.py README.md --baseline`) must not
+    discard the other 23 files' baselines.
+    """
+    out = dict(existing)
+    out.update(fresh)
+    return out
+
+
+def selftest():
+    old = {"a.md": {"hard": ["gone"], "soft": []},
+           "b.md": {"hard": ["kept"], "soft": ["also kept"]}}
+    new = {"a.md": {"hard": [], "soft": []}}
+    m = merge_baseline(old, new)
+    assert set(m) == {"a.md", "b.md"}, "a single-file run dropped other files"
+    assert m["a.md"]["hard"] == [], "the checked file was not refreshed"
+    assert m["b.md"]["hard"] == ["kept"], "an unchecked file's entry was lost"
+    print("selftest ok")
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    if "--selftest" in flags:
+        selftest()
+        return 0
     targets = ([ROOT / a for a in args] if args else
                sorted(p for p in ROOT.rglob("*.md")
                       if not p.name.endswith(".zh-CN.md")
@@ -195,19 +227,28 @@ def main():
 
     if "--baseline" in flags:
         BASELINE.parent.mkdir(exist_ok=True)
-        BASELINE.write_text(json.dumps(results, indent=1, ensure_ascii=False), "utf-8")
-        print(f"baseline written to {BASELINE.relative_to(ROOT)}")
+        existing = json.loads(BASELINE.read_text("utf-8")) if BASELINE.exists() else {}
+        merged = merge_baseline(existing, results)
+        BASELINE.write_text(json.dumps(merged, indent=1, ensure_ascii=False), "utf-8")
+        print(f"baseline updated for {len(results)} of {len(merged)} pairs "
+              f"in {BASELINE.relative_to(ROOT)}")
         return 0
     if "--compare" in flags and BASELINE.exists():
         base = json.loads(BASELINE.read_text("utf-8"))
-        new = 0
+        new = stale = 0
         for rel, r in results.items():
             was = set(base.get(rel, {}).get("hard", []) + base.get(rel, {}).get("soft", []))
-            for f in r["hard"] + r["soft"]:
-                if f not in was:
-                    print(f"\033[31mNEW\033[0m {rel}: {f}")
-                    new += 1
+            now = set(r["hard"] + r["soft"])
+            for f in sorted(now - was):
+                print(f"\033[31mNEW\033[0m {rel}: {f}")
+                new += 1
+            stale += len(was - now)
         print(f"{new} new findings vs baseline")
+        # A baseline entry that no longer reproduces still whitelists that exact
+        # finding, so reintroducing it would pass the gate. Say so out loud.
+        if stale:
+            print(f"\033[33mnote\033[0m  baseline lists {stale} finding(s) that no longer "
+                  f"reproduce and are therefore whitelisted; rerun --baseline")
         return 1 if new else 0
     return 1 if hard_total else 0
 
