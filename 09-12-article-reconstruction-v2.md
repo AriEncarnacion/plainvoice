@@ -1,49 +1,49 @@
-# Full Text Rewrite v2: SVO Content Extraction → Randomization → Independent Text
+# Full Text Rewrite v2: SVO Content Extraction → Shuffle → Independent Composition
 
-The user requested a redo of the first round of six source articles: first, extract pure content from the full text, then let AI organize the language automatically, and change the evaluation unit to the entire article. The original text, content package, generated results, and comparison page are saved on the desktop. `plainvoice/data/local/human-rewrite-pairs/article-v2/` This document records the method; results that have not been evaluated by others are not referred to as "gold".
+The user asked for the first round's six sources to be redone: first extract pure content from the full text, then have the AI organize the language on its own, with the evaluation unit changed to the whole article. The source texts, content packets, generated results, and side-by-side page are saved on the desktop at `plainvoice/data/local/human-rewrite-pairs/article-v2/`. This document records the method; results that have not undergone human evaluation are not called gold.
 
-## This change
+## What changed this round
 
-The first round only provided a short opening segment of the model, requiring direct rewriting. The second round involved reading six complete texts, representing their content independently, and then writing the entire article. There was no target length for the original text, nor was there a preset number of paragraphs.
+The first round gave the model only a short opening fragment and asked directly for a rewrite. The second round reads the complete body text of all six pieces and writes the whole article only after an independent content representation. There is no target length taken from the source, and no preset number of paragraphs.
 
-1. **Extract full text content.** Each proposition has a subject, predicate, and object, and retains qualifiers, attributes, modality, polarity, and depends_on. The coordinator stores the source_locator and full-text overwrite record separately. Simple triples are insufficient to express constraints such as "retry when parameters are the same and the original key is still retained," and these conditions cannot be removed during sentence splitting.
-2. **Eliminate original text organization hints.** Remove original text location, title metadata, original numbering, and source order from the writer packet. Shuffle all propositions using a fixed seed 20260912, HMAC opaque numbering, and deterministic sorting. True causality, event sequence, and API operation meaning are not randomized.
-3. **New Conversation Writing.** Each piece consists of one... `fork_turns: none` The Codex subagent writing tool provides only a single content package and writing instructions. The model independently selects the title, entry point, organization, paragraphs, and sentences; it prohibits looking back at sources, adjacent files, or searching the original text. All specific and unique content should be expressed, and the article does not include a claim ID.
-4. **Preserve the original output and review it.** Output the main text and a separate coverage JSON. The coordinator does not polish the main text. Mechanically check for completeness of coverage records; the review page asks for additional facts, omissions, organizational similarity, and overall preferences.
+1. **Extract the content of the full text.** Each proposition has a subject, predicate, and object, and retains qualifiers, attribution, modality, polarity, and depends_on. The coordinator separately stores source_locator and the full-text coverage record. Simple triples cannot express qualifiers such as "retry when the parameters are the same and the original key is still retained," and these conditions must not be erased when sentences are split.
+2. **Remove organizational hints from the source.** Strip source locations, title metadata, original numbering, and source order out of the writer packet. Shuffle all propositions using the fixed seed 20260912, HMAC opaque numbering, and deterministic sorting. Real causality, event order, and the meaning of API operations are not randomized.
+3. **Compose in a new session.** Each piece is written by a Codex subagent with `fork_turns: none`, given only that piece's content packet and the writing instructions. The model chooses its own title, entry point, organization, paragraphs, and sentences; looking back at the sources, at adjacent files, or searching for the original text is forbidden. Every qualifier and every piece of unique content should be expressed, and the article carries no claim ID.
+4. **Keep the raw output and review it.** Output the body text and a separate coverage JSON. The coordinator does not polish the body text. A mechanical check confirms whether the coverage record is complete; the review page separately asks about facts, omissions, organizational similarity, and overall preference.
 
-**579 propositions were extracted from the six full-text articles.** "Full-text" refers to the cleaned, complete text; HTML external images were not transcribed, and non-text elements such as PDF footers, copyright notices, website navigation, and comments were excluded separately.
+The six full texts yielded **579 propositions**. "Full text" here means the cleaned, complete body text; images linked externally from the HTML were not newly transcribed, and non-body material such as PDF footers, copyright notices, site navigation, and comments has a separate exclusion record.
 
 | Source | Language | Number of Propositions | Scope |
 |---|---|---:|---|
-Howard Marks, How Quickly They Forget, 2011 | EN | 192 | Text and postscript, including tables |
-Howard Marks, There They Go Again... Again, 2017 | EN | 196 | Full text, retaining historical judgment |
+| Howard Marks, How Quickly They Forget, 2011 | EN | 192 | Body text and postscript, including tables |
+| Howard Marks, There They Go Again . . . Again, 2017 | EN | 196 | Full body text, historical judgments retained |
 | Ruan Yifeng, RESTful API Design Guide, 2014 | ZH | 81 | Full text and code examples |
-| Ruan Yifeng, How to Reduce Software Complexity?, 2018 | ZH | 40 | Full Text |
+| Ruan Yifeng, How to Reduce Software Complexity?, 2018 | ZH | 40 | Full text |
 | Stripe, Designing robust and predictable APIs with idempotency, 2017 | EN | 46 | Full text and two practical code examples |
-| Stripe, Idempotent requests, current snapshot | EN | 24 | Full API documentation text and demonstration meaning |
+| Stripe, Idempotent requests, current snapshot | EN | 24 | Full API documentation text and the meaning of the demonstrations |
 
-## Areas that need to be viewed critically
+## Points that need critical scrutiny
 
-**Scrambling the input order does not guarantee an independent output structure.** The Stripe 2017 draft still follows the teaching sequence of "network failure → idempotency → key → backoff." The model may reconstruct an approximate outline from semantic relationships. Therefore, sentence structure changes and discourse changes must be evaluated separately; scrambling itself is not evidence of successful rewriting.
+**Shuffling the input order does not guarantee an independent output structure.** The new Stripe 2017 draft still forms the teaching sequence "network failure → idempotency → key → backoff". The model may reconstruct an approximate outline from semantic relations. Sentence-level change and discourse-level change therefore have to be evaluated separately; completing the shuffle is not by itself evidence that the rewrite succeeded.
 
-**Extraction carries a risk of loss.** The model may have lost tone, exceptions, or authorial stance before writing. This round retains source location, allowing errors to be distinguished as source → content or content → rewrite. Propositions remain in natural language; book titles, author biographies, and historical memo names sometimes belong to the content; this is neither complete source anonymization nor a purely semantic representation that has been proven to erase all syntactic traces.
+**Extraction is a lossy risk point.** The model may already have lost tone, exceptions, or the author's stance before it starts writing. This round retains source locations, so errors can be told apart as source → content or content → rewrite. Propositions are still natural language, and book titles, the author's own statements, and the names of historical memos sometimes count as content; this is neither thorough source anonymization nor a purely semantic representation proven to erase every syntactic trace.
 
-**Completeness records are not a guarantee of fidelity.** Consistent source unit counts and the appearance of all claim IDs in the coverage only indicate record alignment. Coverage is self-reported by the generator and cannot be used to declare 100% information retention. Character count, n-gram overlap, and order reversal ratios are diagnostic, not scores for quality, AI-likeness, or semantic equivalence.
+**A completeness record is not a fidelity conclusion.** Matching source-unit counts and all claim IDs appearing in the coverage only show that the records line up. Coverage is self-reported by the generator, and 100% information retention cannot be declared on that basis. Character counts, n-gram overlap, and the order-reversal ratio are only diagnostics, not scores for quality, AI-ese, or semantic equivalence.
 
-Another model was reviewed, examining the complete original and new drafts of Stripe 2017 and Ruan Yifeng's REST, totaling 127 extracted propositions. No major omissions or reversals were confirmed, but two specific issues were noted: REST's "list (array)" was changed to "list or array" during extraction, introducing slight formatting ambiguity; the last sentence of Stripe's new draft regarding complete rollback may have mistakenly stated a sufficient condition as a necessary condition, as a low-confidence observation. Both issues are on the local review page, and the original generated results are retained in the main text. This model review cannot be extrapolated to the other four papers, nor can it replace human review.
+A second model re-checked Stripe 2017 and Ruan Yifeng's REST — the two full source texts, the new drafts, and 127 extracted propositions in total. It did not confirm any major omission or reversal, but it recorded two specific issues: REST's "list (array)" became "list or array" during extraction, introducing slight formatting ambiguity; the final sentence of the new Stripe draft about a complete rollback may state a sufficient condition as a necessary one, logged as a low-confidence observation. Both have been put on the local review page, and the body text keeps the raw generated output. This model re-check cannot be extrapolated to the other four pieces, and it does not replace human evaluation.
 
-**The source itself is also problematic.** Howard's 2017 memo contains a discrepancy between 2007 and 2008, which needs to be recorded as an unresolved issue. Ruan Yifeng's 2018 Windows/Unix file behavior is preserved based on historical sources, but the technical details have not been independently verified. The author's source and initial time of the current Stripe document are unknown. Older articles are merely snapshots of this download and have not been verified word-for-word against historical archives.
+**The sources themselves have problems too.** Within the Howard 2017 piece the same memo is dated 2007 in one place and 2008 in another, which has to be recorded as an unresolved item. Ruan Yifeng's 2018 description of Windows/Unix file behavior is kept as the historical source has it; the technical details have not been independently verified. The authorship and original date of the current Stripe document are unknown. The older-dated articles are likewise only the snapshot downloaded this time, and were not checked word-for-word against historical archives.
 
-**The production environment has boundaries.** New sessions prevent inheritance of the current conversation and restrict source access through read commands; no separate OS-level file sandbox is created. Some writers read the root README first according to repository conventions, which does not contain these original texts. System write commands still affect the results. The tool does not return precise backend checkpoints, tokens, or amounts; these fields remain empty. Fixed seeds are only used for content package arrangement, not for generating sample seeds.
+**The generation environment has limits.** A new session prevents inheritance from this conversation and restricts contact with the sources through the read instructions; no separate OS-level file sandbox was built. Following repository conventions, some writers read the root README first, which does not contain these source texts. The system writing instructions still influence the result. The tooling did not return a precise backend checkpoint, token count, or cost amount, so those fields stay empty; the fixed seed is used only for arranging the content packet, and is not a generation sampling seed.
 
-The task distribution and future deployment are different. The current approach is human article → content card → AI draft. This provides candidate pairs and checking methods, but the model will typically receive AI drafts in the future. Human original texts do not necessarily win; human preference and semantic review are needed to determine which data enters the SFT or preference dataset.
+**The task distribution still differs from that of future deployment.** The current direction is human article → content card → AI new draft. It can supply candidate pairs and a checking method, but what a future model receives is usually an AI draft. The human source text does not necessarily win; only after human preference judgments and semantic review can it be decided how any of this enters SFT or preference data.
 
-## Documents and Reproduction
+## Files and reproduction
 
 - [Content extraction prompt](prompts/article-content-extraction.md)
-- [Packaged into a document prompt based on content](prompts/article-from-content.md)
-- [Verify and shuffle the content package](scripts/prepare_article_packets.py)
-- [Generate full-text review page](scripts/build_article_review.py)
+- [Compose from a content packet prompt](prompts/article-from-content.md)
+- [Validate and shuffle content packets](scripts/prepare_article_packets.py)
+- [Generate the full-text review page](scripts/build_article_review.py)
 
 ```sh
 python3 scripts/prepare_article_packets.py \
@@ -55,6 +55,6 @@ python3 scripts/prepare_article_packets.py \
 python3 scripts/build_article_review.py /path/to/article-v2/article-results.json
 ```
 
-The preparation script does not call the generative model. Each writer only receives its own packet and writing instructions; the output should be saved as... `<packet_id>.md` and `<packet_id>.coverage.json` The original source, run input, overwrite self-report, and build history are saved on the desktop and not committed to the repository. Older paragraph experiments are retained. `human-rewrite-pairs/review-paragraph-v1.html`.
+The preparation script does not call a generation model. Each writer receives only its own packet and the composition instructions; output should be saved as `<packet_id>.md` and `<packet_id>.coverage.json`. The raw sources, run inputs, coverage self-reports, and generation records are kept on the desktop and not committed to the repository. The older paragraph experiment remains at `human-rewrite-pairs/review-paragraph-v1.html`.
 
-Script checks include schema, duplicate IDs, missing references, semantic dependency cycles, uncovered source units, and reproducibility of fixed seeds. Page build checks include full text embedding, HTML escaping, missing input failures, and JavaScript syntax. Browser interaction has not undergone actual acceptance testing; this is not a test of human writing quality.
+Script checks include schema, duplicate IDs, missing references, semantic dependency cycles, uncovered source units, and reproducibility under the fixed seed. Page build checks cover full-text embedding, HTML escaping, failure on missing input, and JavaScript syntax. Browser interaction has not been through actual acceptance testing; this is not a test of human writing quality.

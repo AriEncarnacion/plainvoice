@@ -1,220 +1,220 @@
-# Plainvoice: How to define ground truth and verify that "removing AI flavor" truly improves writing.
+# Plainvoice: How to define ground truth, and verify that "removing AI-ese" really did improve the writing
 
-Implementation criteria: This memorandum retains the alternative scales and sizes derived from the literature; the first round will uniformly adopt...[Labeling Protocol v0.1](../09-12-annotation-protocol.md)The severity of the problem is 0–3, and[Main scheme](../09-12-research-and-experiment-plan.md)The 80 pilot, experimental arm numbering, and statistical rules.
+Operative scope: this memorandum keeps the candidate scales and sample sizes derived from the literature; the first round uniformly adopts the 0–3 problem severity of the [annotation protocol v0.1](../09-12-annotation-protocol.md), together with the 80-item pilot, the experiment-arm numbering, and the statistical rules of the [main plan](../09-12-research-and-experiment-plan.md).
 
-Research Date: 2026-09-12. Scope: Chinese and English versions, technical documentation and marketing copies are given equal priority. This memo focuses on measurement and evaluation and is part of the first round of targeted literature review; it is not an exhaustive systematic review up to 2026. All references link to original papers or the authors' published texts; secondary articles are not used as the basis for conclusions.
+Research date: 2026-09-12. Scope: Chinese and English, technical documentation and marketing copy — the four scenarios have equal priority. This memo focuses on measurement and evaluation and belongs to the first round of targeted literature research; it is not an exhaustive systematic review up to 2026. Every reference links to the original paper or to body text published by the authors; no secondary article is used as the basis for a conclusion.
 
 ## Core judgment
 
-The user-suggested order of "first create the evaluator, then train the rewriter, and then compare it with prompting/harnessing" is basically reasonable, but the goal of the evaluator cannot be set as "detecting whether the author is AI." At least three things need to be separated:
+The order the user proposed — "build the evaluator first, then train the rewriter, then compare against prompting / harness" — is broadly reasonable, but the evaluator's target must not be set to "detect whether the author is an AI." At least three things have to be kept apart:
 
-| The object to be measured | Tag source | Purpose in this project |
+| Object to be measured | Source of labels | Use in this project |
 |---|---|---|
-| Provenance: Who actually generated it and what process was used? | Verifiable source, timestamp, generation logs, and edit records | Analyze data coverage and obfuscation factors; it cannot be directly used as a label for quality. |
-| Perceived AI-ness: The degree to which readers perceive the templated, generalized, and mechanical approach | Blind review by target readers, preferably with specific textual evidence | User perception metrics, which must acknowledge cultural, linguistic, contextual, and individual differences |
-| Writing utility: Accuracy, specificity, clarity, and applicability | Evaluation by editors/domain experts based on the brief and source materials; objective checks are conducted when applicable | The product's main objectives, along with content fidelity, serve as the basis for model selection |
+| Provenance: who actually produced it, and by what process | Verifiable sources, timestamps, generation logs, edit records | Analysing data coverage and confounding factors; it cannot be used directly as a quality label |
+| Perceived AI-ness: how templated, generic, and mechanical readers find it | Blind evaluation by target readers, ideally with concrete textual evidence | A user-perception metric; it must acknowledge cultural, linguistic, contextual, and individual differences |
+| Writing utility: whether it is accurate, specific, clear, and fit for purpose | Assessed by editors/domain experts against the brief and source material; objective checks where applicable | The product's primary objective; together with content fidelity it is the basis for choosing a model |
 
-Labeling pre-ChatGPT text as "good" and model-generated text as "bad" makes it easy to train classifiers based on era, vocabulary, website, and layout. High-quality human text, poor human clichés, excellent AI rewrites, and poor AI text should all be included in the labeling scope. AI sources are not negative, and human sources are not positive. This is a data design suggestion for this project, not a universally applicable classification method proven in any paper.
+Labelling pre-ChatGPT text "good" and model-generated text "bad" makes it very easy to train a classifier for era, vocabulary, website, and layout. High-quality human writing, bad human boilerplate, good AI rewrites, and bad AI text should all enter the annotation scope. AI provenance is not the negative class, and human provenance is not the positive class. This is a data-design recommendation for this project, not a universal taxonomy that some paper has already proven.
 
-For user-generated examples like "not X, but Y," it's important to note whether they provide a true distinction, boundary, or mechanism. For instance, "This operation is not an append write, but an overwrite of an existing file" has significant implications; "This isn't an upgrade, it's a revolution" might only amplify emotions without supporting evidence. The frequency of sentence structure can help with identification, but it cannot solely determine quality. Avoid turning "removing the AI flavor" into another fixed tone.
+For the 「不是 X，而是 Y」 (*"not X, but rather Y"*) construction the user raised, annotate whether it supplies a real distinction, boundary, or mechanism. For example, 「此操作不是追加写入，而是覆盖现有文件」 (*"this operation is not an append write, but an overwrite of the existing file"*) carries important meaning, whereas 「这不是一次升级，而是一场革命」 (*"this is not an upgrade, it is a revolution"*) may merely add emotion when no evidence is given. The number of occurrences of the pattern can help locate candidates; it cannot decide quality on its own. Avoid turning "removing AI-ese" into just another fixed register.
 
-## 12 key documents and their applicable boundaries
+## 12 key papers and their limits of applicability
 
-### E01. Humans can also confuse something that "sounds like a human" with its actual origin.
+### E01. Humans, too, confuse "sounds human" with actual provenance
 
-**Maurice Jakesch, Jeffrey T. Hancock, Mor Naaman. 2023. _Human heuristics for AI-generated language are flawed_. PNAS 120(11), e2208839120.** [DOI of the paper](https://doi.org/10.1073/pnas.2208839120) · [Full text of the author's preprint](https://arxiv.org/pdf/2206.07271)
+**Maurice Jakesch, Jeffrey T. Hancock, Mor Naaman. 2023. _Human heuristics for AI-generated language are flawed_. PNAS 120(11), e2208839120.** [Paper DOI](https://doi.org/10.1073/pnas.2208839120) · [Full text of the authors' preprint](https://arxiv.org/pdf/2206.07271)
 
-Six experiments involving 4,600 participants examined self-introductions on professional, dating, and accommodation platforms. The primary experiments achieved an accuracy rate of approximately 50%–52% in identifying the source. First-person pronouns and family-related topics make the text sound more human, but may not actually reveal the source. On the other hand, having another group directly rate "repetitive" and "incoherent" texts revealed some genuine issues. The paper also demonstrates that texts selected based on human perception are more easily perceived as human-written than actual human writing.
+Six experiments with 4,600 participants in total examined self-presentations on professional, dating, and accommodation platforms. Accuracy at judging provenance in the main experiments was about 50%–52%. First person, family topics, and the like make readers feel the text is more human, yet may not actually distinguish provenance. On the other hand, when a separate set of readers was asked to rate "repetitive" and "not fluent" directly, some real problems could be measured. The paper also shows that text selected on the basis of human perception is judged human-written more readily than actual human writing.
 
-This project adopts the following approach: Breaking down "template-like/vague/redundant" issues into locatable editing questions; and asking questions with an overall AI feel to prevent guesses about the source from dominating all scoring.
+**Adopted by this project:** break "sense of templatedness / vagueness / redundancy" into locatable editing problems; ask about overall AI-ness as a separate question, so that guesses about provenance do not dominate every score.
 
-**Limitations:** This research uses English self-presentation and is based on an earlier model. It cannot be concluded that today's professional editors only have a random judgment level when it comes to Chinese technical documents. What is transferable is the measurement alert, not the accuracy rate.
+**Limitations:** this is a study of English self-presentation with an earlier model; it cannot be extended to conclude that today's professional editors are also at chance level on Chinese technical documentation. What transfers is the measurement caution, not the accuracy figure.
 
-**Reading scope:** The experimental setup, main results, heuristic analysis, optimization text, and discussion in the full text; all statistical models in the appendix have not been reviewed.
+**Reading scope:** the experimental setup, main results, heuristic analysis, optimized texts, and discussion in the full text; not all statistical models in the appendix were re-checked.
 
-### E02. The detector's low perplexity signal may penalize clear, naive non-native English.
+### E02. A detector's low-perplexity signal may penalize clear, plain non-native English
 
 **Weixin Liang, Mert Yuksekgonul, Yining Mao, Eric Wu, James Zou. 2023. _GPT detectors are biased against non-native English writers_. Patterns 4(7), 100779.** [Full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC10382961/)
 
-The study evaluated 91 TOEFL articles and 88 US eighth-grade articles using seven detectors. The average false positive rate for the TOEFL articles was 61.3%, which decreased to 11.6% after vocabulary enhancement. This is a result specific to the detector, sample, and time period, and does not represent the current false positive rate of all existing detectors. It suggests that rare words, complex expressions, and detection scores may be correlated.
+The study used seven detectors to evaluate 91 TOEFL essays and 88 US eighth-grade essays; the average false-positive rate on the TOEFL essays was 61.3%, dropping to 11.6% after the vocabulary was enriched. This is a result for particular detectors, samples, and a particular moment in time, not the current false-positive rate of every detector in use. It shows that rare words, elaborate expression, and detection scores may be bound together.
 
-This project adopts the following approach: Separately list non-native English segments; include clear, simple, and professional English examples. Do not train the model by intentionally adding rare words, grammatical errors, or colloquialisms to make it "human-like."
+**Adopted by this project:** keep a separate non-native-English slice; put clear, plain, professional English into the positive examples. Do not train the model to deliberately add rare words, grammatical errors, or spoken filler in order to seem "human."
 
-**Limitations:** The two groups differ in age, genre, and writing environment; this design cannot precisely attribute all differences to native language identity. The Chinese study should be independently validated; TOEFL conclusions cannot be directly applied.
+**Limitations:** the two sets of writers also differ in age, genre, and writing environment; the design cannot attribute all of the difference precisely to native-speaker status. Chinese should be validated independently; the TOEFL conclusions cannot simply be carried over.
 
-**Reading scope:** Samples of the full text, false positives, vocabulary interventions, and discussions.
+**Reading scope:** the samples, false positives, vocabulary intervention, and discussion in the formal full text.
 
-### E03. Multilingual detection datasets cannot be directly used as bilingual document quality datasets.
+### E03. A multilingual detection dataset cannot serve directly as a bilingual copy-quality set
 
 **Yuxia Wang et al. 2024. _M4: Multi-Generator, Multi-Domain, and Multi-Lingual Black-Box Machine-Generated Text Detection_. EACL.** [formal paper](https://aclanthology.org/2024.eacl-long.83/) · [PDF](https://aclanthology.org/2024.eacl-long.83.pdf)
 
-M4 covers multiple generators, domains, and seven languages, including Chinese and English, and found that generalization across unseen domains and generators remains difficult. The Chinese portion consists of Baike/Web QA; the English portion includes Wikipedia, WikiHow, Reddit, arXiv, and PeerRead. Table 1 of the paper contains a total of 147,895 human/machine text entries, with 9,000 in Chinese, including 3,000 human text entries; do not interpret "parallel" as a faithful, sentence-by-sentence rewrite.
+M4 covers multiple generators, multiple domains, and seven languages including Chinese and English, and finds that generalization to unseen domains and generators remains difficult. Its Chinese portion is Baike/Web QA; the English portion includes Wikipedia, WikiHow, Reddit, arXiv, and PeerRead. Table 1 of the paper gives a total of 147,895 human/machine texts, of which 9,000 are Chinese, including 3,000 human texts; do not read "parallel" as faithful sentence-by-sentence rewrite pairs.
 
-This project adopts:** drawing inspiration from cross-generator, cross-domain, and cross-language segmentation; it can be used for external distributed stress testing.
+**Adopted by this project:** borrow its cross-generator, cross-domain, and cross-language splits; it can be used as an external-distribution stress test.
 
-**Limitations:** The English and Chinese domains do not match, making it impossible to differentiate between language and domain influence solely based on overall scores; QA does not represent technical documentation or marketing copy. The required "Better Rewrite" preference tag is not available for this project.
+**Limitations:** the Chinese and English domains do not match, so language effects and domain effects cannot be separated from the overall scores alone; QA does not stand in for technical documentation or marketing copy. It does not carry the "better rewrite" preference labels this project needs.
 
-**Reading scope:** Data construction, Table 1, Chinese source, human evaluation, and definition of cross-language experiments.
+**Reading scope:** data construction, Table 1, the Chinese sources, human evaluation, and the definitions of the cross-language experiments.
 
-### E04. Detection scores are very fragile against decoding and surface modifications.
+### E04. Detection scores are very fragile with respect to decoding and surface changes
 
 **Liam Dugan, Alyssa Hwang, Filip Trhlík, Andrew Zhu, Josh Magnus Ludan, Hainiu Xu, Daphne Ippolito, Chris Callison-Burch. 2024. _RAID: A Shared Benchmark for Robust Evaluation of Machine-Generated Text Detectors_. ACL.** [formal paper](https://aclanthology.org/2024.acl-long.674/) · [PDF](https://aclanthology.org/2024.acl-long.674.pdf)
 
-The RAID contains over 6 million generations/variants, covering 11 generators, 8 main domains, 11 attack classes, and 4 decoding settings; 12 detectors were tested. Resampling methods, repetition penalties, generators, or surface forms all affect detection. The main set uses pre-2022 human sources; this is a proofreading choice and does not define human text as superior.
+RAID contains over 6 million generations/variants, covering 11 generators, 8 main domains, 11 classes of attack, and 4 decoding settings; 12 detectors were tested. Changing the sampling method, the repetition penalty, the generator, or the surface form all affect detection. The main set uses pre-2022 human sources; that is a provenance choice, and it does not define human writing as excellent.
 
-This project adopts the following approach: **Retaining complete metadata for decoding, model version, prompt, and source documents; all generation and rewriting of the same source document must be done within the same data partition.**
+**Adopted by this project:** retain complete metadata for decoding, model version, prompt, and source document; every generation and rewrite of the same source text must sit in the same data partition.
 
-**Limitations:** The core task is detection; the main focus is not on Chinese marketing copy. Some stress tests can corrupt numerical data, therefore a "decrease in detection scores" does not necessarily indicate that rewriting is beneficial.
+**Limitations:** the core task is detection, and the main set is not Chinese marketing copy. Some stress tests damage content such as numbers, so a "drop in detection score" cannot by itself show that the rewriter is beneficial.
 
-**Reading scope:** Data construction, generation settings, detector and threshold evaluation, limitations; attack not reproduced item by item.
+**Reading scope:** data construction, generation settings, detector and threshold evaluation, limitations; the attacks were not reproduced item by item.
 
-### E05. The theoretical boundaries of detection cannot be exaggerated to the point that "any detection is ineffective".
+### E05. The theoretical limits of detection must not be inflated into "no detection works at all"
 
-**Vinu Sankar Sadasivan, Aounon Kumar, Sriram Balasubramanian, Wenxiao Wang, Soheil Feizi. _Can AI-Generated Text be Reliably Detected?_ 2023 first release; current reading 2025-01-17 v4.** [full text](https://arxiv.org/html/2303.11156v4)
+**Vinu Sankar Sadasivan, Aounon Kumar, Sriram Balasubramanian, Wenxiao Wang, Soheil Feizi. _Can AI-Generated Text be Reliably Detected?_ First released 2023; v4 of 2025-01-17 read this round.** [full text](https://arxiv.org/html/2303.11156v4)
 
-The paper investigates the impact of recursive paraphrasing on multi-class detectors, and also points out that rewriting may slightly reduce text quality. Its theory links the upper bound of the optimal detector's AUROC to the total variation distance of the human/model text distribution: the closer the distributions are, the more difficult it is to identify the source.
+The paper studies the effect of recursive paraphrasing on several classes of detector, and also notes that paraphrasing may slightly reduce text quality. Its theory links the AUROC upper bound of the optimal detector to the total variation distance between the human and model text distributions: the closer the distributions, the harder provenance is to identify.
 
-**This project uses:** The detector is only used as a diagnostic indicator; natural and accurate AI rewriting may be difficult to detect, but the reverse is not necessarily true.
+**Adopted by this project:** the detector serves only as a diagnostic indicator; natural, accurate AI rewrites may also be hard to detect, but the converse does not necessarily follow.
 
-**Limitations:** The statement that "model progress will inevitably bring all real-world text distributions infinitely close" is not a fact directly proven by this theorem; actual TV is difficult to estimate accurately from finite texts. The paper does not prove that detectors are useless for all given domains.
+**Limitations:** "model progress must bring every real-world text distribution infinitely close" is not a fact this theorem directly proves; in practice TV is hard to estimate precisely from finite text. The paper does not prove that detectors are useless in every given domain.
 
-**Reading Scope:** v4 abstract, paraphrase quality statement, Theory Section 4, Theorem 1 and hypothesis interpretation; proof not checked line by line.
+**Reading scope:** the v4 abstract, the note on paraphrase quality, the theory in Section 4, Theorem 1 and the explanation of its assumptions; the proof was not checked line by line.
 
-### E06. Style transfer already has a more suitable multidimensional assessment tradition.
+### E06. Style transfer already has a better-suited multi-dimensional evaluation tradition
 
 **Remi Mir, Bjarke Felbo, Nick Obradovich, Iyad Rahwan. 2019. _Evaluating Style Transfer for Text_. NAACL.** [formal paper](https://aclanthology.org/N19-1049/) · [PDF](https://aclanthology.org/N19-1049.pdf)
 
-The paper distinguishes between style transfer intensity, content preservation, and naturalness, advocating for observation of the trade-offs among these objectives. In the Yelp sentiment transfer experiment, relative judgments of naturalness showed higher annotation consistency than absolute scores; however, style intensity did not show the same universal benefit. Sentence perplexity in this experiment was not significantly correlated with naturalness ratings.
+The paper distinguishes style transfer intensity, content preservation, and naturalness, and argues for watching the trade-offs among these objectives. In the Yelp sentiment transfer experiment, relative judgments of naturalness had higher annotation agreement than absolute scores; style intensity, however, showed no comparable general gain. Sentence perplexity in that experiment was not significantly correlated with human evaluation of naturalness.
 
-This project employs the following approach: simultaneously recording the extent of rewriting, fidelity, naturalness, and task quality; using blinded pairwise preference as the primary comparison; and using multi-dimensional scoring to diagnose the causes.
+**Adopted by this project:** record the extent of the rewrite, fidelity, naturalness, and task quality together; use blinded pairwise preference for the main comparison, and per-dimension scores to diagnose the cause.
 
-**Limitations:** The boundaries of sentiment shifting are much clearer than those of open-ended "de-AI flavoring"; the word-level masking and WMD proposed in the paper should not be used directly as fact checkers for technical documents.
+**Limitations:** sentiment transfer has far clearer boundaries than open-ended "removing AI-ese"; the word-level masking and WMD the paper proposes should not be used directly as a fact checker for technical documentation.
 
-**Reading Scope:** Evaluation definition, human evaluation, results and tradeoff discussion; old model not reproduced.
+**Reading scope:** the evaluation definitions, human evaluation, results, and the tradeoff discussion; the older models were not reproduced.
 
-### E07. A general LLM judge can be useful, but a meta-evaluation of the current task must be performed first.
+### E07. A general-purpose LLM judge can be useful, but meta-evaluation on the task at hand must come first
 
 **Lianmin Zheng et al. 2023. _Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena_. NeurIPS Datasets and Benchmarks.** [full text](https://arxiv.org/html/2306.05685)
 
-The paper system analyzes limitations related to position, verbosity, self-preference, and reasoning ability. The GPT-4 judge achieves over 80% consistency on its specific human preference data; however, this is not a guarantee of accuracy for any new writing task or any new judge. It distinguishes between pairwise, single-answer scoring, and judging with reference answers.
+The paper systematically analyses position bias, verbosity bias, self-preference, and limited reasoning ability. The GPT-4 judge reaches over 80% agreement on its particular human preference data; that is not an accuracy guarantee for any new writing task or any new judge. It distinguishes pairwise comparison, single-answer scoring, and judging with a reference answer.
 
-This project employs the following methods: Hiding model names and sources, randomizing A/B sampling, and repeating a subset of samples with swapped order; comparing the consistency between the judge and domain editing on a calibration set, and reporting on four scenarios respectively. Using different families of judges can reveal discrepancies, but cannot prove that the biases are independent.
+**Adopted by this project:** hide model names and provenance, randomize A/B, and repeat a portion of the samples with the order swapped; compare the agreement between the judge and domain editors on a calibration set, reporting the four scenarios separately. Using judges from different families can surface disagreement, but cannot prove the biases are independent.
 
-**Limitations:** General chat preferences do not equate to the effectiveness of professional copywriting; human evaluations may also favor long, neat, and confident answers.
+**Limitations:** general chat preference is not the same as professional copy performing well; human evaluation itself may also favour long, tidy, confident answers.
 
-**Reading Scope:** Assessment format, bias section, human agreement, and data definitions.
+**Reading scope:** the evaluation formats, the bias sections, human agreement, and the data definitions.
 
-### E08. The feasible starting point of the Rubric judge and the risk of self-reinforcement come from the same paper.
+### E08. The workable starting point for a rubric judge and the risk of self-reinforcement come from the same paper
 
 **Yang Liu, Dan Iter, Yichong Xu, Shuohang Wang, Ruochen Xu, Chenguang Zhu. 2023. _G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment_. EMNLP.** [formal paper](https://aclanthology.org/2023.emnlp-main.153/) · [PDF](https://aclanthology.org/2023.emnlp-main.153.pdf)
 
-G-Eval uses task/dimension definition, evaluation steps, and structured form completion. The paper reports an average Spearman correlation of 0.514 on SummEval, while explicitly stating that the judge may favor LLM-generated abstracts and warning that directly using this evaluation for tuning may reinforce its own bias.
+G-Eval uses task/dimension definitions, evaluation steps, and a structured form to fill in. The paper reports an average Spearman correlation of 0.514 on SummEval, while explicitly raising the possibility that the judge favours LLM-generated summaries, and warning that feeding such evaluation straight into tuning may reinforce its own preferences.
 
-This project adopts the following approach: First, a rubric + anchor point sample + evidence spans are used as the evaluator baseline; then each dimension is calibrated separately. The evaluation output includes partial evidence and brief reasons, but this does not mean the reasons are necessarily correct; random sampling is still required.
+**Adopted by this project:** start with rubric + anchor examples + evidence spans as the evaluator baseline; calibrate each dimension separately. Having the evaluation output local evidence and a short rationale does not mean the rationale is necessarily correct; spot checks are still required.
 
-**Limitations:** The preference is that LLM texts are used for preliminary analysis and potential interpretations within the paper, rather than general conclusions that have eliminated confounding factors; relevance in the abstract/dialogue cannot be directly extrapolated.
+**Limitations:** the preference for LLM text is, in the paper, a preliminary analysis and a possible explanation, not a general conclusion with confounders ruled out; correlations on summarization/dialogue cannot be extrapolated directly.
 
-**Reading scope:** Methodology, SummEval Table 1, LLM output preference analysis, limitations.
+**Reading scope:** the method, SummEval Table 1, the analysis of preference for LLM output, and the limitations.
 
-### E09. Control the length, but do not replace "shorter is better" with a new reward.
+### E09. Control for length, but do not turn "shorter is better" into a new reward
 
-**Yann Dubois, Balázs Galambosi, Percy Liang, Tatsunori B. Hashimoto. _Length-Controlled AlpacaEval: A Simple Way to Debias Automatic Evaluators_. 2024 first release; current reading 2025-03-10 v2.** [full text](https://arxiv.org/html/2404.04475v2)
+**Yann Dubois, Balázs Galambosi, Percy Liang, Tatsunori B. Hashimoto. _Length-Controlled AlpacaEval: A Simple Way to Debias Automatic Evaluators_. First released 2024; v2 of 2025-03-10 read this round.** [full text](https://arxiv.org/html/2404.04475v2)
 
-By adjusting for output length differences through regression, the preference for outputs of the same length was estimated; in their AlpacaEval experiment, the Spearman correlation with Chatbot Arena rankings improved from 0.94 to 0.98. The authors explicitly listed the assumptions and boundaries of application: simple English instructions, a specific judge prompt, and the desire to compare outputs of the same length.
+Regression is used to adjust away differences in output length and estimate the preference that would hold at equal length; in their AlpacaEval experiment, the Spearman correlation with Chatbot Arena rankings rose from 0.94 to 0.98. The authors state the assumptions and limits of applicability explicitly: simple English instructions, a particular judge prompt, and a wish to compare outputs of the same length.
 
-**This project employs:** Sensitivity analysis that simultaneously reports original preferences, length variation, information retention, and length matching.
+**Adopted by this project:** report the raw preference, the change in length, information retention, and a length-matched sensitivity analysis together.
 
-**Limitations:** One of the goals of this project may be to eliminate unnecessary information, and the length is a mediating result actually generated by the method. Reporting only the score after controlling the length will also eliminate the real benefits; technical documents and taglines cannot be forced to have the same length, and Chinese and English token numbers cannot be directly mixed.
+**Limitations:** one of this project's goals may be precisely to cut the filler, and length is also a mediating outcome the method genuinely produces. Reporting only the length-controlled score would cancel out the real gain along with it; technical documentation and a tagline cannot be forced to the same length, and Chinese and English token counts cannot simply be pooled.
 
-**Reading scope:** Definitions, regression control, main results, other biases, and limitations.
+**Reading scope:** the definitions, the regression control, the main results, other biases, and the limitations.
 
-### E10. Rewrite using atomic facts checking, but recall must be added.
+### E10. Check rewrites with atomic facts, but recall has to be added back
 
 **Sewon Min, Kalpesh Krishna, Xinxi Lyu, Mike Lewis, Wen-tau Yih, Pang Koh, Mohit Iyyer, Luke Zettlemoyer, Hannaneh Hajishirzi. 2023. _FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation_. EMNLP.** [formal paper](https://aclanthology.org/2023.emnlp-main.741/) · [PDF](https://aclanthology.org/2023.emnlp-main.741.pdf)
 
-FActScore breaks down long texts into atomic facts, checks each fact against credible sources, and then calculates factual precision. The paper explicitly states that it does not measure recall: saying less or nothing may reduce the chance of errors but still does not meet the task requirements.
+FActScore breaks long text into atomic facts, checks one by one whether a trustworthy source supports each, and then computes factual precision. The paper states explicitly that it does not measure recall: saying less, or saying nothing, can cut the chance of error and still fail the task.
 
-This project employs the following approach: Two-way checks are performed on the rewrite: whether the added/changed assertions in the output are supported by supporting materials, and whether the assertions required to be retained in the original text are still fully present. Additionally, numbers, units, negations, conditions, versions, API identifiers, and commitment strength are checked.
+**Adopted by this project:** check rewrites in both directions — whether the assertions the output adds or changes are supported by the source material, and whether the assertions the source draft requires to be kept are still present in full. Also check numbers, units, negations, conditions, versions, API identifiers, and the strength of commitments.
 
-**Limitations:** The input text itself may contain errors; a distinction must be made between "faithful to the original text" and "real-world accuracy." Rigorous mode should provide a source pack or a verified claim ledger. Marketing metaphors and opinions should not be treated as factual for scoring.
+**Limitations:** the input text may itself be wrong; "faithful to the source draft" and "correct in the real world" must be kept apart. Strict mode should supply a source pack or a human-confirmed claim ledger. Marketing metaphors and opinions cannot all be scored as if they were facts.
 
-**Reading scope:** Definitions, knowledge source assumptions, scope of biography, precision/recall limitations.
+**Reading scope:** the definitions, the knowledge-source assumptions, the biography scope, and the precision/recall limitations.
 
-### E11. Judges should be able to reject judgments that are "nice to hear but don't accomplish the task."
+### E11. The judge must be able to reject "sounds good but did not do the task"
 
-**Zhiyuan Zeng, Jiatong Yu, Tianyu Gao, Yu Meng, Tanya Goyal, Danqi Chen. 2024. _Evaluating Large Language Models at Evaluating Instruction Following_. ICLR.** [full text](https://arxiv.org/html/2310.07641v2) · [Author Data Warehouse](https://github.com/princeton-nlp/LLMBar)
+**Zhiyuan Zeng, Jiatong Yu, Tianyu Gao, Yu Meng, Tanya Goyal, Danqi Chen. 2024. _Evaluating Large Language Models at Evaluating Instruction Following_. ICLR.** [full text](https://arxiv.org/html/2310.07641v2) · [Authors' data repository](https://github.com/princeton-nlp/LLMBar)
 
-LLMBar has 419 paired samples: 100 natural and 319 adversarial. In each pair, one sample follows the instructions, while the other deviates but may be more attractive or fluid. The authors used this to examine whether the judge was misled by surface quality and to test improved prompting methods for evaluation.
+LLMBar has 419 paired samples: 100 natural and 319 adversarial. In each pair one member follows the instruction and the other departs from it, yet may be more appealing and more fluent. The authors use this to check whether the judge is misled by surface quality, and to test prompting methods that improve evaluation.
 
-This project employs the following approach: Constructing challenge pairs such as "more colloquial but missing conditions," "more specific but fabricated data," "removing clichés but correcting meaning errors," and "more emotional but not in line with the brand." Constraint failures and style preferences are recorded separately.
+**Adopted by this project:** construct challenge pairs such as "more colloquial but drops a condition," "more specific but fabricates data," "removes the boilerplate but gets the meaning wrong," and "more emotive but off-brand." Record constraint failures separately from style preference.
 
-**Limitations:** LLMBar's preferences are as objective as possible; the naturalness and brand fit of this project are subjective; it cannot be assumed that every rewrite pair has a single winner.
+**Limitations:** LLMBar's preferences are as objective as they can be made, whereas this project's naturalness and brand fit are subjective; it cannot be assumed that every rewrite pair has a single winner.
 
-**Reading scope:** Task definition, 419 components, adversarial construction and prompting design.
+**Reading scope:** the task definition, the composition of the 419 items, the adversarial construction, and the prompting design.
 
-### E12. Even with multiple sampling and selecting the best option, overfitting of the reward can still occur, not just in RL.
+### E12. Sampling many and picking the best also overfits the reward — this is not confined to RL
 
 **Leo Gao, John Schulman, Jacob Hilton. 2023. _Scaling Laws for Reward Model Overoptimization_. ICML.** [formal paper](https://proceedings.mlr.press/v202/gao23h.html) · [PDF](https://proceedings.mlr.press/v202/gao23h/gao23h.pdf)
 
-The paper trains a proxy reward model in a synthesized setting using a fixed gold reward model instead of a human. When optimizing the proxy, the gold score may initially increase and then decrease; the study also covers both reinforcement learning (RL) and best-of-n methods. Therefore, even with "untrained harnesses," there is a risk of over-optimizing the evaluator.
+In a synthetic setting, the paper substitutes a fixed gold reward model for humans and trains a proxy reward model. As the proxy is optimized, the gold score may rise and then fall; the study covers both RL and best-of-n. A "training-free harness" therefore also carries the risk of over-optimizing the evaluator.
 
-This project employs the following methods: Separating training/sampling judge from final blind evaluation; reserving a test set that has never been used in prompt iteration, checkpoint selection, or n selection. The aim is to observe whether the quality of human work decreases with optimization intensity.
+**Adopted by this project:** keep the training/sampling judge separate from the final blind evaluation; hold out a test set never used for prompt iteration, checkpoint selection, or choosing n. Observe whether human-rated quality falls as optimization pressure rises.
 
-**Limitations:** Gold is still a model, and the paper does not fully capture the discrepancy between human labels and actual needs; its scaling law coefficients cannot be directly used for budget forecasting in this project.
+**Limitations:** gold is still a model, and the paper does not fully capture the gap between human labels and real needs; its scaling-law coefficients cannot be applied directly to this project's budget forecasts.
 
-**Reading scope:** Research setup, RL/best-of-n definition and 4.5 limitations; experiments not reproduced.
+**Reading scope:** the study setup, the RL/best-of-n definitions, and the 4.5 limitations; the experiments were not reproduced.
 
 ## Suggested ground truth structure
 
-The following are project design suggestions based on literature, which have not yet been actually collected or verified.
+The following are project design recommendations based on the literature; no real collection or verification has been done yet.
 
-1. **Source Records.** Save the URL, fetch/archive date, original release date, author/brand, license, permitted use, language, domain, length, and source pack. Pre-ChatGPT pages should use a snapshot or verifiable version from that time, not just an old date on the page; older text may also have been included in the model's pre-training corpus.
-2. **Content Constraints.** Each input corresponds to a manually verified claim ledger: essential facts, figures, conditions, terminology, evidence, CTAs, tone, and length constraints. Technical documentation retains its executability; marketing materials retain the basis for selling points and the boundaries of promises.
-3. **Quality Tagging.** Independently evaluated by the target audience/editors, without showing them human/AI tags, model name, generation time, or detector score. Saves dimensional results, wins/losses, evidence fragments, and disagreements; does not automatically delete samples with no consensus.
-4. **Rewrite Correction.** Within the same source pack, this includes the original file, minimal manual modifications, major rewrites, and outputs from different models/prompts. High-quality original files should be tagged "No Rewrite/Minor Modifications" to prevent forced changes to the model each time.
+1. **Source records.** Save the URL, the fetch/archive date, the original publication date, the author/brand, the licence, the permitted scope of use, the language, the domain, the length, and the source pack. Pre-ChatGPT pages should use a snapshot from that time or a verifiable version, not merely an old date printed on the page; old text may also already have entered a model's pre-training corpus.
+2. **Content constraints.** Each input has one human-verified claim ledger: facts that must not be dropped, numbers, conditions, terminology, evidence, CTA, tone, and length constraints. Technical documentation keeps its executability; marketing material keeps the grounds for its selling points and the boundaries of its promises.
+3. **Quality labels.** Evaluated independently by target readers/editors, who are not shown the human/AI label, the model name, the generation time, or detector scores. Keep the per-dimension results, the win/loss/tie, evidence fragments, and disagreements; samples without consensus must not be deleted automatically.
+4. **Rewrite pairs.** Under the same source pack, include the source draft, a minimal human edit, a larger rewrite, and outputs from different models and different prompts. A high-quality source draft needs a "no rewrite needed / minor edit" label, to stop the model from forcing a change every time.
 
-The most significant misconception to avoid is that the human author receives the complete factual context, while the AI only receives the title or a generic prompt, and then the evaluator rewards the human with specific information. The main experiment should give all methods the same source pack, audience, purpose, and length budget. The task of reconstructing the human author's text from the title alone can be retained, but only as a separate task.
+The single most important confound to avoid is this: the human source text gets the complete factual background while the AI gets only a title or a one-line generic prompt, and the evaluator then rewards the human's specificity. The main experiment should give every method the same source pack, audience, purpose, and length budget. A task of reconstructing the human source text from the title alone can be kept, but only as a different task.
 
-Each of the four scenarios should comprise an equal number of core test units; Chinese should have its own independent original source and review process, not just translations of English. Simplified/Traditional Chinese, regional markets, and non-native English expressions need to be included as metadata or subsequent slices; comprehensive coverage cannot be claimed when the sample size is insufficient.
+The four scenarios each account for the same number of core test units; Chinese needs its own native sources and reviewers, not just translated English. Simplified/traditional characters, regional markets, and non-native English expression should be carried as metadata or as later slices; comprehensive coverage must not be claimed while the sample is too small.
 
-## The initial version of Rubric: First determine constraints, then consider the reader's experience.
+## Initial rubric: judge the constraints first, then the reader's experience
 
-It is recommended to use 1–5 levels per dimension and provide anchor points for the scenario; do not pre-compact all dimensions into an unverified "AI-like score of 0–100". The following is the initial tag definition; the weights and thresholds will be calibrated through small-scale human evaluation.
+The recommendation is 1–5 levels per dimension with anchors supplied for that scenario; do not collapse every dimension in advance into an unvalidated "AI-ese score of 0–100." Below are the initial label definitions; the weights and thresholds await calibration by small-scale human evaluation.
 
-| Dimensions | Poor Performance | Good Performance | Recording Method |
+| Dimension | Poor performance | Good performance | How it is recorded |
 |---|---|---|---|
-| Retention of Facts and Intent | Fabricating Information, Deleting Conditions, Changing Negations, Transforming Possibility into Guarantee | Retaining Necessary Information, Causality, Boundaries, and Uncertainty | Major Failures/Minor Problems/Passage; Evidence Location |
-| Information Contribution | Synonyms, vague openings, restatements at the end, useless evaluative words | Each paragraph should provide facts, explanations, evidence for judgment, or necessary transitions | 1–5; redundant spans; omitted claims |
-| Specific and Verifiable | False specificity, fabricated figures, statements applicable to all brands | Specific to the scenario, object, mechanism, evidence, and next steps | 1–5; Indicate the materials relied upon |
-| Structure and Sentence Naturalness | Symmetrical templates, mechanical three-point structures, overuse of inversion sentences and subheadings | Structure should follow content, sentence length and emphasis should be natural | 1–5; High scores should not be obtained by relying on spelling errors |
-| Scenario Adaptation | Technical documentation is overly sentimental; marketing copy focuses on implementation details; it doesn't match the reader's background | Technical content is actionable, marketing content has a clear audience and commitment | 1–5; Use Case Rubric |
-| Brand/Author Voice | Replace all sources with the same tone and fabricate personal experiences | Retain necessary individuality and terminology, and conform to the given references | 1–5; excluding if no reference is available |
-| Subjective AI Feeling | Readers perceive it as obviously generalized and templated | Readers perceive it as natural, content-rich, and purposeful | Independent 1–5; not interpreted as source probability |
-| Overall Usability | Still requires extensive rewriting, or we dare not use it | Can be adopted directly or only minor modifications are needed | A/B/Tie/Neither is usable + Reasons for adoption |
+| Fact and intent preservation | Fabricating information, deleting conditions, flipping negations, stating a possibility as a guarantee | Preserving necessary information, causality, boundaries, and uncertainty | Major failure / minor issue / pass; evidence location |
+| Information contribution | Synonymous repetition, empty openings, closing restatement, evaluative words that do nothing | Every paragraph supplies a fact, an explanation, grounds for a judgement, or a necessary transition | 1–5; redundant span; missing claim |
+| Specific and verifiable | False specificity, numbers invented out of thin air, lines that would fit any brand | Specific to the scenario, the object, the mechanism, the evidence, and the next step | 1–5; state the material relied on |
+| Structure and sentence naturalness | Symmetrical templates, mechanical rule-of-three, overuse of reversal sentences and subheadings | Structure follows content; sentence length and emphasis feel natural | 1–5; a high score must not be earned through typos |
+| Scenario fit | Technical documentation waxing lyrical; marketing copy piling up implementation detail; mismatched to the reader's background | Technical content is actionable; marketing content has a clear audience and a clear promise | 1–5; per-scenario rubric |
+| Brand/author voice | Rewriting every source into one tone; fabricating personal experience | Keeping the necessary individuality and terminology, consistent with the given reference | 1–5; may abstain when there is no reference |
+| Subjective AI-ness | Readers find it plainly generic and templated | Readers find it natural, substantive, and clearly purposeful | Independent 1–5; not to be read as a probability of provenance |
+| Overall usability | Still needs extensive rewriting, or you would not dare use it | Can be used as is, or needs only a small edit | A/B/tie/neither usable + reason for the choice |
 
-Technical documentation should undergo specific checks, including: preconditions, commands and parameters, return values, exceptions and boundaries, version, permissions, and error recovery information. If the original document contains code, syntax checks or relevant example execution checks should be performed; avoid creating formalistic tests for purely textual transformations.
+Checks specific to technical documentation: preconditions, commands and parameters, return values, exceptions and boundaries, versions, permissions, and error-recovery information. If the source contains code, a syntax check or execution of the relevant examples can be run; do not invent formalistic tests for purely textual transformations.
 
-Marketing-specific checks: audience, question/benefit, differentiating rationale, evidence, brand voice, CTA, and prohibitions. Don't mistake copywriting preferences for CTR/CVR; real conversions require independent experimentation and control over factors such as audience, channel, and offer.
+Checks specific to marketing: audience, problem/benefit, reason for differentiation, evidence, brand voice, CTA, and forbidden promises. Do not treat human evaluation preference on copy as CTR/CVR; real conversion requires a separate experiment with audience, channel, offer, and similar factors controlled.
 
 ## Minimum evaluator calibration and model benchmark
 
-**Calibration Phase.** It is recommended to start with 30–50 brief/source units per scenario, totaling 120–200 units; this is a budget-friendly design suggestion, not a statistical power guarantee. For each unit, select a small number of output pairs with varying quality, and have at least three suitable reviewers conduct blind reviews. Jason can provide some anchor points and preferences. Invite reviewers with experience in the relevant domain and familiarity with the corresponding language for both technical and marketing roles. Record the reasons for consistency and disagreement, and then revise the rubric.
+**Calibration phase.** The suggested starting point is 30–50 brief/source units per scenario, 120–200 in total; this is a budget-friendly design recommendation, not a guarantee of statistical power. For each unit, pick a small number of output pairs that differ in quality and have at least three suitable reviewers evaluate them blind; it is enough for Jason to supply a portion of the anchors and preferences. For technical and for marketing separately, invite reviewers who have experience in that domain and are familiar with the language in question. Record the agreement and the reasons for disagreement, then revise the rubric.
 
-**Judge Selection.** Compare simple rule features, single-model rubric judge, and another family of judges; use ensemble only if calibration data demonstrates its benefit. Report at least the consistency with humans across all dimensions, pairwise accuracy (in a subset with human consensus), tie-breaking, A/B flip rate, non-native language/language slices, and forced constraint false negative rate. Repeated prompts for the same model do not count as independent evidence.
+**Judge selection.** Compare simple rule-based features, a single-model rubric judge, and a judge from another family; adopt an ensemble only where the calibration data shows it helps. Report at least per-dimension agreement with humans, pairwise accuracy (on the subset where humans agree), how ties are handled, the A/B flip rate, the non-native and per-language slices, and the miss rate on hard constraints. Repeating a prompt against the same model does not count as independent evidence.
 
-**Challenge Set.** Includes already good text, valid comparative sentences (allowed), very simple but correct English, formal Chinese technical specifications, short slogans, long documents, and rewrites that sound good but contain significant factual errors. Special checks will be conducted to see if "deleting content only," "changing numbers," "intentionally misspelling words," "adding unsubstantiated anecdotes," or "making all sentences colloquial" will fool the judge.
+**Challenge set.** Include text that was already good, permitted and genuinely effective contrast sentences, very plain but correct English, formal Chinese technical specifications, short slogan copy, long documents, and rewrites that read well but carry a major factual error. Check specifically whether "delete content only," "change the numbers," "introduce deliberate typos," "add an unsourced anecdote," and "make every sentence colloquial" can fool the judge.
 
-**Fair Comparison.** Compare no-op, basic rewrite prompt, rubric + examples prompt, critique-rewrite harness, best-of-n, SFT, and preference tuning on the same frozen test set. Each method is tuned only on the development set; the same factual material and task constraints are given during evaluation. Report the same single inference budget and actual quality-cost curve separately; harness extra invocations, latency, and training amortization should not be hidden. The final judge should not be the sampling reward for all methods.
+**Fair comparison.** On the same frozen test set, compare no-op, a basic rewrite prompt, a rubric + examples prompt, a critique–rewrite harness, best-of-n, SFT, and preference tuning. Each method is tuned only on the dev set; at evaluation time every method gets the same factual material and task constraints. Report separately at an equal single-inference budget and as an actual quality–cost curve; the harness's extra calls, its latency, and amortized training cost must not be hidden. The final judge must not double as the sampling reward for all the methods.
 
-**Main Results.** Prioritize reporting the "Overall Adoption Preference Rewritten" and "Major Fidelity Failure Rate" results, and retain four independent tables and equally weighted averages for each scenario. For samples with errors but better readability, record the original preference while simultaneously disqualifying them according to the pre-defined major failure rules; do not filter out failed samples before only promoting survivor win rates. Auxiliary results should include reports on redundancy reduction, necessary fact recall, unsupported claim rate, editing time, length changes, and subjective AI perception.
+**Main results.** Report two results first — "overall adoption preference for the rewrite" and "major fidelity failure rate" — and keep the four scenarios in separate tables alongside an equally weighted average. For a sample that reads better but contains an error, record the raw preference and at the same time mark it as failing under the pre-defined major-failure rule; failed samples must not be filtered out first so that only the survivors' win rate is advertised. Supporting results report redundancy reduction, recall of necessary facts, unsupported claim rate, editing hours, length change, and subjective AI-ness.
 
-**Statistics and Segmentation.** Divide the dataset into train/dev/test segments based on source/brief, ensuring maximum isolation by author, brand, site, and derivative versions; then perform tests with the generator and new date data. Confidence intervals should be resampled by source clustering to avoid treating multiple rewrites of the same source text as independent samples. When using training runs with at least two different random seeds to validate candidate results, seed outputs should not be mixed into independent text samples. Sample size should be planned for effectiveness after pilot testing based on actual variation and the expected minimum benefit; a small batch of "looks good" samples should not be used to declare superiority over prompting.
+**Statistics and splits.** Split train/dev/test by source/brief, quarantining authors, brands, sites, and derived versions as whole units as far as possible; then add a held-out-generator test and a new-date test. Confidence intervals should be resampled with clustering by source, to avoid treating multiple rewrites of one source text as independent samples. Where training runs with at least two different random seeds are used to validate a candidate result, the seeds' outputs must not be pooled as independent text samples. Sample size should be power-planned after the pilot from the observed variance and the minimum benefit worth detecting; a small batch that "looks good" cannot be used to declare superiority over prompting.
 
-**Judgment on whether to continue training.** First, prove that humans can reliably identify expected rewriting and that the judge can capture this preference before proceeding with training. If the strong prompt/harness has already achieved its goal, the value of post-training may mainly lie in cost, latency, stability, and deployment methods; if only the automatic judge score improves while the human score does not improve, the optimization of the same reward should not be further increased.
+**Deciding whether to go on to training.** First show that humans can reliably tell the desired rewrite apart and that the judge can capture that preference; only then train. If a strong prompt/harness already reaches the goal, the value of post-training may lie mainly in cost, latency, stability, and how it is deployed; if only the automatic judge score improves while human evaluation does not, optimization against that same reward should not be pushed further.
 
 ## Evidence not yet established
 
-- These 12 papers cannot prove that there is a unified "AI-flavored" scalar between Chinese and English, or between technical docs and marketing, nor can they prove that using the same reward can improve all four scenarios simultaneously.
-- Authorized corpora have not yet been collected, real human evaluations have been conducted, judges have been calibrated, models have been tested, or training has been run; the figures in this article are from the original papers and are not the results of the Plainvoice experiment.
-- Professional creative evaluations may differ significantly from general writing evaluations. The main research will separately cover marketing-related work such as the 2025 Creativity Benchmark; marketing judges should not be determined solely based on MT-Bench / G-Eval.
-- This round is for targeted background research, with the focus on improving the performance metrics of the first round of experiments to avoid misleading the proxy. The final selection of the base, training method, and cost will be based on another training survey and field tests.
+- These 12 papers cannot prove that a single unified "AI-ese" scalar exists across Chinese and English, or across technical docs and marketing, nor that one and the same reward can improve all four scenarios at once.
+- No licensed corpus has been collected yet, no real human evaluation has been run, no judge has been calibrated, no model has been tested, and no training has been run; the figures in this memo come from the original papers and are not Plainvoice experimental results.
+- Professional creative evaluation may differ substantially from general writing evaluation. The main research separately covers marketing-related work such as the 2025 _Creativity Benchmark_; the marketing judge should not be decided on MT-Bench / G-Eval alone.
+- This round is targeted background research, and its point is to keep the first round of experiments from getting better at optimizing the wrong proxy metric; the final base model, training method, and cost choices need to be made together with the separate training literature review and with real measurements.

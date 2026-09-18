@@ -1,0 +1,236 @@
+{
+ "09-12-annotation-protocol.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-article-reconstruction-v2.md": {
+  "hard": [
+   "18: table row lost its leading pipe",
+   "19: table row lost its leading pipe"
+  ],
+  "soft": [
+   "Latin identifiers in zh but not en: attribution, checkpoint, token"
+  ]
+ },
+ "09-12-ground-truth-acquisition.md": {
+  "hard": [
+   "88: table row lost its leading pipe"
+  ],
+  "soft": [
+   "27: table cell count 3 vs zh 4",
+   "29: table cell count 3 vs zh 4",
+   "30: table cell count 3 vs zh 4",
+   "52: table cell count 3 vs zh 4",
+   "54: table cell count 3 vs zh 4",
+   "89: table cell count 2 vs zh 4",
+   "90: table cell count 2 vs zh 4",
+   "Latin identifiers in zh but not en: abstain, brief, diff, rubric, shot, uncertain, url",
+   "numbers in zh not found in en: {'10': 1, '5': 1}",
+   "17: banned rendering — use draft (稿/稿件)",
+   "32: banned rendering — use draft (稿/稿件)",
+   "41: banned rendering — use draft (稿/稿件)",
+   "65: banned rendering — use draft (稿/稿件)",
+   "43: check term — likely collection (分组 — the live URL parameter is `collection`)"
+  ]
+ },
+ "09-12-local-data-and-rewrite-pilot.md": {
+  "hard": [
+   "3: machine-translation artifact placeholder"
+  ],
+  "soft": [
+   "39: table cell count 3 vs zh 4",
+   "40: table cell count 3 vs zh 4",
+   "Latin identifiers in zh but not en: checkpoint, pair, prompt",
+   "numbers in zh not found in en: {'3': 1, '5': 1}",
+   "13: banned rendering — use check: 人标句对 = human-annotated sentence pairs",
+   "43: check term — likely collection (分组 — the live URL parameter is `collection`)"
+  ]
+ },
+ "09-12-low-cost-ai-enrichment.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: token, trace",
+   "37: banned rendering — use draft (稿/稿件)",
+   "56: banned rendering — use draft (稿/稿件)",
+   "58: banned rendering — use draft (稿/稿件)",
+   "5: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "21: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "58: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "64: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "33: check term — likely quarantine (隔离)"
+  ]
+ },
+ "09-12-research-and-experiment-plan.md": {
+  "hard": [],
+  "soft": [
+   "31: table cell count 4 vs zh 5",
+   "133: table cell count 2 vs zh 3",
+   "Latin identifiers in zh but not en: abstain, docs, ranker, verifier",
+   "numbers in zh not found in en: {'9': 1}",
+   "15: banned rendering — use draft (稿/稿件)",
+   "58: banned rendering — use draft (稿/稿件)",
+   "137: banned rendering — use draft (稿/稿件)",
+   "72: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "147: check term — likely collection (分组 — the live URL parameter is `collection`)"
+  ]
+ },
+ "09-12-text-cleaning.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: endpoint, pair, stub, trace, url"
+  ]
+ },
+ "09-12-unified-data-viewer.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: pair",
+   "hedge markers 1 vs zh 2 — a dropped caveat turns a hypothesis into a finding"
+  ]
+ },
+ "README.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: evaluator, trace"
+  ]
+ },
+ "data/README.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: adapter"
+  ]
+ },
+ "prompts/README.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: audience_and_purpose, evidence_and_constraints, token",
+   "10: banned rendering — use draft (稿/稿件)",
+   "56: banned rendering — use draft (稿/稿件)"
+  ]
+ },
+ "prompts/article-content-extraction.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: api, qualifier"
+  ]
+ },
+ "prompts/article-from-content.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: api, audit"
+  ]
+ },
+ "qa/09-12-enrichment-qa.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: payload"
+  ]
+ },
+ "qa/09-12-research-qa.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: instruct, train, uncertain",
+   "numbers in zh not found in en: {'9': 1}",
+   "28: Chinese outside a code span or gloss",
+   "30: banned rendering — use does not overwrite (不覆盖)",
+   "9: banned rendering — use draft (稿/稿件)"
+  ]
+ },
+ "qa/09-12-text-cleaning-qa.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: diff"
+  ]
+ },
+ "qa/09-12-viewer-qa.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: blob, claim"
+  ]
+ },
+ "research/09-12-agentic-technical-datasets.md": {
+  "hard": [],
+  "soft": [
+   "67: table cell count 3 vs zh 4",
+   "68: table cell count 3 vs zh 4",
+   "70: table cell count 3 vs zh 4",
+   "Latin identifiers in zh but not en: commit, packet, requery, uncertain",
+   "numbers in zh not found in en: {'10': 1, '2': 1, '3': 3, '50': 1, '9': 1}",
+   "69: banned rendering — use draft (稿/稿件)"
+  ]
+ },
+ "research/09-12-data-and-task-literature.md": {
+  "hard": [],
+  "soft": [
+   "9: table cell count 2 vs zh 4",
+   "13: table cell count 3 vs zh 4",
+   "14: table cell count 3 vs zh 4",
+   "15: table cell count 2 vs zh 4",
+   "16: table cell count 2 vs zh 4",
+   "17: table cell count 2 vs zh 4",
+   "34: table cell count 3 vs zh 4",
+   "numbers in zh not found in en: {'11': 1, '9': 1}",
+   "14: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "34: check term — likely collection (分组 — the live URL parameter is `collection`)"
+  ]
+ },
+ "research/09-12-evaluation-literature.md": {
+  "hard": [],
+  "soft": [
+   "Latin identifiers in zh but not en: _creativity, abstain, benchmark_, penalty, slogan, span, synthetic, tagline",
+   "63: banned rendering — use provenance (keep the loanword)",
+   "27: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "211: check term — likely quarantine (隔离)"
+  ]
+ },
+ "research/09-12-style-literature.md": {
+  "hard": [
+   "159: table row lost its leading pipe"
+  ],
+  "soft": [
+   "23: table cell count 3 vs zh 4",
+   "24: table cell count 3 vs zh 4",
+   "27: table cell count 3 vs zh 4",
+   "Latin identifiers in zh but not en: behaviour, docs, harness, instruct, rct, slogan, surprisal",
+   "29: Chinese outside a code span or gloss",
+   "133: banned rendering — use draft (稿/稿件)",
+   "87: check term — likely collection (分组 — the live URL parameter is `collection`)",
+   "137: check term — likely collection (分组 — the live URL parameter is `collection`)"
+  ]
+ },
+ "research/09-12-training-literature.md": {
+  "hard": [],
+  "soft": [
+   "23: table cell count 3 vs zh 4",
+   "24: table cell count 3 vs zh 4",
+   "25: table cell count 3 vs zh 4",
+   "26: table cell count 3 vs zh 4",
+   "27: table cell count 3 vs zh 4",
+   "28: table cell count 1 vs zh 4",
+   "29: table cell count 3 vs zh 4",
+   "39: table cell count 3 vs zh 4",
+   "40: table cell count 3 vs zh 4",
+   "41: table cell count 3 vs zh 4",
+   "43: table cell count 3 vs zh 4",
+   "44: table cell count 3 vs zh 4",
+   "45: table cell count 3 vs zh 4",
+   "46: table cell count 3 vs zh 4",
+   "58: table cell count 4 vs zh 5",
+   "59: table cell count 4 vs zh 5",
+   "60: table cell count 4 vs zh 5",
+   "61: table cell count 4 vs zh 5",
+   "62: table cell count 4 vs zh 5",
+   "Latin identifiers in zh but not en: batch, diff, docs, epoch, flag, holdout, profile, workspace",
+   "numbers in zh not found in en: {'3': 1, '8': 1}",
+   "104: banned rendering — use provenance (keep the loanword)",
+   "42: banned rendering — use draft (稿/稿件)"
+  ]
+ },
+ "research/clean-text-2026-09-12/length-comparison.md": {
+  "hard": [],
+  "soft": []
+ },
+ "research/length-analysis-2026-09-12/report.md": {
+  "hard": [],
+  "soft": []
+ }
+}
