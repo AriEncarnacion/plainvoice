@@ -15,7 +15,7 @@
 | [ASSET](https://github.com/facebookresearch/asset) | 2,359 source sentences × 10 human references |
 | [CoEdIT](https://huggingface.co/datasets/grammarly/coedit) | train 69,071; validation 1,712 |
 
-The original README, the license file or data-card statement, the pinned revision, the file URL, SHA-256, record counts, and human/machine provenance are all kept in each package's manifest. JSON/JSONL/CSV parsing, parallel line counts, ZIP CRC, and the SHA-256 checks on the 104 manifest files all pass. Records at different granularities overlap, so the numbers in the table cannot simply be added together.
+The original README, the license file or data-card statement, the pinned revision, the file URL, SHA-256, record counts, and human/machine provenance are all kept in each package's manifest. JSON/JSONL/CSV parsing, parallel line counts, ZIP CRC, and the SHA-256 checks on the 104 manifest-listed files all pass. Records at different granularities overlap, so the numbers in the table cannot simply be added together.
 
 Previously only the Git LFS pointer could be read for MCTS; this time the body of the GPLv3 LICENSE was obtained, which does not automatically establish training rights over all the upstream news content. The unreleased instances of IteraTeR Plus/v2 and CoEdIT were not obtained through other channels. Downloading and structural verification is not the same as having confirmed training and redistribution use for every source.
 
