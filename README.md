@@ -4,7 +4,7 @@
 
 Research into making content rewriting more natural and more informative while preserving facts, purpose, and the author's voice. Four scenarios have equal priority: Chinese, English, technical docs, and marketing.
 
-Current phase: background research, data collection, and content rewriting experiments. Most recently, Gemini Flash-Lite was used to produce 848 candidates and diagnostic outputs, covering complete articles, segments, model comparisons, and early diagnostics; all of them use content extraction followed by shuffled recomposition. There is no trained model, no validated judge, no real benchmark score, and no gold confirmed by independent human review.
+Current phase: background research, data collection, and content rewriting experiments. Most recently, Gemini Flash-Lite was used to save 848 candidates and diagnostic outputs, covering complete articles, segments, model comparisons, and early diagnostics; all of them use content extraction followed by shuffled recomposition. There is no trained model, no validated judge, no real benchmark score, and no gold confirmed by independent human review.
 
 ## Local directory and startup
 
@@ -20,7 +20,7 @@ Open <http://127.0.0.1:8876/?view=clean> in your browser. The old absolute paths
 
 ## Start here
 
-- **[Repo-wide body-text cleaning](09-12-text-cleaning.md)**: unifying source/AI formats, body-text export, switching to the raw version, and quality quarantine.
+- **[Corpus-wide body-text cleaning](09-12-text-cleaning.md)**: unifying source/AI formats, body-text export, switching to the raw version, and quality quarantine.
 
 - **[Unified Data Viewer](09-12-unified-data-viewer.md)**: all 1,247,891 local records across 28 collections, with side-by-side full text, filtering, reference answers, traces, and review import/export. The [local entry point](http://127.0.0.1:8876) requires starting the database first; the [hosted entry point](https://plainvoice-data-review.jason62-h.chatgpt.site) provides a source directory and permission-cleared examples, with access controlled by Sites account permissions.
 - **[Bilingual AI candidate enrichment and model comparison](09-12-low-cost-ai-enrichment.md)**: counts added, source coverage, actual cost, gaps, and semantic QA; review the new collections in the local viewer first.

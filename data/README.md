@@ -29,4 +29,4 @@ Verify usage conditions separately for each source. `.gitignore` only guards aga
 
 ## The local cleaning layer as implemented
 
-For the repo-wide unified body-text layer, auditing, and minimal text export, see the [body-text cleaning notes](../09-12-text-cleaning.md). The data lives in `~/Desktop/plainvoice/data/local/`. The cleaned export preserves each original task's roles, its null versus empty-string distinction, and its multi-reference distinctions, and does not automatically produce human preference labels.
+For the corpus-wide unified body-text layer, auditing, and minimal text export, see the [body-text cleaning notes](../09-12-text-cleaning.md). The data lives in `~/Desktop/plainvoice/data/local/`. The cleaned export preserves each original task's roles, its null versus empty-string distinction, and its multi-reference distinctions, and does not automatically produce human preference labels.

@@ -1,4 +1,4 @@
-# Repo-wide body-text cleaning
+# Corpus-wide body-text cleaning
 
 The corpus covers **1,247,891 records / 28 collections**, of which **214,048 records and 397,342 text fields** changed format. Of the 860 rewrite experiments, 600 are candidates awaiting human evaluation and 260 are quarantined; the remaining records keep their original task meaning. For verification, see the [QA record](qa/09-12-text-cleaning-qa.md); for counts before and after cleaning, see the [length comparison](research/clean-text-2026-09-12/length-comparison.md).
 
@@ -17,7 +17,7 @@ The complete files live on the desktop at `plainvoice/data/local/clean-text-v1/`
 | `rewrite-candidates.jsonl.gz` | Source/AI rewrite candidates that triggered no quarantine rule, still awaiting human review |
 | `quarantined-rewrites.jsonl.gz` | Source/AI records needing attention due to failure, semantic, or formatting problems |
 | `metadata.jsonl.gz` | Role, language, license, raw/cleaned hash, candidate status, and reason, keyed by ID |
-| `format-flags.jsonl.gz` | Repo-wide records carrying format warnings or quarantine reasons; joined to the body text by ID/clean hash, including warnings for text that is empty after cleaning |
+| `format-flags.jsonl.gz` | Corpus-wide records carrying format warnings or quarantine reasons; joined to the body text by ID/clean hash, including warnings for text that is empty after cleaning |
 | `summary.json`, `qa/` | Full counts, rule fingerprint, exact removals, and defect scope |
 
 Model input takes only the body-text columns. `id` is used to join metadata and is not concatenated into the training text. `null` means unpaired, while an empty string may be a valid insertion/deletion edit; the two are not interchangeable. Multi-reference answers preserve their original order and roles.
@@ -32,7 +32,7 @@ Model input takes only the body-text columns. `id` is used to join metadata and 
 
 Code, API endpoints, mathematical expressions, scientific sub- and superscripts, units, negations, Javadoc, list order, and table structure all count as content. To keep cleaning repeatable and preserve technical meaning, code fences, inline code, and formula/table delimiters are deliberately retained. Valid JSON traces are stored as-is and not converted into prose. arXiv's `[MATH]` and `[CITATION]` are retained and flagged as a source limitation.
 
-A few ambiguities remain at the collection layer: hard line breaks inside some PDF paragraphs, scientific-notation spacing such as `CO 2` / `B 12`, and placeholders for missing formulas or citations. These are not fixed by guesswork; the corresponding source limitations are retained, and specific examples are in the local QA.
+A few ambiguities remain at the acquisition layer: hard line breaks inside some PDF paragraphs, scientific-notation spacing such as `CO 2` / `B 12`, and placeholders for missing formulas or citations. These are not fixed by guesswork; the corresponding source limitations are retained, and specific examples are in the local QA.
 
 Paragraphs are not deleted on the basis of single words like "copyright" or "cookies", body text is not arbitrarily deduplicated, facts are not corrected, and run-on sentences or spelling problems are not guessed into new phrasings.
 

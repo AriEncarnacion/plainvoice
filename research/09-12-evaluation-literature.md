@@ -30,7 +30,7 @@ Six experiments with 4,600 participants in total examined self-presentations on 
 
 **Limitations:** this is a study of English self-presentation with an earlier model; it cannot be extended to conclude that today's professional editors are also at chance level on Chinese technical documentation. What transfers is the measurement caution, not the accuracy figure.
 
-**Reading scope:** the experimental setup, main results, heuristic analysis, optimized texts, and discussion in the full text; not all statistical models in the appendix were re-checked.
+**Reading scope:** the experimental setup, main results, heuristic analysis, optimized texts, and discussion in the full text; the appendix's statistical models were not re-checked.
 
 ### E02. A detector's low-perplexity signal may penalize clear, plain non-native English
 

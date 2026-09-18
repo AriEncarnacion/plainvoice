@@ -92,7 +92,7 @@ The Results returned by the publisher (including story similarity) and the Discu
 
 [Full text](https://arxiv.org/html/2603.18161v1)
 
-§3, §4.2–4.3, the abstract, and the discussion read. It covers a writing experiment with 100 people, plus 86 ArgRewrite-v2 essays collected in 2021, comparing human and model revisions across three vendors' models and five classes of editing instruction. It finds that even edits restricted to grammar may change the argument. **Limitations**: heavy use was defined by behaviour after random assignment, so that subgroup difference cannot be treated as a randomized dose effect; embedding displacement also mixes style with content; the real-review portion partly relies on an AI detector. The project can reuse the paired-revision design, but must verify claim by claim separately, and cannot sign off on embeddings alone.
+§3, §4.2–4.3, the abstract, and the discussion read. It covers a writing experiment with 100 people, plus 86 ArgRewrite-v2 essays collected in 2021, comparing human and model revisions across three vendors' models and five classes of editing instruction. It finds that even edits restricted to grammar may change the argument. **Limitations**: heavy use was defined by behaviour after random assignment, so that subgroup difference cannot be treated as a randomized dose effect; embedding displacement also mixes style with content; the real-review portion relies on an AI detector. The project can reuse the paired-revision design, but must verify claim by claim separately, and cannot sign off on embeddings alone.
 
 ### S9 — "Completeness" in technical documentation must be aligned with the page and the reader's context
 

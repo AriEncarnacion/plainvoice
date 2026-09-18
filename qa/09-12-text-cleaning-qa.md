@@ -13,7 +13,7 @@ Covers 1,247,891 records, 28 collections, and 2,466,749 text fields; raw data, m
 
 ## Content protection and interface
 
-28 offline format-protection tests, 12 real local HTTP tests, and 14 sampled regression tests passed. A repo-wide rule rescan found and fixed LaTeX without delimiters being misread as Markdown; formulas with unclear structure, diffs, wiki editing residue, and ASCII art are preserved and flagged.
+28 offline format-protection tests, 12 real local HTTP tests, and 14 sampled regression tests passed. A corpus-wide rule rescan found and fixed LaTeX without delimiters being misread as Markdown; formulas with unclear structure, diffs, wiki editing residue, and ASCII art are preserved and flagged.
 
 An independent format check covered 328 records and 748 fields, including all 47 article/paragraph AI outputs and 20 code2doc samples. 41 code blocks, the code content of 1 HTML `pre` example, 30 formula/citation placeholders, and 35 specified numeric/technical fact checks passed.
 

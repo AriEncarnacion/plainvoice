@@ -2,7 +2,7 @@
 
 This file records a prompt that was run in Chinese to produce this project's recorded results. `scripts/export_other_records.py` reads the prompt markdown and embeds it verbatim into the exported dataset records, so the Chinese block below is the as-run text and is not to be reworded, tightened, or clarified. The English block that follows is an equivalent prompt for reuse; it does not replace the record.
 
-JSON field names and placeholders are identical in both blocks - renaming one would break the schema contract.
+JSON field names are identical in both blocks - renaming one would break the schema contract.
 
 **As run (Chinese, verbatim):**
 

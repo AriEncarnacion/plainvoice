@@ -60,7 +60,7 @@ Evaluation has two steps: first decide whether a draft passes, then compare the 
 | Layer | What is judged | Result |
 |---|---|---|
 | Must-pass conditions | Key facts and constraints preserved; no newly added unsupported claims; code, identifiers, figures, units, links, and strength of tone all as required | pass / fail / uncertain, with the specific errors listed; cannot be offset by a high style score |
-| Per-dimension evaluation | Naturalness, useful information, context fit, structure, voice, need for editing | Problem severity 0–3 per dimension: 0 nothing to point out, 1 minor and local, 2 recurring or affecting use, 3 seriously blocking the intended use; abstain is allowed |
+| Per-dimension evaluation | Naturalness, useful information, context fit, structure, voice, necessity of the edit | Problem severity 0–3 per dimension: 0 nothing to point out, 1 minor and local, 2 recurring or affecting use, 3 seriously blocking the intended use; abstain is allowed |
 | Blind pairwise preference | For the same input, which draft is better suited to real use, and which has less sense of templatedness | A / B / tie / both unacceptable / insufficient context; the two preferences are recorded separately |
 
 Fact checking should run in both directions: whether the assertions in the rewritten draft can be supported by the evidence, and whether the information that must be kept from the source draft/brief is still there. One-directional factual precision may reward deleting everything; similarity alone may miss a negation or a numeric error. Structured checks handle deterministic constraints, model checks handle semantic problems, and high-risk disagreements go to a human.[^4]

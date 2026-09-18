@@ -36,7 +36,7 @@ The [NVIDIA official data card](https://huggingface.co/datasets/nvidia/SWE-Hero-
 
 This package used the HF rows API to download the first 3 rows, all of them pandas tasks; the API's `truncated_cells` is empty. Tool calls such as `execute_bash`, environment echoes, the final `finish` call, and its summary text are all actually visible. The last turn is stored separately in `traces/swe-hero-openhands/samples/row-*.final.json` so it can be read first; the complete record is in `trajectories.3.jsonl`.
 
-Limitations: there is no same-content human revision; not all of the assistant text in a trajectory is an execution update visible to the user. `model_patch` is not the same as a patch verified correct in this round, and claims in the final such as "succeeded" or "everything works" have not yet been checked point by point against the logs. This round only checked fields, end states, and whether the API truncated anything; no tests were rerun. The data card declares CC BY 4.0 while each row keeps its source repository's license; these 3 rows are BSD-3-Clause.
+Limitations: there is no same-content human revision; the assistant text in a trajectory is not necessarily all user-visible execution updates. `model_patch` is not the same as a patch verified correct in this round, and claims in the final such as "succeeded" or "everything works" have not yet been checked point by point against the logs. This round only checked fields, end states, and whether the API truncated anything; no tests were rerun. The data card declares CC BY 4.0 while each row keeps its source repository's license; these 3 rows are BSD-3-Clause.
 
 ### DeepResearch Bench II: the criteria come from expert articles, and the article body text is not in the task files
 
