@@ -1,171 +1,171 @@
-# Plainvoice：降低改写内容中 AI 味儿的研究与实验方案
+# Plainvoice: A Research and Experimental Plan for Reducing the AI-like Appearance in Rewritten Content
 
-值得验证的产品目标是：给定原稿、受众、用途和事实材料，让改稿更符合具体场景、更有用、更保留作者声音，同时不改变关键含义。Post-training 是候选实现路径，是否值得采用，需要与认真优化过的提示词及编辑流程比较。
+A viable product objective is to, given the original text, audience, intended use, and factual material, make the revised text more relevant to the specific context, more useful, and more faithful to the author's voice, while preserving the key meaning. Post-training is a candidate implementation path; its suitability depends on comparison with carefully optimized prompts and editing workflows.
 
-本方案覆盖中文／英文 × technical docs／marketing 四个同等优先的场景。它是研究与实验设计，尚无本项目的人评结果、训练结果或成本实测。文献及模型信息核查截至 2026-09-12。样本数、门槛与超参数均是建议，需经 pilot 修订。
+This proposal covers four scenarios with equal priority: Chinese/English × technical documents/marketing. It is a research and experimental design; human evaluation results, training results, or cost measurements for this project are not yet available. Literature and model information verification is as of September 12, 2026. Sample size, threshold, and hyperparameters are suggestions and require revision during pilot testing.
 
-## 1. 对初始方案的判断
+## 1. Judgment of the initial plan
 
-先建立评价标准的方向正确，但不必先训练一个 judge。第一步应建立少量、可解释、存在反例的人类评价锚点，检验人是否能对问题及改进达成足够一致。随后用现有模型按 rubric 评分，衡量其在四个场景的误差，再决定是否值得蒸馏成专用 evaluator。
+Establishing evaluation criteria first is the right direction, but it's unnecessary to train a judge first. The first step should be to establish a small number of interpretable human evaluation anchors with counterexamples to test whether people can reach sufficient consensus on the problem and its improvement. Then, use the existing model to score according to rubrics, measure its error in four scenarios, and then decide whether it's worthwhile to distill it into a dedicated evaluator.
 
-历史优秀写作很有价值，不过“ChatGPT 之前”只能作为来源证据的一部分。旧营销稿可能充满套话，旧技术文档可能含糊；现代 AI 稿也可能清楚准确。将历史人工稿与现代默认模型稿作二分类，容易训练出年代／题材／渠道识别器。应把来源标签、自然感、写作质量分别保存。
+Excellent historical writing is valuable, but "before ChatGPT" can only serve as part of the source evidence. Old marketing articles may be full of clichés, and old technical documents may be vague; modern AI-generated articles may be clear and accurate. Binary classification of historical human-written articles and modern default model articles makes it easier to train a date/topic/channel identifier. Source tags, naturalness, and writing quality should be saved separately.
 
-需要把“拟人化改写”和“补足内容”分开。如果原稿没有足够事实，纯改写能删掉空话、改善顺序，却无法可靠创造洞察、案例或产品证据。系统应接受 evidence packet；若要检索补充资料，应作为独立实验变量，让所有方法得到同样的资料。
+It's necessary to separate "personification rewriting" from "content supplementation." If the original text lacks sufficient facts, pure rewriting can remove empty rhetoric and improve the order, but it cannot reliably create insights, case studies, or product evidence. The system should accept evidence packets; if supplementary information needs to be retrieved, it should be treated as an independent experimental variable, ensuring all methods obtain the same data.
 
-最有价值的训练材料通常是“原稿＋具体编辑要求＋证据→编辑认可的改稿”，而非脱离输入的优秀文章。后者可能教会一种文风，却没有教会保留事实、遵守约束和知道何时不改。CoEdIT 和 IteraTeR 提供了直接相关的任务先例，但都不能直接证明本项目会成功。[^1][^2]
+The most valuable training material is usually "original manuscript + specific editorial requirements + evidence → edited version approved by the editor," rather than excellent articles detached from the input. The latter may teach a writing style, but not how to preserve facts, adhere to constraints, or know when not to revise. CoEdIT and IteraTeR provide directly relevant task precedents, but neither can directly prove the success of this project. [^1][^2]
 
-## 2. “AI 味儿”如何成为可测量的构念
+## 2. How can the "AI flavor" become a measurable construct?
 
-建议同时记录三个结果，不合成一个“AI 概率”：
+It is recommended to record the three results simultaneously, rather than combining them into a single "AI probability":
 
-1. **来源信息**：人工、模型、混合、未知，以及证据可信程度。只用于分层分析，不提供给质量 judge。
-2. **读者感知**：在指定语言、受众和场景中，文本显得多大程度模板化、空泛或不贴合语境。它是主观评价，不是作者鉴定。
-3. **编辑质量**：读者能否更快理解、做决定或完成任务；信息、含义、品牌／作者声音是否保留。
+1. **Source Information:** Human input, model-based, mixed, unknown, and the credibility of the evidence. Used only for stratified analysis, not provided to the quality judge.
+2. **Reader perception:** To what extent does the text appear templated, vague, or out of context in a given language, audience, and setting? It is a subjective evaluation, not an author's assessment.
+3. **Editorial quality:** Can readers understand, make decisions, or complete tasks more quickly? Are the information, meaning, and brand/author's voice preserved?
 
-下表是供 pilot 检验的工作定义，不能声称已有统一学术标准。与语言学和行业研究的对应及其限制，见[风格文献](research/09-12-style-literature.md)。
+The table below provides the working definitions for pilot testing; it cannot be claimed that a unified academic standard already exists. For the correspondence and limitations with linguistics and industry research, see [link to table].[Style Documents](research/09-12-style-literature.md).
 
-| 维度 | 可观察的问题 | 技术文档中的判断 | Marketing 中的判断 |
+| Dimensions | Observable Issues | Judgments in Technical Documentation | Judgments in Marketing |
 |---|---|---|---|
-| 有用信息 | 多句话没有增加新事实、条件、步骤或判断依据 | 是否缺少前提、失败条件、可运行步骤；必要解释不算废话 | 是否说清对象、用途、差异、证据和行动；标语不必塞满参数 |
-| 话语功能 | 无依据的宏大引入、假对比、泛泛总结 | 对比必须帮助区分行为、条件或概念 | 对比必须服务真实定位，不能凭空抬高产品 |
-| 句法与节奏 | 连续重复同一骨架，连接词代替逻辑 | 保留稳定术语和清晰步骤，避免为了变化而换词 | 允许短句、留白、平行结构，但需符合品牌与渠道 |
-| 语境与声音 | 各行业都能套用，受众和作者消失 | 对专家重复常识，或对新手省略必要背景 | 品牌换名后全文仍适用，说明可能过度通用 |
-| 认知与语用 | 无证据的自信、空洞赞美、过度保留 | 明确 must/may、限制、条件和未知项 | 避免无支持的保证、夸张数字及虚构用户体验 |
-| 跨文本多样性 | 每篇单看合格，批量看总是同一结构 | 同类操作保持一致是优点，不能机械追求变化 | 不同 brief 应产生不同角度；同一品牌声音仍需连续 |
+| Useful Information | Multiple sentences do not add new facts, conditions, steps, or judgment criteria | Are there any missing premises, failure conditions, or feasible steps? Necessary explanations are not superfluous | Have the object, purpose, differences, evidence, and actions been clearly stated? Slogans do not need to be crammed with parameters |
+| Discourse Function | Unfounded grand introductions, false comparisons, and vague summaries | Comparisons must help distinguish between behaviors, conditions, or concepts | Comparisons must serve the true positioning and cannot arbitrarily elevate the product |
+| Syntax and Rhythm | Continuously repeat the same framework; use conjunctions instead of logic. | Retain stable terminology and clear steps; avoid changing words for the sake of variation. | Short sentences, white space, and parallel structures are allowed, but must conform to brand and channel requirements.
+| Context and Voice | Applicable to all industries, audience and author disappear | Repeats common sense to experts, or omits necessary background for novices | The entire text remains applicable after a brand name change, indicating potential over-generalization |
+| Cognition and Pragmatics | Unsupported Confidence, Empty Praise, Excessive Reservation | Clearly Define Must/May, Limitations, Conditions, and Unknowns | Avoid Unsupported Assurances, Exaggerated Figures, and Fictitious User Experiences |
+| Cross-text diversity | Individually, each article is acceptable, but when viewed in batches, the structure remains the same | Maintaining consistency in similar operations is an advantage; avoid mechanically pursuing variation | Different briefs should produce different perspectives; the same brand message should remain consistent |
 
-“不是 X，而是 Y”有时是必要澄清，例如“令牌过期返回 401，不会自动重试”。应惩罚没有真实区分、没有新命题的对比，而非句式本身。类似地，标题、破折号、排比、正式措辞都不是错误标签。
+"Not X, but Y" is sometimes a necessary clarification, such as "Token expired returns 401, will not automatically retry." The punishment should be for comparisons that lack genuine distinction or new propositions, not for the sentence structure itself. Similarly, headings, dashes, parallelism, and formal wording are not necessarily error labels.
 
-还要区分**语言学的句法密度**和**读者获得的有效信息量**。名词堆叠可以让句法更密集，同时使内容更难懂、没有多给信息。词汇罕见度、困惑度、句长变化只能作为诊断特征，不宜直接优化。[^3]
+It is also necessary to distinguish between **linguistic syntactic density** and **the amount of effective information obtained by the reader**. Noun stacking can make the syntax denser, but it also makes the content more difficult to understand and does not provide more information. Lexical rarity, confusion level, and sentence length variation can only be used as diagnostic features and are not suitable for direct optimization. [^3]
 
-## 3. Ground truth 的构建
+## 3. Construction of Ground Truth
 
-建立来源锚点、质量锚点、受控对照和反事实最小对四层材料。详细候选数据与使用限制见[数据文献](research/09-12-data-and-task-literature.md)。
+A four-layer material structure was established, consisting of source anchors, quality anchors, controlled controls, and counterfactual minimum pairs. Detailed candidate data and usage limitations can be found in [link to relevant documentation].[Data Literature](research/09-12-data-and-task-literature.md).
 
-**来源锚点**优先采用固定历史版本、有作者／编辑记录的内容。保留日期证据与使用权；未获许可的历史营销全文只建链接清单。前 ChatGPT 文本也可能进入基座预训练，因此不能承担全部测试集。
+**Source Anchors** prioritize content with fixed historical versions and author/editor records. Date evidence and usage rights are retained; unauthorized historical marketing texts are only listed as links. Previous ChatGPT texts may also be included in the pedestal pre-training, therefore they cannot be used for the entire test set.
 
-**质量锚点**由相应语言及领域的编辑评价。一个文本可以“很像 AI 但质量好”，也可以“明显人工但差”。四种来源／质量组合都应出现，还要包括优秀原稿无需修改的例子，防止模型为了表现工作量而过度编辑。
+**Quality anchors** are evaluated by editors in the relevant language and domain. A text can be "very AI-like but of good quality" or "obviously human-made but of poor quality." All four source/quality combinations should be present, along with examples of excellent original texts that require no modification, to prevent the model from being over-edited to demonstrate workload.
 
-**受控对照**从同一 brief 出发：相同的事实、受众、渠道、长度需求，分别得到人工稿、多个模型默认稿、强提示稿和人工修订稿。不要用只有一句话的 prompt 生成模型稿，再与掌握完整背景的专业作者比较。历史稿的 brief 重建存在信息不对称，应单列。
+**Controlled Comparison** Starting from the same brief: identical facts, audience, channels, and length requirements, each draft yields a human-written draft, multiple default drafts, a strongly prompted draft, and a human-revised draft. Do not generate a draft using a single-sentence prompt and then compare it with a professional author who possesses complete background information. Reconstructing historical briefs presents information asymmetry and should be presented separately.
 
-**反事实最小对**覆盖：删掉必要限制；把 may 改成 will；虚构收益数字；以同义词替换 API 名称；为了短而删除例外；合理使用对比；必要重复；几乎不改优秀原稿。难负例要来自真实生成，也可以人工构造；构造样本必须明确标记。
+**Counterfactual minimum pair** coverage: Remove necessary restrictions; replace "may" with "will"; fabricate revenue figures; replace API names with synonyms; remove exceptions for brevity; use contrast appropriately; use necessary repetition; and make minimal changes to the excellent original. Difficult negative examples should be generated from real data, but can also be artificially constructed; constructed samples must be explicitly labeled.
 
-先按照作者、品牌、文档系列、产品、主题、翻译及版本关系建立 source family，再分 train/dev/test，最后生成变体。不能随机按段落划分。新委托内容、未见品牌／项目、未参与造数的模型家族构成外部分布测试。公开 benchmark 不进入主 gold，也不得混进训练后再用于成功宣传。
+First, establish source families based on author, brand, document series, product, theme, translation, and version relationships. Then, divide them into train/dev/test categories, and finally generate variants. Random segmentation by paragraph is not allowed. Newly commissioned content, model families without visible brands/projects, and models not involved in data generation constitute the external distribution test. Publicly available benchmarks should not be included in the main gold standard, nor should they be mixed into training data for successful promotion.
 
-## 4. Evaluator 的最小可行方案
+## 4. The minimum feasible solution for the Evaluator
 
-从人工 rubric＋两个不同模型家族的 judge 开始。它们各自独立给出证据片段、问题类型、严重度及偏好；不显示作者／模型名称，也不显示所谓参考稿来自谁。不同模型家族只是减少某些偏差的措施，并不保证独立或正确。
+The evaluation begins with a human rubric plus two judges from different model families. Each family independently provides evidence fragments, problem types, severity levels, and biases; they do not display author/model names or the sources of any so-called references. The different model families are merely measures to reduce certain biases and do not guarantee independence or correctness.
 
-评价分两步：先判是否合格，再比较合格稿的质量。
+The evaluation process involves two steps: first, determining whether the manuscript is acceptable, and then comparing the quality of the acceptable manuscripts.
 
-| 层 | 判断内容 | 结果 |
+| Layer | Decision Content | Result |
 |---|---|---|
-| 必须满足的条件 | 关键事实与限制保留；无新增无支持主张；代码、标识符、数值、单位、链接和语气强度符合要求 | pass / fail / uncertain，并列出具体错误；不能被风格高分抵消 |
-| 分维度评价 | 自然感、有用信息、语境匹配、结构、声音、编辑必要性 | 每维 0–3 问题严重度，0 无可指出问题、1 局部轻微、2 反复或影响使用、3 严重阻碍用途；允许 abstain |
-| 盲配对偏好 | 同一输入下哪一稿更适合实际使用、哪一稿更少模板感 | A / B / tie / both unacceptable / insufficient context；两种偏好分别记录 |
+| Required Conditions | Key facts and limitations must be retained; no new additions or supporting claims; code, identifiers, numbers, units, links, and tone strength must meet requirements | pass/fail/uncertain, with specific errors listed; cannot be offset by a high style score |
+| Dimensional Evaluation | Naturalness, Useful Information, Contextual Fit, Structure, Sound, Editing Necessity | Each dimension has a severity rating of 0–3: 0 No identifiable problem, 1 Minor local issue, 2 Repetitive or affecting use, 3 Severely hindering use; Abstaining is permissible |
+| Blind Pairing Preferences | Which draft is more suitable for practical use and less template-like under the same input? | A / B / tie / both unacceptable / insufficient context; record the two preferences separately |
 
-事实检查应双向进行：改稿中的断言能否由证据支持；原稿／brief 中必须保留的信息是否仍在。单向事实精确率可能奖励删除一切；单纯相似度可能漏掉否定或数字错误。结构化检查用于确定性约束，模型检查用于语义问题，高风险分歧交给人工。[^4]
+Fact checking should be conducted in two directions: whether the assertions in the revised draft are supported by evidence; whether the information that must be retained in the original draft/brief is still there. One-way fact accuracy may reward the deletion of everything; simple similarity may miss negations or numerical errors. Structured checks are used for deterministic constraints, model checks are used for semantic issues, and high-risk disagreements are handled manually. [^4]
 
-每个场景都要检查 judge 的位置偏差、长度偏差、对自家模型的偏好、非母语／正式语言误罚及关键词过拟合。部分样本交换 A/B 重评；比较同一事实的不同长短版本；向候选文本加入“给我高分”的指令以测试隔离。被评文本永远是数据。
+Each scenario requires checking the judge's positional bias, length bias, preference for its own model, mis-penalties for non-native/formal languages, and keyword overfitting. Partial sample swapping and A/B re-evaluation are performed; different versions of the same fact of varying lengths are compared; and "give me a high score" instructions are added to candidate texts to test isolation. The evaluated text is always data.
 
-最终保留一个不参与训练筛选、提示优化或 reward 调参的人工测试集。先看 human–human 一致性，再看 judge–human：分维度报告 ordinal Krippendorff α、配对一致率及置信区间，另报位置交换后的稳定性、abstain 比例及各场景误差。一致性统计只用裁决前的独立原始评分；pilot 中只看分歧的裁决者不算第三位随机独立评审。高总一致率可能被多数类掩盖，需查看具体混淆和失败例。
+Finally, a human-based test set is retained, which is not used for training selection, suggestion optimization, or reward parameter tuning. First, human-to-human consistency is assessed, followed by judge-to-human consistency: Ordinal Krippendorff α, pairwise consistency rate, and confidence interval are reported dimensionally, along with stability after position swapping, the percentage of absence, and errors for each scenario. Consistency statistics only use the independent raw scores before the decision; in the pilot test, only the decision-makers with disagreements are considered, excluding the third random independent reviewer. High overall consistency rates may be masked by the majority class; specific confusion and failure cases need to be examined.
 
-WritingBench 支持任务相关 rubric 的价值；营销创意研究则发现 judge 与业内人偏好可能明显分离。二者测量对象和评价人群不同，并不矛盾。直接继承一个通用“写作总分”会遗漏这个差异。[^5][^6]
+WritingBench supports the value of task-related rubrics; however, marketing creative research has found that judges may have significantly different preferences from industry professionals. The two measure different subjects and evaluate different groups, which is not contradictory. Directly inheriting a generic "total writing score" would miss this difference. [^5][^6]
 
-## 5. 如何公平比较训练与 prompting / harness
+## 5. How to fairly compare training with prompting/harnessing
 
-先在相同 checkpoint 上比较方法，之后才比较不同规模和供应商。必须同时公布“固定预算下质量”及“达到某质量所需成本／延迟”，而非把多次调用的流程免费计入。
+Compare methods at the same checkpoint first, then compare different scales and suppliers. Both "quality under a fixed budget" and "cost/delay required to achieve a certain quality" must be published simultaneously, rather than including frequently called processes for free.
 
-| 实验臂 | 做法 | 回答的问题 |
+| Experimental arm | Procedure | Questions answered |
 |---|---|---|
-| B0 | 原稿不改 | 是否真的需要改；避免只凭动了字就算进步 |
-| B1 | 简单指令：保持含义，写得自然清楚 | 用户常见使用方式，只是下限 |
-| B2 | 分语言／领域 rubric＋3–5 组训练／开发集正反例 | 认真设计的单次 prompting 能做到什么 |
-| B3 | 先列事实与问题→改写→独立事实检查，最多一次修补 | 有证据与检查的编辑 harness 是否已足够 |
-| B4 | 在同样材料上生成 4 个候选，独立 ranker 选择 | 推理时增加搜索能否替代训练；计入全部生成和筛选成本 |
-| T1 | SFT adapter，训练完成后用与 B2 同等编辑要求 | 高质量改写监督的增量价值 |
-| T2 | 在 T1 基础上 DPO，使用人工验证偏好对 | 偏好监督在 SFT 之上是否仍有收益 |
-| T3 | 最优训练模型＋与 B3 相同检查流程 | 训练和 harness 是否互补 |
-| H | 专业人工改稿 | 人类参照及节省编辑时间的基准，不作为廉价自动方案 |
+| B0 | Original draft unchanged | Is it really necessary to make changes?; Avoid equating progress with just minor text changes |
+| B1 | Simple instructions: Keep the meaning clear and natural | Common user usage patterns, just the lower limit |
+| B2 | Language/Domain-Specific Rubric + 3–5 Training/Development Sets with Positive and Negative Examples | What can a carefully designed single prompting session achieve? |
+| B3 | First list the facts and issues → rewrite → independent fact-checking, with a maximum of one revision | Is an editor with evidence and checks sufficient? |
+| B4 | Generate 4 candidates from the same material, select independently by a ranking algorithm | Can adding search during inference replace training? Consider the total generation and selection costs. |
+| T1 | SFT adapter, with the same editing requirements as B2 after training | Incremental value of high-quality rewriting of supervision |
+| T2 | Based on T1, DPO is performed, and preference pairs are manually validated. | Does preference supervision still offer benefits on top of SFT? |
+| T3 | Optimal training model + same checking process as B3 | Are training and harness complementary? |
+| H | Professional human editing | Based on human reference and time-saving editing standards, not intended as a cheap automated solution |
 
-同一输入、evidence packet、目标语言、输出要求、示例来源和模型版本均冻结。提示调优只用 dev；各方法获得相当的调优机会，并记录尝试次数和选择标准。对生成长度既报告自然结果，也用需求规定的长度区间分层；不能为了“公平”事后删除长稿，或以裁剪改变内容。
+The same input, evidence packet, target language, output requirements, example sources, and model version are all frozen. Optimization is only performed using the dev method; each method is given an equal opportunity for optimization, and the number of attempts and selection criteria are recorded. For generated lengths, both natural results and length ranges specified in the requirements are reported; long drafts cannot be deleted afterward for the sake of "fairness," nor can content be altered by pruning.
 
-采样温度数值在不同模型中不一定可比；保存所有支持的解码参数，并用 dev 选择合适设置。对于 reasoning 模型，记录思考预算、隐藏推理计费与最终输出长度。关键 arm 至少评估生成随机性；训练 arm 的领先结果以多个随机种子复核，先不把全部全因子组合都跑一遍。
+Sampling temperature values may not be comparable across different models; save all supported decoding parameters and use dev to select appropriate settings. For reasoning models, record the thinking budget, hidden inference cost, and final output length. For critical arm models, at least evaluate generation randomness; validate the leading results of training the arm with multiple random seeds, without running all full factorial combinations initially.
 
-最终主比较预先锁定一个胜出的训练系统和一个最强未训练系统，在未动过的 test 上比较。B0 及困难子集继续作为回归检查。消融至少覆盖：无 examples、无独立 verifier、无 preference stage、无 genre conditioning、只用默认弱 AI 负例，以及合成坏稿占比。
+The final main comparison pre-selects a winning trained system and a strongest untrained system, comparing them on untouched test sets. B0 and the hard subset continue as regression checks. Ablation covers at least: no examples, no independent verifiers, no preference stage, no generation conditioning, using only default weak AI negative examples, and the percentage of synthetic bad examples.
 
-## 6. 训练路径与模型规模
+## 6. Training Path and Model Size
 
-建议顺序是**强 baseline → 编辑对 SFT → 偏好 DPO → 必要时在线 RL**。LoRA 是参数高效适配方式，QLoRA 是量化底座配合 adapter 的训练方式，SFT／DPO 才是不同监督目标；这些不是互斥的同一层选项。训练详解、原始论文及官方模型卡见[训练文献](research/09-12-training-literature.md)。
+The recommended order is **strong baseline → edit SFT → favor DPO → online RL if necessary**. LoRA is an efficient parameter fitting method, QLoRA is a training method using a quantization base with an adapter, and SFT/DPO are different supervision targets; these are not mutually exclusive options at the same level. For detailed training explanations, the original paper, and official model cards, see [link to training documentation].[Training literature](research/09-12-training-literature.md).
 
-SFT 先学习具体改法和何时保持原文。DPO 的 chosen/rejected 必须是同一任务和事实材料，且 chosen 自身经过事实检查；不要单凭“更短”或“词汇检测器分数更低”造偏好标签。对训练中常见的高频风格错误，监督信号应包含编辑理由或问题定位，但最终改写输出不必附带解释。
+SFT first learns specific revision methods and when to retain the original text. The DPO's chosen/rejected materials must be from the same task and factual material, and the chosen materials themselves must be fact-checked; do not create preference labels solely based on "shorter" or "lower vocabulary detector scores." For common high-frequency style errors encountered during training, the supervision signal should include the reasoning for the edit or the problem location, but the final rewritten output does not necessarily need to include explanations.
 
-第一轮候选以一个**约 8–9B 的中英双语底座**为主，一个**约 4B**作低成本对照；再选 **12–14B**或 **27–32B**之一验证容量是否限制长文保真。可核验的具体候选包括 Qwen3.5-4B、Qwen3.5-9B、Qwen3-14B，及 Qwen3.8-27B；这些是待评候选，不是已经得出的排名。跨家族候选与其架构／许可由模型卡逐一核实。
+The first round of candidates primarily consists of a **bilingual (approximately 8–9 bytes) Chinese-English base**, with an **approximately 4 bytes** as a low-cost control. Then, one of either a **12–14 bytes** or a **27–32 bytes** base will be selected to verify whether capacity limits long text fidelity. Verifiable candidates include Qwen3.5-4 bytes, Qwen3.5-9 bytes, Qwen3-14 bytes, and Qwen3.8-27 bytes; these are candidates to be evaluated, not already ranked. Cross-family candidates and their architecture/licenses will be verified one by one using model cards.
 
-四个场景先使用同一模型和显式 language/genre 条件，观察负迁移；如果中文营销改善却伤害英文技术文档，再比较按领域 adapter。模型变大可能改善指令遵循和保真，但不保证自然感变好，模型家族、训练数据和偏好目标都可能更重要。对多模态／混合架构模型，纯文本路径、adapter 可训练模块、attention 实现和量化支持需先验证。
+First, use the same model and explicit language/genre conditions in all four scenarios to observe negative transfer. If improvements in Chinese marketing harm English technical documentation, then compare adapters by domain. Larger models may improve instruction compliance and fidelity, but do not guarantee better naturalness; model family, training data, and preference targets may all be more important. For multimodal/hybrid architecture models, plain text paths, trainable adapter modules, attention implementation, and quantization support need to be validated first.
 
-暂不以在线 RL 为起点：此时 reward 很可能还没有足够稳定的人工支撑，在线优化会放大 evaluator 的捷径。只有已经出现可信、稳定、SFT/DPO 难以解决的错误，且 reward 在外部人评上可靠，才值得追加该成本。
+Let's not start with online RL: at this point, the reward may not yet have sufficiently stable human support, and online optimization would amplify the evaluator's shortcuts. Only when reliable, stable, and SFT/DPO errors have emerged, and the reward is reliable in external evaluations, is it worthwhile to incur this additional cost.
 
-不要直接从优秀人类文章做 continued pretraining 开局。可以把它作为后续风格适配消融，但要和编辑指令监督区分。也不要一开始选 70B：先确定小模型失败在容量还是数据／评价；否则扩大模型只会更贵地重复同一错误。
+Don't start with continued pretraining from excellent human articles. You can use it for subsequent style adaptation ablation, but distinguish it from editorial supervision. Also, don't choose 70B from the beginning: first determine whether the small model fails due to capacity or data/evaluation; otherwise, scaling up the model will only lead to more expensive repetition of the same mistake.
 
-## 7. 分阶段样本与停止条件
+## 7. Phased sampling and stopping conditions
 
-| 阶段 | 四场景均衡安排 | 交付与进入下一步的条件 |
+| Phase | Balanced arrangement of four scenarios | Delivery and conditions for proceeding to the next step |
 |---|---|---|
-| Rubric pilot | 80 个独立任务，每格 20；2 位初评＋1 位分歧裁决 | 看人能否指出一致的问题及改进；修订维度，保留分歧记录，不能把 pilot 当最终 test |
-| Baseline development | 240 个新任务，每格 60 | 调 B1–B4，审查失败和作者声音损失；若 harness 已满足要求且没有成本问题，可停在此处 |
-| 首轮 SFT | 建议 2,000 个独立、经核验的改写对，每格约 500 | 先看学习曲线和 held-out dev；再按仍有收益的场景扩到 5K–10K，数量不作为质量保证 |
-| Preference stage | 先做少量真实歧义偏好；必要时扩充 1K–3K 对 | 只在 SFT 后仍有稳定风格偏差时进入；偏好例需满足事实约束并保存 tie |
-| 锁定终测 | 800 个新任务，每格 200；主比较每对 3 位独立评审 | 训练优于 strongest baseline，并满足保真、各场景回归与实际成本约束 |
+| Rubric pilot | 80 independent tasks, 20 per segment; 2 initial evaluators + 1 dissent arbitrator | Assess whether evaluators can point out consistent issues and improvements; revision dimensions, retain dissent records, the pilot should not be used as the final test |
+| Baseline development | 240 new tasks, 60 per frame | Adjust B1–B4, review failures and author voice loss; stop here if harness requirements are met and there are no cost issues |
+| First Round SFT | Suggests 2,000 independent, verified rewrite pairs, approximately 500 per cell | First assess the learning curve and held-out dev; then expand to 5K–10K for scenarios still generating revenue. Quantity is not a guarantee of quality. |
+| Preference stage | First, perform a small number of truly ambiguous preferences; expand to 1K–3K pairs if necessary | Only proceed if there is still a stable style bias after SFT; preference examples must satisfy factual constraints and be saved |
+| Final Testing Locked | 800 new tasks, 200 per grid; 3 independent reviewers per pair for the main comparison | Training outperforms the strongest baseline while meeting fidelity, regression requirements for various scenarios, and practical cost constraints |
 
-这些数量属于可调整预算建议。800 项的主配对比较，按 3 位评审，每次阅读与评价 3–5 分钟，约需 **120–200 小时**，不含招聘、rubric 训练、长文审核、复评和裁决。不能将几千条高质量偏好标签视作免费副产品。四场景都优先意味着每格都需要相应专业能力。
+These figures represent an adjustable budget proposal. 800 primary pairwise comparisons, with 3 reviewers and 3–5 minutes per reading and evaluation, would require approximately **120–200 hours**, excluding recruitment, rubric training, lengthy document review, re-evaluation, and adjudication. Thousands of high-quality preference tags cannot be considered a free byproduct. Prioritizing all four scenarios means that each segment requires corresponding expertise.
 
-主指标为三评审汇总后每个 task 的质量偏好得分；同时单列双方不合格率、uncertain 与自然感偏好。以训练系统为 A，计分规则如下。对双方合格的条件胜率作为辅助指标，避免仅筛合格样本造成幸存者偏差。
+The primary metric is the quality preference score for each task after the three reviews are summarized; additionally, the failure rate, uncertainty, and naturalness preference for both parties are listed separately. The training system is designated as A, and the scoring rules are as follows. The conditional win rate for both parties' compliance is used as a secondary metric to avoid survivorship bias caused by only screening qualified samples.
 
-| 情形 | 预设处理与 A 的相对得分 |
+| Situation | Relative score of preset treatment and A |
 |---|---|
-| A 合格，B 确认失败 | 1；B 的绝对失败另记 |
-| A 确认失败，B 合格 | 0；A 的绝对失败另记 |
-| 双方确认失败 | 0.5 相对平局，双方绝对失败各记 1；不能宣称双方质量合格 |
-| 双方合格 | 对每位评审将 A/B/tie 映射为 1/0/0.5，再取均值；A、B、tie 各一票时得 0.5，保留无共识标记 |
-| 评审判 both_unacceptable | 先查是否未记录任务或硬约束失败；若仅为均不够好，配对票记 0.5，另记两者均不可采用 |
-| 任一评审指出重大事实错误 | 独立事实裁决者按证据处理，不按风格票多数决；裁决前不能判通过 |
-| 某系统空输出、超时或约定重试后仍失败 | 算该系统任务失败，按上述单方／双方失败规则计分；保留成本 |
-| 材料不足、事实裁决后仍 uncertain，或缺少评审 | 先补评或核查；仍无法判断时保留任务，以 0 和 1 给出该任务对总体结果的上下界，不静默剔除，不用中性 0.5 掩盖未知 |
+| A is qualified, B fails confirmation | 1; Absolute failure of B is recorded separately |
+| A fails, B succeeds| 0; absolute failure of A is recorded separately |
+| Both sides confirm defeat | 0.5 for a relative tie, 1 for each side in an absolute defeat; neither side can claim the quality was satisfactory |
+| Both parties qualified | For each reviewer, map A/B/tie to 1/0/0.5, then take the average; if A, B, and tie each have one vote, the score is 0.5, and the no-consensus flag is retained. |
+| Evaluation of both_unacceptable | First check if the task was not recorded or if the hard constraint failed; if neither is good enough, award 0.5 points for the paired vote, and also award 0.5 points for both. |
+| Any reviewer points out a significant factual error | Independent fact-checkers handle cases based on evidence, not by majority vote; a decision cannot be made before a ruling is made |
+| If a system fails after empty output, timeout, or agreed-upon retries, | the system task is considered a failure and scored according to the aforementioned unilateral/bilateral failure rules; retention costs |
+| Insufficient materials, uncertainty after fact-finding, or lack of review | First, conduct supplementary review or verification; if a judgment still cannot be made, retain the task, providing upper and lower bounds for the task's impact on the overall result using 0 and 1, without silent elimination or using a neutral 0.5 to mask the unknown.
 
-全部预定 task 留在总分母；有未决任务时报告部分识别区间和覆盖率，只有保守边界仍满足门槛才可通过。若发现任务包本身无效，按预注册的、对模型结果盲态的规则替换并保留审计记录，不按输赢删题。
+All scheduled tasks remain in the total denominator; for pending tasks, report partial recognition intervals and coverage rates, and only tasks that still meet the threshold at conservative boundaries can pass. If a task package is found to be invalid, it is replaced according to the pre-registered rules that are blind to the model results, and the audit record is retained; tasks are not deleted based on wins or losses.
 
-四格等权 macro 平均，并分别报告每格。按独立 task/source family cluster bootstrap 计算区间；同稿的多位评审、多次采样、A/B 调序均不算新增独立样本。分析员需看 rubric 的一致性及人群差异，不能把所有审美分歧都裁成一个“真值”。
+Four-cell equally weighted macro average, with each cell reported separately. Intervals are calculated based on independent task/source family cluster bootstrap; multiple reviews of the same manuscript, multiple samplings, and A/B reordering are not considered as new independent samples. Analysts need to consider rubric consistency and population differences, and cannot treat all aesthetic disagreements as a single "true value".
 
-可预注册一个示例门槛：总体质量偏好得分达到 0.55 且 95% 区间下界超过 0.50；各格满足预定非劣条件；严重事实错误率符合具体产品要求。**0.55 是产品上拟议的最小收益，非文献公认阈值**。在 pilot 后、终测前，还必须为每格锁定允许回退幅度、严重错误上限及多重比较的置信规则；未检出显著下降不等于非劣，证据不足标 inconclusive。每格 n=200 对接近 0.5 的二项结果，普通近似 95% 区间半宽约 7 个百分点，总体 n=800 约 3.5 个百分点；平局、聚类和多重比较会改变精度。因此不能用此规模宣称每格都有 5 个百分点的显著改进。
+A sample threshold can be pre-registered: an overall quality preference score of 0.55 and a 95% lower bound exceeding 0.50; each cell meeting predetermined non-inferiority criteria; and a serious fact error rate meeting specific product requirements. **0.55 is the proposed minimum gain for the product, not a literature-recognized threshold.** After the pilot test and before the final test, the allowable backoff range, the upper limit of serious errors, and the confidence rules for multiple comparisons must be locked for each cell; failure to detect a significant decrease does not equate to non-inferiority, and insufficient evidence is marked as inconclusive. For n=200 cells with binary results close to 0.5, the average approximation 95% half-width is approximately 7 percentage points, and for n=800 cells, it is approximately 3.5 percentage points; ties, clustering, and multiple comparisons will alter accuracy. Therefore, this scale cannot be used to claim a significant improvement of 5 percentage points per cell.
 
-保真同样需要不确定性：某格 200 个独立任务零严重错误，常用 rule-of-three 近似上界仍约 1.5%，不能证明真实错误率低于 1%。若承诺更低错误率，应扩大检查样本并预先定义错误和置信要求。样本量最终依 pilot 中的方差、平局率、簇相关与所需效应重新计算。
+Fidelity also requires uncertainty: Even with 200 independent tasks and zero serious errors, the commonly used rule-of-three approximation upper bound is still around 1.5%, which does not prove the true error rate is below 1%. To commit to a lower error rate, the sample size should be increased and error and confidence requirements predefined. The sample size is ultimately recalculated based on the variance, average percentage, cluster correlation, and desired effect in the pilot.
 
-## 8. 两类产品最终还要测什么
+## 8. What else needs to be tested for both types of products?
 
-Technical docs 的终点是读者能否正确完成操作、找到所需信息，以及是否误解条件。保留代码和标识符，必要时运行用户任务或做阅读理解测试。句子更“活泼”不能抵消指令错误。
+The ultimate goal of technical documentation is for readers to correctly complete operations, find the required information, and avoid misunderstanding conditions. Retain code and identifiers, and run user tasks or reading comprehension tests when necessary. More "lively" sentences cannot compensate for instruction errors.
 
-Marketing 的终点取决于渠道：编辑采用率、品牌适配、读者理解，以及具备条件时的真实转化实验。CTR、转化和自然感可能方向不同，不能相互代替。正式投放需要另行确定预算和实验设计，本轮不触发投放。已有营销系统研究表明，输入材料、检索与工作流都值得纳入对照。[^7]
+Marketing's ultimate goal depends on the channel: editorial adoption, brand fit, reader understanding, and, when conditions permit, real conversion experiments. CTR, conversion, and naturalness may have different focuses and cannot be substituted for one another. Formal campaigns require separate budgeting and experiment design; they are not triggered in this round. Existing marketing system research indicates that input materials, search, and workflows are all worth including in a control group. [^7]
 
-另测时间到可发布版本：让盲测编辑把输出改到可用，记录编辑分钟数、事实修复数量与最终采用率。它能识别“judge 分数高，但人工返工仍多”的方案。首次测量是研究，不应把编辑者成本假设写成实际商业 ROI。
+Another test is conducted when a publishable version is ready: Blindly test editors revise the output to a usable state, recording the editing minutes, number of fact fixes, and final adoption rate. This identifies solutions with high judge scores but still requiring significant manual rework. The initial measurement is for research purposes and should not be used to calculate actual business ROI.
 
-成本账同时包含标注、训练、调参、推理、候选筛选、验证和返工。盈亏平衡调用量可写为：`额外一次性成本 /（baseline 每稿总成本 − trained 每稿总成本）`；分母不大于零时不存在基于调用量的成本回收。GPU 与 API 价格在真正跑实验时再核实，研究阶段不预支计算预算。
+The cost breakdown includes annotation, training, hyperparameter tuning, inference, candidate selection, validation, and rework. The break-even call count can be written as:`额外一次性成本 /（baseline 每稿总成本 − trained 每稿总成本）` When the denominator is not greater than zero, there is no cost recovery based on the number of calls. GPU and API prices will be verified during actual experimental runs; no computational budget will be pre-allocated during the research phase.
 
-## 9. 当前最值得验证的假设
+## 9. The most worthwhile hypothesis to test at present
 
-- 四个场景可能共享部分问题，但不存在一个跨语言／领域通用的禁词表。
-- 在给定充分材料后，8–9B 编辑模型可能以较低推理成本达到强 harness 的质量；这比预设它必然超过所有前沿模型更值得验证。
-- 事实保真与有用信息约束，加上专业编辑偏好，可能比 AI 检测分数提供更好的优化信号。
-- Prompting 若已解决大部分风格问题，训练的价值可能主要是稳定性、延迟、隐私部署或成本，而非更高平均文采。
-- 当作者声音本身多样时，单一偏好模型可能把所有人写成同一种“自然腔”；需要可配置声音及无需修改的正例。
+- The four scenarios may share some issues, but there is no universally applicable list of forbidden words across languages/domains.
+- Given sufficient material, the 8–9B edit model may achieve strong harness quality with lower inference costs; this is more worthy of verification than assuming it necessarily surpasses all cutting-edge models.
+- Fact-based accuracy and useful information constraints, coupled with professional editorial preferences, may provide better optimization signals than AI detection scores.
+- If prompting has solved most style issues, the value of training may be primarily stability, latency, privacy deployment, or cost, rather than higher average writing quality.
+- When the author's voice is diverse, a single preference model may write everyone with the same "natural voice"; configurable voices and positive examples that do not require modification are needed.
 
-下一步最小可执行工作是制作四格各 20 项的 rubric pilot，并收集专业编辑的真实分歧。还不需要先采购 GPU、爬取大语料或训练独立判别器。
+The next minimal executable step is to create a rubric pilot with 20 items in each of the four sections and collect real disagreements from professional editors. There's no need to purchase GPUs, crawl large corpora, or train independent discriminators yet.
 
-## 参考来源
+## Reference source
 
-[^1]: Raheja, Kumar, Koo & Kang. [CoEdIT: Text Editing by Task-Specific Instruction Tuning](https://aclanthology.org/2023.findings-emnlp.350/). Findings of EMNLP, 2023.
-[^2]: Du et al. [Understanding Iterative Revision from Human-Written Text](https://aclanthology.org/2022.acl-long.250/). ACL, 2022.
-[^3]: 风格研究的原始论文、观察范围与相互冲突的结果见[风格文献](research/09-12-style-literature.md)；此处“有效信息量”为本项目拟采用的功能性定义。
-[^4]: 事实评价、检测器局限及 judge bias 的原始来源见[评价文献](research/09-12-evaluation-literature.md)；双向保真协议是本项目设计，不能视作现成指标已经覆盖。
-[^5]: Wu et al. [WritingBench: A Comprehensive Benchmark for Generative Writing](https://arxiv.org/html/2503.05244v4). 2025, v4.
-[^6]: Bhat, Browne & Bingemann. [Creativity Benchmark: A benchmark for marketing creativity for LLM models](https://arxiv.org/html/2509.09702v1). 2025, preprint.
-[^7]: Liu, Tahmasbi, Haque & Jain. [LLMs for Customized Marketing Content Generation and Evaluation at Scale](https://arxiv.org/html/2506.17863v1). 2025, preprint.
+[^1]: Raheja, Kumar, Koo & Kang. [CoEdIT: Text Editing by Task-Specific Instruction Tuning](https://aclanthology.org/2023.findings-emnlp.350/)Findings of EMNLP, 2023.
+[^2]: Du et al. [Understanding Iterative Revision from Human-Written Text](https://aclanthology.org/2022.acl-long.250/)ACL, 2022.
+[^3]: The original papers on style studies, their scope of observation, and conflicting results can be found in [Style Literature].](research/09-12-style-literature.md)The term "effective information content" here is a functional definition to be adopted in this project.
+[^4]: The original sources of fact-finding, detector limitations, and judge bias can be found in [evaluation literature].](research/09-12-evaluation-literature.md)The two-way fidelity protocol is a feature of this project and should not be considered as a readily available indicator that has already been covered.
+[^5]: Wu et al. [WritingBench: A Comprehensive Benchmark for Generative Writing](https://arxiv.org/html/2503.05244v4)2025, v4.
+[^6]: Bhat, Browne & Bingemann. [Creativity Benchmark: A benchmark for marketing creativity for LLM models](https://arxiv.org/html/2509.09702v1)2025, preprint.
+[^7]: Liu, Tahmasbi, Haque & Jain. [LLMs for Customized Marketing Content Generation and Evaluation at Scale](https://arxiv.org/html/2506.17863v1)2025, preprint.

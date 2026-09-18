@@ -1,28 +1,28 @@
-# 正文清理 QA — 2026-09-12
+# Body-text cleaning QA — 2026-09-12
 
-覆盖 1,247,891 条记录、28 个分组和 2,466,749 个文本字段；原始数据、模型输出和既有评审未修改，没有调用模型。
+Covers 1,247,891 records, 28 collections, and 2,466,749 text fields; raw data, model outputs, and existing reviews were not modified, and no model was called.
 
-## 完整性
+## Completeness
 
-- 214,048 条记录的 397,342 个字段发生格式变化；清理库行数、ID、配对角色和 33,562 个参考答案与原库一一对应。
-- 31 个正文／元数据 gzip 文件全部完整读取、解析并检查 CRC；逐分组有序 ID 与全文哈希和 SQLite 完全一致。600 条候选、260 条隔离记录合计 860 条改写实验；候选两侧均非空。
-- 第 32 个 `format-flags.jsonl.gz` 独立验证，共 148,318 条带来源警告或隔离原因的记录，不含正文。可用于读取归档数据时排除损坏来源。
-- 62,595 个 null 目标保留为未配对。2,400 个原本仅含空白的字段规范为空字符串；另外 6 个非空字段在去除 HTML、署名或引用定义后变空，均属于 5 条归档记录，完整保留审计和警告，不混入改写候选。
-- 原库 SHA256 在构建前后及独立 QA 中一致：`a8b2572fbc88853b424ed4b1f8840f605bb32ec6bd251b7b794725b144d47188`。
-- 规则指纹：`ec3783638cc9f0473fd5087f0cc29c863f09f25a0ebc4a6a87a40f4480c7d11c`。构建时所有发生变化的字段再次清理结果不变。
+- 397,342 fields across 214,048 records changed format; the cleaned database's row count, IDs, pairing roles, and 33,562 reference answers correspond one-to-one with the source database.
+- All 31 body-text/metadata gzip files were read in full, parsed, and CRC-checked; per-collection ordered IDs and full-text hashes match SQLite exactly. 600 candidates and 260 quarantined records make up 860 rewrite experiments in total; neither side of a candidate is empty.
+- A 32nd file, `format-flags.jsonl.gz`, was verified independently: 148,318 records carrying source warnings or quarantine reasons, containing no body text. It can be used to exclude corrupted sources when reading the archived data.
+- 62,595 null targets are retained as unpaired. 2,400 fields that originally held only whitespace were normalized to empty strings; a further 6 non-empty fields became empty after HTML, bylines, or reference definitions were stripped, all belonging to 5 archived records, which keep their full audit trail and warnings and are not mixed into the rewrite candidates.
+- The source database's SHA256 is identical before the build, after the build, and in independent QA: `a8b2572fbc88853b424ed4b1f8840f605bb32ec6bd251b7b794725b144d47188`.
+- Rule fingerprint: `ec3783638cc9f0473fd5087f0cc29c863f09f25a0ebc4a6a87a40f4480c7d11c`. At build time, re-cleaning every changed field produces an unchanged result.
 
-## 内容保护与界面
+## Content protection and interface
 
-28 项离线格式保护测试、12 项真实本机 HTTP 测试和 14 项选样回归测试通过。全库规则复扫发现并修复了无边界 LaTeX 被误读为 Markdown 的问题；结构不明确的公式、diff、维基编辑残留和 ASCII 图形保留并标记。
+28 offline format-protection tests, 12 real local HTTP tests, and 14 sampled regression tests passed. A repo-wide rule rescan found and fixed LaTeX without delimiters being misread as Markdown; formulas with unclear structure, diffs, wiki editing residue, and ASCII art are preserved and flagged.
 
-独立格式检查覆盖 328 条记录、748 个字段，包含全部 47 个文章／段落 AI 输出和 20 个 Code2Doc 样本。41 个代码块、1 个 HTML pre 示例的代码内容、30 处公式／引用占位，以及 35 项指定数字／技术事实检查通过。
+An independent format check covered 328 records and 748 fields, including all 47 article/paragraph AI outputs and 20 code2doc samples. 41 code blocks, the code content of 1 HTML `pre` example, 30 formula/citation placeholders, and 35 specified numeric/technical fact checks passed.
 
-西班牙流感原文与 AI 稿均直接从正文开始，去掉 frontmatter、署名、标题副本、分隔线、版权／引用页尾和 AI 重述的网页信息。原文缺少尾注正文，因此保留来源警告并隔离，未将其宣称为保真 gold。
+Both the source and the AI draft of the Spanish flu article start directly at the body text, with frontmatter, bylines, duplicated titles, horizontal rules, copyright/citation footers, and webpage information restated by the AI removed. The source lacks the endnote body text, so its source warning is retained and it is quarantined; it is not claimed as fidelity-grade gold.
 
-本机 API 默认选择清理库，支持原始版本、搜索、质量筛选和清理审计；版本哈希隔离经过测试，原始评审不会自动成为清理稿评审。静态资源、DOM ID、JS 语法和本机页面响应通过检查。真实浏览器已验证西班牙流感的清理／原始切换、候选筛选、审计展开及双栏布局；原始版本仍展示原始 YAML，切回清理版则直接显示正文。
+The local API selects the cleaned database by default and supports the raw version, search, quality filtering, and cleaning audits; version-hash isolation has been tested, so reviews of the raw text do not automatically become reviews of the cleaned draft. Static resources, DOM IDs, JS syntax, and local page responses passed their checks. A real browser verified the cleaned/raw toggle, candidate filtering, audit expansion, and two-column layout on the Spanish flu article; the raw version still shows the original YAML, and switching back to the cleaned version shows the body text directly.
 
-## 尚需人工判断
+## Still requires human judgment
 
-五处 AI 句子把作者／日期与实质内容混在一起，保留并隔离。部分 PDF 硬换行、科学记号间距、缺失图表／尾注和来源中已有的连写句子不能通过安全的排版规则完全恢复。保留代码围栏、公式和表格结构是为了保护其含义。
+Five AI sentences blend author/date into the substantive content; these are preserved and quarantined. Some PDF hard line breaks, scientific-notation spacing, missing figures/endnotes, and run-on sentences already present in the source cannot be fully recovered by safe typographic rules. Code fences, formulas, and table structures are preserved in order to protect their meaning.
 
-质量隔离包含自动诊断的待核对项，并非 260 条都已证明错误。以上验证不替代作者身份核验、偏好标注、完整语义等价或人类质量评审。完整逐条审计及源文本片段仅在本地数据包中。
+The quality quarantine holds automatically diagnosed items awaiting checking; it is not the case that all 260 have been proven wrong. The verification above does not substitute for authorship verification, preference annotation, full semantic equivalence, or human quality review. The complete item-by-item audit and the source text excerpts exist only in the local data package.

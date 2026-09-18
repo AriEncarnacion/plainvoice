@@ -1,94 +1,94 @@
-# Agentic trace 与技术写作：公开数据核查及小样本
+# Agentic Trace and Technical Writing: Public Data Verification and Small Samples
 
-核查日期：2026-09-12。目标是寻找 AI 文本、可验证的任务/执行证据，以及高质量人类写法之间的可配对材料。本轮阅读官方论文、作者仓库和数据卡，并检查实际样本字段；未运行生成模型、训练或重放软件环境。
+Verification Date: 2026-09-12. The goal was to find pairable material between AI text, verifiable task/performance evidence, and high-quality human writing. This round involved reading official papers, author repositories, and data cards, and examining actual sample fields; no generative models, training, or replay software environments were run.
 
-**结论：已经取得可观测工具轨迹和最终工程总结，也找到一个已核实同一 prompt 的 AI 报告—人类参考文章对；没有找到可直接称为「同内容、事实不变、真人精修 AI 初稿」的现成 gold 数据。** 工具轨迹最合适的入口是 NVIDIA 的 SWE-Hero；研究报告可先看 DeepResearch Bench II 与 CogGen。代码注释数据更接近技术文档，但人类来源和质量仍需逐条核查。
+**Conclusion:** Observable tool trajectories and final engineering summaries have been obtained, and a verified AI report—a human-referenced article pair—with the same prompt has been found. No readily available gold data could be directly described as "the same content, unchanged facts, and a human-refined AI draft." The most suitable entry point for tool trajectories is NVIDIA's SWE-Hero; for research reports, DeepResearch Bench II and CogGen are recommended. Code comment data is closer to technical documentation, but the human source and quality still need to be verified item by item.
 
-数据实际保存在用户指定的桌面目录：`~/Desktop/plainvoice/data/local/agentic-technical/`。`source-manifest.json` 记录来源、revision、选样、许可说明和文件校验；第三方正文仅保存在桌面，不纳入本仓库。
+The data is actually stored in the user-specified desktop directory:`~/Desktop/plainvoice/data/local/agentic-technical/`.`source-manifest.json` Record the source, revision, sample selection, license description, and document verification; third-party text is only saved on the desktop and is not included in this repository.
 
-## 1. 先区分四种“配对”
+## 1. First, distinguish between the four types of "pairing".
 
-| 类型 | 能回答的问题 | 不能直接推出什么 |
+| Type | Answerable Questions | Cannot Directly Infer Anything |
 |---|---|---|
-| 同一个 topic 的真人文章与 AI 文章 | 文体差异的探索 | 信息量、事实、目的和长度受控 |
-| 同一个 task/prompt 的两份文章 | 相同需求下的整体输出质量 | 两份文章表达同一组事实；真人稿是在修订 AI 稿 |
-| 同一份 code/brief/evidence 下的人与 AI 输出 | 有共同事实依据的生成质量 | 已获得事实完全等价的改写偏好 |
-| AI 初稿及真人精修稿，附事实核验 | 改写 SFT / DPO 所需目标 | 每一次人类改动都一定更好 |
+| Real-person articles and AI-generated articles on the same topic | Exploring stylistic differences | Controlled information content, facts, purpose, and length |
+| Two articles from the same task/prompt | Overall output quality under the same requirements | Both articles express the same set of facts; the real-person draft is a revision of the AI draft |
+| Human and AI output under the same code/brief/evidence | Generation quality with shared factual basis | Rewriting preference based on completely equivalent facts |
+| AI initial draft and human-refined version, with fact-checking | Goals required for rewriting SFT/DPO | Every human modification is guaranteed to be better |
 
-另一个独立维度是 trace。带 `assistant.tool_calls` 与对应 `tool` observation 的日志是可观测交互记录；模型叙述“我检索了……”或 `thought` / rationale 字段不是工具确实执行的证据。数据导出的 message history 也不保证包含所有重试、环境状态、隐藏过程或可重放依赖。
+Another independent dimension is trace. `assistant.tool_calls` Corresponding `tool` The observation log is a record of observable interactions; the model describes "I retrieved..." or `thought` The `/ratione` field is not evidence that the tool actually executed. The exported message history is also not guaranteed to include all retries, environment states, hidden processes, or replayable dependencies.
 
-## 2. 优先查看的实际样本
+## 2. Prioritize viewing actual samples
 
-| 数据 | 桌面已取得 | 配对与 trace 级别 | 优先用途 |
+| Data | Desktop Acquired | Pairing and Trace Level | Preferred Use |
 |---|---|---|---|
-| **SWE-Hero / OpenHands** | 3 条轨迹；分别 143、145、117 messages；各自保留最终 assistant turn、`finish.message` 和 `model_patch` | 可观测 actions / observations + final 工程总结；没有真人修订 | 给最终总结建立执行证据约束，再收集真人精修 |
-| **DeepResearch Bench II** | Software Development 的 idx 41–50：中文 5、英文 5；10 份 Doubao 最终报告；对应任务、rubrics、人类来源文章链接 | 同任务 AI 报告 + 专家来源标准；本包没有人类来源文章全文，也没有 trace | 中英技术研究报告的事实与风格分离评估 |
-| **CogGen / OWID** | 20 篇人类参考正文及 task；2 篇官方 AI 示例；其中 deforestation 已核实 query 逐字相同 | **1 个 exact-same-task AI—human reference pair**，不是 same-content rewrite；没有发布的完整 trace | 最直观的 AI / 人类研究写作比较起点 |
-| **STORM / FreshWiki** | 10 篇技术、科学和相关商业百科文章，保留正文、来源 URL、references | 人类参考池；官方发布物未找到对应 AI 输出/轨迹 | 内容卡与人类参考的探索性构造 |
-| **Code2Doc** | test 前 20 行：Java 10、Python 8、TypeScript 2；代码及原有文档 | 同一代码对应已有 docstring；无 AI 对照、无真人修订链 | 技术文档来源池；需补版本/作者核验和新对照 |
-| ResearcherBench（补充） | 前 10 个问题、专家 rubric、Claude 回答，按 id 对齐 | 同任务 AI 回答 + 专家标准；没有真人参考文章或 trace | 技术问题的保真评估与 AI 初稿来源 |
+| **SWE-Hero / OpenHands** | 3 tracks; 143, 145, and 117 messages respectively; each retains the final assistant turn,`finish.message` and `model_patch` | Observable actions/observations + final project summary; no human review | Establish execution evidence constraints for the final summary, then collect data for human review |
+| **DeepResearch Bench II** | Software Development idx 41–50: 5 in Chinese, 5 in English; 10 Doubao final reports; corresponding tasks, rubrics, and links to human-sourced articles | AI reports for the same task + expert source standards; this package does not include full-text human-sourced articles or traces | Fact and style separation assessment of Chinese and English technical research reports |
+| **CogGen / OWID** | 20 human reference texts and tasks; 2 official AI examples; deforestation has been verified to have a verbatim identical query | **1 exact-same-task AI-human reference pair**, not same-content rewrite; no published complete trace | The most intuitive starting point for comparing AI/human research writing |
+| **STORM / FreshWiki** | 10 technical, scientific, and related business encyclopedia articles, retaining the text, source URLs, and references | Human reference pool; no corresponding AI output/trajectory found in official releases | Exploratory construction of content cards and human references |
+| **Code2Doc** | First 20 lines of test: Java 10, Python 8, TypeScript 2; Code and existing documentation | Existing docstring for the same code; No AI comparison, no human revision chain | Technical documentation source pool; Version/author verification and new comparison needed |
+| ResearcherBench (Supplement) | Top 10 questions, expert rubric, Claude answers, aligned by ID | AI answers for the same task + expert criteria; no human reference articles or traces | Fidelity assessment of technical issues and AI initial draft source |
 
-这些是可阅读的探索性样本，不是代表性 benchmark。除 DRB II 的 5+5 双语任务外，本轮可用内容主要是英文，也没有 marketing 与 technical 四格平衡；不能代替主方案的分层采样。
+These are readable exploratory samples, not representative benchmarks. Apart from the 5+5 bilingual task in DRB II, the available content in this round is mainly in English, and there is no four-panel balance between marketing and technical; therefore, it cannot replace the stratified sampling of the main scheme.
 
-### SWE-Hero：真实执行轨迹与 final 都有，适合继续收集精修
+### SWE-Hero: It contains both the actual execution trajectory and the final result, making it suitable for further collection and refinement.
 
-[NVIDIA 官方数据卡](https://huggingface.co/datasets/nvidia/SWE-Hero-openhands-trajectories)说明该数据使用 OpenHands 与 Qwen3-Coder-480B-A35B-Instruct，发布 34,269 条轨迹、11,766 个 issue。issue 来自 SWE-Gym、R2E-Gym 与 SWE-rebench，其中部分问题描述也是合成的。[技术报告](https://arxiv.org/abs/2604.01496)为 *From SWE-ZERO to SWE-HERO: Execution-free to Execution-based Fine-tuning for Software Engineering Agents*（Ludwig、Ahmad、Majumdar、Ginsburg，2026）。
+[NVIDIA official data card](https://huggingface.co/datasets/nvidia/SWE-Hero-openhands-trajectories)This data was generated using OpenHands and Qwen3-Coder-480B-A35B-Instruct, resulting in 34,269 tracks and 11,766 issues. The issues originated from SWE-Gym, R2E-Gym, and SWE-rebench, and some issue descriptions were also synthesized.[Technical Report](https://arxiv.org/abs/2604.01496)From SWE-ZERO to SWE-HERO: Execution-free to Execution-based Fine-tuning for Software Engineering Agents (Ludwig, Ahmad, Majumdar, Ginsburg, 2026).
 
-本包使用 HF rows API 下载前 3 条，均是 pandas 任务；API `truncated_cells` 为空。实际可见 `execute_bash` 等工具调用、环境回显、最终 `finish` 调用及其总结文本。最后一轮单独放在 `traces/swe-hero-openhands/samples/row-*.final.json`，方便先读；完整记录在 `trajectories.3.jsonl`。
+This package uses the HF rows API to download the first 3 rows, all of which are pandas tasks; API `truncated_cells` Empty. Actually visible. `execute_bash` Tool calls, environment feedback, and final `finish` The call and its summary text. The final round is placed separately. `traces/swe-hero-openhands/samples/row-*.final.json` For easy reading first; complete record in `trajectories.3.jsonl`.
 
-限制：没有真人同内容修订；轨迹中的 assistant 文本不一定都是对用户可见的执行更新。`model_patch` 不等于经过本轮验证的正确补丁，final 中“成功”“全部正常”等宣称也尚未逐条与日志对照。本轮仅检查字段、结束状态和 API 是否截断，没有重跑测试。数据卡声明 CC BY 4.0，同时各行保留源仓库许可；这 3 行是 BSD-3-Clause。
+Limitations: No real-person content revisions; assistant text in the trajectory is not necessarily an update visible to the user.`model_patch` This does not equate to a correct patch verified in this round. Claims such as "success" and "all normal" in the final statement have not been individually compared with the logs. This round only checked fields, end states, and API truncation; no tests were rerun. The data card declares CC BY 4.0, while retaining the source repository license in each line; these three lines are BSD-3-Clause.
 
-### DeepResearch Bench II：标准来自专家文章，文章正文并不在任务文件里
+### DeepResearch Bench II: The standards are derived from expert articles, but the full text of these articles is not included in the task file.
 
-[作者仓库](https://github.com/imlrz/DeepResearch-Bench-II)与[论文](https://arxiv.org/abs/2601.08536)介绍 132 个任务、9,430 条 rubrics。实际 `tasks_and_rubrics.jsonl` 的 `content` 包含 `task`、`rubric`、`blocked`；后者保存来源标题、作者与 URL，并不是原文正文。任务要求被测 agent 不读取这篇来源文章；这是 benchmark 构造的一部分，不是人类编辑 AI 初稿的记录。
+[Author's Repository](https://github.com/imlrz/DeepResearch-Bench-II)and[paper](https://arxiv.org/abs/2601.08536)It introduces 132 tasks and 9,430 rubrics. (Actual) `tasks_and_rubrics.jsonl` of `content` Include `task`,`rubric`,`blocked` The latter stores the source title, author, and URL, not the original text. The task requires the tested agent not to read this source article; this is part of the benchmark construction and not a record of human editing of the AI's initial draft.
 
-本包的 10 个 task 与 [HF 官方模型报告发布](https://huggingface.co/datasets/muset-ai/DeepResearch-Bench-II-Dataset)中 `Doubao-DeepResearch/idx-*.md` 按 idx 对齐，覆盖低代码、强化学习、Kubernetes 调度、可观测性、视频编码与云扩缩容等。抽查 idx 41/42 的正文标题与任务对应；未对全部语义、引用与指标作质量标注。
+This package contains 10 tasks and [HF Official Model Report Released](https://huggingface.co/datasets/muset-ai/DeepResearch-Bench-II-Dataset)middle `Doubao-DeepResearch/idx-*.md` Aligned by idx, covering low-code, reinforcement learning, Kubernetes scheduling, observability, video encoding, and cloud scaling. A spot check of the text titles and task correspondence in idx 41/42 revealed that not all semantics, citations, and metrics were quality-annotated.
 
-许可必须分开：仓库代码 Apache-2.0；任务/rubrics 使用逐条来源许可。作者当前 `DATA_LICENSE` 写明 129 条 CC BY 4.0、idx 26/110 为 CC BY-NC 4.0、idx 119 为 CC0。本次 41–50 均为 CC BY 4.0。HF 模型报告卡另标 Apache-2.0，不能用它覆盖人类来源文章的许可。
+Licenses must be separated: repository code Apache-2.0; task/rubrics uses a line-by-line license. The author currently... `DATA_LICENSE` It specifies that 129 entries are CC BY 4.0, idx 26/110 are CC BY-NC 4.0, and idx 119 is CC0. Entries 41–50 in this report are all CC BY 4.0. The HF model report card is also labeled Apache-2.0, which cannot be used to override the licenses of human-derived articles.
 
-### CogGen：一对确实同 prompt，但内容仍未受控
+### CogGen: A pair of people did indeed receive the same prompt, but the content is still not under control.
 
-[作者仓库](https://github.com/NJUNLP/CogGen)与[数据卡](https://huggingface.co/datasets/tk1111/coggen-benchmark)将 50 篇 OWID 报告列为人类专家参考，保留作者、日期、来源 URL、Markdown 正文。另有 20 篇 WildSeek 参考由 Gemini Deep Research 生成；**后者不能当作人类 ground truth**。
+[Author's Repository](https://github.com/NJUNLP/CogGen)and[Data card](https://huggingface.co/datasets/tk1111/coggen-benchmark)Fifty OWID reports are listed as human expert references, retaining the author, date, source URL, and Markdown text. An additional 20 WildSeek references were generated by Gemini Deep Research; **the latter cannot be considered as human ground truth.**
 
-本次保留 OWID main_001–019，加 main_033。`global_deforestation/config.json` 中的 query 与 `owid_main_033` query 逐字相同，后者通过 `source_report_id` 对应 OWID 人类文章；配对文件为 `coggen/samples/deforestation.same-task-pair.json`。这验证了同任务来源，未验证 AI 与人类稿的事实覆盖相同，也不代表人类看过/修改过这份 AI 稿。另一个 oil/gas IoT 示例只有 AI 稿；未伪造人类配对。
+This time, we retain OWID main_001–019 and add main_033.`global_deforestation/config.json` query and `owid_main_033` The queries are identical word for word, the latter is obtained through... `source_report_id` Corresponding OWID human articles; the pairing file is `coggen/samples/deforestation.same-task-pair.json` This verifies that the fact that the AI and human drafts from the same task source have the same coverage does not mean that humans have seen/modified the AI draft. Another oil/gas IoT example only has an AI draft; no fake human pairings were found.
 
-作者代码能生成日志、上下文池等文件，不等于这些完整轨迹已经发布。当前仓库内查到的是两个最终报告示例与 config。OWID 文字数据卡标 CC BY 4.0，原始作者/链接保留；第三方图表和数据许可需独立处理。本次未下载图像，只保留文字内已有 URL。
+The author's code can generate logs, context pools, and other files, but this does not mean that these complete tracks have been published. The current repository contains two final report examples and a configuration file. OWID text data is CC BY 4.0, and the original author/link is retained; third-party charts and data licenses need to be handled separately. No images were downloaded this time; only URLs existing within the text are retained.
 
-### FreshWiki 与 Code2Doc：适合作为原始材料，不直接当偏好金标
+### FreshWiki and Code2Doc: Suitable as primary source material, not directly used as preferred gold labels.
 
-[FreshWiki 数据卡](https://huggingface.co/datasets/EchoShao8899/FreshWiki)发布 100 篇英语 Wikipedia 文章，采样关注 2022-02 至 2023-09 的高编辑量页面。[STORM 论文](https://aclanthology.org/2024.naacl-long.347/)研究从主题到长文章的流程。10 篇样本有 `title/url/summary/content/references` 等字段。主仓库、论文存档分支与 HF 文件清单未找到这些参考对应的公开生成结果或 conversation log；该结论限于本轮检查的发布物。文本 CC BY-SA 4.0，不能沿用 STORM 代码 MIT。文章发布日期/历史窗口也不是未经机器辅助的作者身份证明。
+[FreshWiki Data Card](https://huggingface.co/datasets/EchoShao8899/FreshWiki)Published 100 English Wikipedia articles, focusing on high-editability pages from February 2022 to September 2023.[STORM paper](https://aclanthology.org/2024.naacl-long.347/)The study examines the process from topic selection to the development of a full-length article. Ten sample articles are available. `title/url/summary/content/references` Fields such as [list of fields]. No publicly generated results or conversation logs corresponding to these references were found in the main repository, paper archive branch, and HF file list; this conclusion is limited to publications examined in this round. The text is CC BY-SA 4.0 and cannot be used with the STORM code MIT. The article publication date/history window is also not a non-machine-assisted proof of authorship.
 
-[Code2Doc 数据卡](https://huggingface.co/datasets/kaanrkaraman/code2doc)宣称 13,358 组代码—文档对，覆盖五种**编程语言**。[论文](https://arxiv.org/abs/2512.18748)的质量与 AI 来源过滤依赖启发式；没有为本项目提供经过人类核验的“无 AI”身份标签或“去 AI 味儿”胜负标签。现有字段包括 repo、文件路径、行号、代码、文档、quality_score，但不是历史修改链。数据卡 CC BY 4.0 与原仓库 MIT/Apache/BSD 的归属仍应一起保留。随机按行拆分还可能让同 repo/风格泄漏到测试集。
+[Code2Doc Data Card](https://huggingface.co/datasets/kaanrkaraman/code2doc)It claims 13,358 code-document pairs, covering five **programming languages**.[paper](https://arxiv.org/abs/2512.18748)The quality and AI source filtering rely on heuristics; there are no human-verified "AI-free" identity labels or "AI-free" win/loss labels for this project. Existing fields include repo, file path, line number, code, documentation, and quality_score, but not a historical modification chain. Data cards CC BY 4.0 and their original MIT/Apache/BSD repository affiliations should still be preserved. Randomly splitting by line may allow similar repo/style leaks to the test suite.
 
-## 3. 其他核查对象与排除原因
+## 3. Other verification targets and reasons for exclusion
 
-| 对象 | 核查结果 | 对本项目的意义 |
+| Object | Verification Results | Significance to this Project |
 |---|---|---|
-| [WildSeek](https://huggingface.co/datasets/YuchengJiang/WildSeek) | 官方数据点是 topic + 用户 goal；独立发布物不是真人文章/AI 报告/轨迹集 | 需求分布参考；不要把“真实用户需求”误当“真人写作” |
-| [ResearcherBench](https://github.com/GAIR-NLP/ResearcherBench) | 65 个前沿 AI 研究问题；Claude 辅助提炼 insights，再由专家构造加权 rubrics；公开多系统最终回答 | 有专家评价标准，不等于 65 篇真人高质量文章。检查的 revision 未找到 LICENSE，训练/再分发权限未验证 |
-| [DeepResearch Bench I](https://github.com/Ayanami0730/deep_research_bench) | 100 个研究任务、criteria、reference 与模型最终报告文件；本轮未建立 reference 的逐条人类写作证据 | 可作评测设计参考，不能仅凭文件名 reference 推断 gold 人类稿 |
-| [ReportBench](https://github.com/ByteDance-BandAI/ReportBench) | 由专家综述构造研究需求与参考依据；公开任务和 citation ground truth | 人类参考与生成任务的内容范围仍需对齐；没有找到现成的人类精修 AI 稿或全轨迹三件套 |
-| [Meta DocAgent](https://github.com/facebookresearch/DocAgent) | 多 agent 代码文档生成方法；公开代码/小型示例，采用自动检查与 LLM 评价；[论文](https://arxiv.org/abs/2504.08725)讨论缺少 gold reference | 方法相关，未发现可直接下载的高质量人类—AI 改写对；注意与同名多模态 DocAgent 区分 |
-| [CodeSearchNet](https://github.com/github/CodeSearchNet) | 代码与已有函数注释的数据和收集方法 | 原始技术文档来源池，无现成 AI 对照、真人修订标签或 workflow trace |
+| [WildSeek](https://huggingface.co/datasets/YuchengJiang/WildSeek) Official data points are topic + user goals; independently published content is not real-person articles/AI reports/trajectory sets | Demand distribution reference; do not mistake "real user needs" for "real-person writing" |
+| [ResearcherBench](https://github.com/GAIR-NLP/ResearcherBench) | 65 cutting-edge AI research questions; Claude helps refine insights, then experts construct weighted rubrics; publicly available final answers from multiple systems | Expert evaluation criteria are included, but this does not equate to 65 high-quality articles by real researchers. No license found for the revision check; training/redistribution permissions not verified.
+| [DeepResearch Bench I](https://github.com/Ayanami0730/deep_research_bench) | 100 research tasks, criteria, references, and the final model report; evidence of human writing for which no references were established in this round | Can be used as a reference for evaluation design; do not infer the quality of a gold-level human manuscript solely from filename references |
+| [ReportBench](https://github.com/ByteDance-BandAI/ReportBench) | The research needs and references are constructed from expert reviews; the task and citation ground truth are made public. | The content scope of human references and generated tasks still needs to be aligned; no ready-made human-refined AI drafts or full-track three-piece sets were found.
+| [Meta DocAgent](https://github.com/facebookresearch/DocAgent) | Methods for generating multi-agent code documentation; public code/small examples, using automatic checks and LLM evaluation;[paper](https://arxiv.org/abs/2504.08725)The discussion lacks a gold reference | Methodologically related, no high-quality human-AI rewrite pairs were found that can be directly downloaded; note the distinction from the multimodal DocAgent with the same name |
+| [CodeSearchNet](https://github.com/github/CodeSearchNet) | Data and collection methods for code and existing function comments | Original technical documentation source pool, no ready-made AI comparisons, human revision tags, or workflow traces |
 
-### SWE-smith：额外下载 3 条，保留为数据 QA 反例
+### SWE-smith: Download 3 additional records, keep them for data QA counterexamples.
 
-[官方 SWE-smith 发布](https://huggingface.co/datasets/SWE-bench/SWE-smith-trajectories)的 tool split 前 3 条确实有 49/43/65 条消息、工具调用和 observation，以 `submit` 结束；无 API 单元格截断。但是 `patch` 两条为空，另一条 `instance_id` 为 apispec 而 patch 路径为 `flashtext/keyword.py`。这是本地抽查发现的**疑似对应异常**，不能由这 3 行推断整个数据集失效，也不能将此列直接当正确最终补丁。
+[Official SWE-smith release](https://huggingface.co/datasets/SWE-bench/SWE-smith-trajectories)The first three entries of the tool split do indeed contain 49/43/65 messages, tool calls, and observations. `submit` End; no API cell truncation. However... `patch` Two are empty, the other one `instance_id` The patch path is for apispec. `flashtext/keyword.py` This is a **suspected anomaly** discovered during local sampling. These three rows do not indicate that the entire dataset is invalid, nor can they be directly taken as the correct final patch.
 
-[官方转换代码](https://github.com/SWE-bench/SWE-smith/blob/main/swesmith/train/traj_mgr/utils.py)还明确说明 message history 的导出近似，部分 blocked-action requery 未完整保存。下载的 `tool` 表保留工具结构，比把 rationale 文本当轨迹可靠，但仍不能称作环境全部事件的无损记录。故本轮 trace 首选 SWE-Hero，SWE-smith 仅保留于 `traces/swe-smith/` 供检查。
+[Official conversion code](https://github.com/SWE-bench/SWE-smith/blob/main/swesmith/train/traj_mgr/utils.py)It also explicitly states that the exported message history is approximate, and some blocked-action requeries are not fully saved. (Downloaded) `tool` While preserving the tool structure is more reliable than using rationale text as a trace, it still cannot be considered a lossless record of all events in the environment. Therefore, SWE-Hero is the preferred choice for this round of tracing, while SWE-smith is only used for... `traces/swe-smith/` For inspection.
 
-## 4. 如何补成真正适合 rewrite 的数据
+## 4. How to supplement the data to be truly suitable for rewriting?
 
-1. **最终工程总结路线**：从 SWE-Hero 的 final 和可观测 trace 出发。先提取实际改动、实际执行测试及结果、未解决限制的 evidence packet；让工程师在相同 packet 下修订原 final。严格区分日志支持的事实与 agent 自述成功。保留 code/tool/action/observation 不变，改写仅作用于指定的对用户可见文字。
-2. **技术研究报告路线**：从 DRB II 的中英任务及 AI 初稿出发，另外核对来源/事实后请研究编辑精修。CogGen 的 same-task pair 可帮助讨论风格，但不能直接把两篇全文放入 chosen/rejected：信息差和覆盖差尚未控制。
-3. **技术文档路线**：固定 repo commit、代码与上下文，保留既有文档并生成 AI 对照；请维护者/技术作者在相同代码证据下选择或修订。Code2Doc 的启发式 quality_score 不作为最终权重或来源金标。
-4. **标注与切分**：先 factual pass/fail/uncertain，再比较信息密度、可操作性、语气与重复；两者都保真时才形成风格 DPO pair。人类精修且复核通过的目标可用于 SFT。按 repo/项目/文档家族/原任务划分 train/dev/test，多个 trace、语言版本和段落必须跟随母任务。
+1. **Final Project Summary Roadmap:** Starting with the final and observable traces of SWE-Hero. First, extract evidence packets containing actual changes, actual test execution and results, and unresolved limitations; then have engineers revise the original final version using the same packets. Strictly distinguish between facts supported by logs and agent-reported success. Keep code/tools/actions/observations unchanged, and rewrite only the specified text visible to the user.
+2. **Technical Research Report Roadmap:** Starting with the English-Chinese task and AI draft of DRB II, please have the research editor refine the report after verifying the sources/facts. CogGen's same-task pair can help with discussion style, but two full papers cannot be directly placed in chosen/rejected: information gap and coverage gap have not yet been controlled.
+3. **Technical Documentation Approach:** Fixed repo commits, code, and context; existing documentation preserved and AI-generated comparisons generated; maintainers/technical authors should select or revise under the same code evidence. Code2Doc's heuristic quality_score is not used as the final weight or source gold standard.
+4. **Annotation and Segmentation**: First, perform factual pass/fail/uncertainty checks, then compare information density, operability, tone, and repetition; only when both are accurate are style DPO pairs formed. Human-refined and verified targets can be used for SFT. Divide into train/dev/test segments by repo/project/document family/original task; multiple traces, language versions, and paragraphs must follow the parent task.
 
-本轮桌面样本尚未经过上述人工精修与事实核验，所以只标 `candidate/source/example`；不赋予 `human_preferred`、`style_gold` 或 `same_content` 标签。
+The desktop samples in this round have not yet undergone the aforementioned manual refinement and fact-checking, so they are only labeled... `candidate/source/example` Not granted `human_preferred`,`style_gold` or `same_content` Label.
 
-## 5. 复现与阅读覆盖
+## 5. Reproduction and Reading Coverage
 
-- GitHub README、许可证和数据文件采用获取时解析的 commit；HF README 与可直接下载文件采用 dataset revision。详见两个 manifest。
-- Code2Doc、SWE-Hero、SWE-smith 使用 HF rows API 的有界请求。实际响应和 SHA 留在本地；API 行视图未证明与同时下载的数据卡 revision 完全一致，因此记录为访问时快照。
-- 实际验证了 JSON/JSONL 可解析、样本数、3+3 条 trace 的 tool 与结束状态、API 无截断、CogGen 一个 query 完全相等、DRB II 10 条任务中英 5+5，以及文件哈希。没有执行第三方代码、回放环境或作全量语义质量判断。
-- 阅读程度：STORM/Co-STORM、ResearcherBench、DRB II、DocAgent、Code2Doc 阅读论文相关方法/局限与官方发布说明；CogGen、ReportBench、DRB I、CodeSearchNet 以作者发布说明/文件结构为主；新增 SWE-Hero 以官方数据卡及真实行记录为主，SWE-smith 另读官方 export 函数。未据此声称完成各论文全文复现。
+- The GitHub README, license, and data files use the commits parsed at the time of retrieval; the HF README and directly downloadable files use the dataset revision. See both manifests for details.
+- Code2Doc, SWE-Hero, and SWE-smith use bounded requests to the HF rows API. The actual response and SHA remain local; the API row view is not proven to be completely consistent with the concurrently downloaded data card revision, and is therefore recorded as a snapshot at the time of access.
+- The test verified JSON/JSONL parsing capability, sample size, 3+3 trace tools and termination status, API untruncation, CogGen query complete equality, DRB II 10 tasks with 5+5 Chinese and English characters, and file hashing. No third-party code was executed, the replay environment was not tested, or full semantic quality assessment was performed.
+- Reading level: For STORM/Co-STORM, ResearcherBench, DRB II, DocAgent, and Code2Doc, focus on the paper's methods/limitations and official release notes; for CogGen, ReportBench, DRB I, and CodeSearchNet, focus on the author's release notes and file structure; for the newly added SWE-Hero, focus on the official data card and actual line records; for SWE-smith, also read the official export functions. This does not constitute a claim of fully reproducing each paper.

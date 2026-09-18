@@ -1,49 +1,49 @@
-# 全文重写 v2：SVO 内容抽取 → 乱序 → 独立成文
+# Full Text Rewrite v2: SVO Content Extraction → Randomization → Independent Text
 
-用户要求重做第一轮六篇来源：先从全文抽出 pure content，再由 AI 自行组织语言，评价单位改为整篇文章。原文、内容包、生成结果和对照页面保存在桌面 `plainvoice/data/local/human-rewrite-pairs/article-v2/`。本文件记录方法；不把未经人评的结果称为 gold。
+The user requested a redo of the first round of six source articles: first, extract pure content from the full text, then let AI organize the language automatically, and change the evaluation unit to the entire article. The original text, content package, generated results, and comparison page are saved on the desktop. `plainvoice/data/local/human-rewrite-pairs/article-v2/` This document records the method; results that have not been evaluated by others are not referred to as "gold".
 
-## 本次改变
+## This change
 
-第一轮只给模型开头短片段，直接要求改写。第二轮读取六篇完整文字正文，经过独立的内容表示后再写整篇文章。没有原文长度目标，也没有预设段落数。
+The first round only provided a short opening segment of the model, requiring direct rewriting. The second round involved reading six complete texts, representing their content independently, and then writing the entire article. There was no target length for the original text, nor was there a preset number of paragraphs.
 
-1. **抽取全文内容。** 每条命题具有 subject、predicate、object，并保留 qualifiers、attribution、modality、polarity、depends_on。协调者另存 source_locator 和全文覆盖记录。简单三元组不足以表达“在参数相同且原 key 仍保留时重试”之类的限定，不能在拆句时抹掉这些条件。
-2. **消除原文组织提示。** 从 writer packet 去掉原文定位、标题元数据、原编号和源顺序。使用固定种子 20260912、HMAC 不透明编号与确定性排序打乱全部命题。真实因果、事件先后、API 操作含义不随机化。
-3. **新会话成文。** 每篇由一个 `fork_turns: none` 的 Codex subagent 写作，只给单篇内容包和写作指令。模型自行选择标题、切入点、组织、段落和句子；禁止回看来源、相邻文件或搜索原文。全部限定与独有内容应被表达，文章不带 claim ID。
-4. **保留原始输出并审阅。** 输出正文和独立 coverage JSON。协调者不润色正文。机械检查覆盖记录是否齐全，审阅页另问事实、遗漏、组织相似度与综合偏好。
+1. **Extract full text content.** Each proposition has a subject, predicate, and object, and retains qualifiers, attributes, modality, polarity, and depends_on. The coordinator stores the source_locator and full-text overwrite record separately. Simple triples are insufficient to express constraints such as "retry when parameters are the same and the original key is still retained," and these conditions cannot be removed during sentence splitting.
+2. **Eliminate original text organization hints.** Remove original text location, title metadata, original numbering, and source order from the writer packet. Shuffle all propositions using a fixed seed 20260912, HMAC opaque numbering, and deterministic sorting. True causality, event sequence, and API operation meaning are not randomized.
+3. **New Conversation Writing.** Each piece consists of one... `fork_turns: none` The Codex subagent writing tool provides only a single content package and writing instructions. The model independently selects the title, entry point, organization, paragraphs, and sentences; it prohibits looking back at sources, adjacent files, or searching the original text. All specific and unique content should be expressed, and the article does not include a claim ID.
+4. **Preserve the original output and review it.** Output the main text and a separate coverage JSON. The coordinator does not polish the main text. Mechanically check for completeness of coverage records; the review page asks for additional facts, omissions, organizational similarity, and overall preferences.
 
-六篇全文抽取了 **579 条命题**。所谓全文是清洗后的完整文字正文；HTML 外链图片未新增转录，PDF 页脚、版权声明、网站导航和评论等非正文有单独排除记录。
+**579 propositions were extracted from the six full-text articles.** "Full-text" refers to the cleaned, complete text; HTML external images were not transcribed, and non-text elements such as PDF footers, copyright notices, website navigation, and comments were excluded separately.
 
-| 来源 | 语言 | 命题数 | 范围 |
+| Source | Language | Number of Propositions | Scope |
 |---|---|---:|---|
-| Howard Marks, How Quickly They Forget, 2011 | EN | 192 | 正文与附言，含表格 |
-| Howard Marks, There They Go Again . . . Again, 2017 | EN | 196 | 全文文字，保留历史判断 |
-| 阮一峰，RESTful API设计指南，2014 | ZH | 81 | 全文与代码例子 |
-| 阮一峰，如何降低软件的复杂性？，2018 | ZH | 40 | 全文 |
-| Stripe, Designing robust and predictable APIs with idempotency, 2017 | EN | 46 | 全文与两段实际示例代码 |
-| Stripe, Idempotent requests，当前快照 | EN | 24 | 完整 API 文档文字与演示含义 |
+Howard Marks, How Quickly They Forget, 2011 | EN | 192 | Text and postscript, including tables |
+Howard Marks, There They Go Again... Again, 2017 | EN | 196 | Full text, retaining historical judgment |
+| Ruan Yifeng, RESTful API Design Guide, 2014 | ZH | 81 | Full text and code examples |
+| Ruan Yifeng, How to Reduce Software Complexity?, 2018 | ZH | 40 | Full Text |
+| Stripe, Designing robust and predictable APIs with idempotency, 2017 | EN | 46 | Full text and two practical code examples |
+| Stripe, Idempotent requests, current snapshot | EN | 24 | Full API documentation text and demonstration meaning |
 
-## 需要批判性看待的地方
+## Areas that need to be viewed critically
 
-**打乱输入顺序不保证输出结构独立。** Stripe 2017 新稿仍形成“网络失败 → 幂等 → key → 退避”的教学顺序。模型可能从语义关系重建近似提纲。因此须分别评价句式变化和篇章变化；乱序完成本身不是改写成功的证据。
+**Scrambling the input order does not guarantee an independent output structure.** The Stripe 2017 draft still follows the teaching sequence of "network failure → idempotency → key → backoff." The model may reconstruct an approximate outline from semantic relationships. Therefore, sentence structure changes and discourse changes must be evaluated separately; scrambling itself is not evidence of successful rewriting.
 
-**抽取是有损风险点。** 模型可能在写作前已丢失语气、例外或作者立场。本轮保留来源定位，使错误能够区分为 source → content 或 content → rewrite。命题仍是自然语言，书名、作者自述和历史备忘录名称有时属于内容；这既不是彻底的来源匿名化，也不是已经证实能抹去所有句法痕迹的纯语义表示。
+**Extraction carries a risk of loss.** The model may have lost tone, exceptions, or authorial stance before writing. This round retains source location, allowing errors to be distinguished as source → content or content → rewrite. Propositions remain in natural language; book titles, author biographies, and historical memo names sometimes belong to the content; this is neither complete source anonymization nor a purely semantic representation that has been proven to erase all syntactic traces.
 
-**完整性记录不是保真结论。** 来源单位数量一致、claim ID 全部出现在 coverage 中，只能说明记录对齐。coverage 是生成器自报，不能据此宣布 100% 信息保留。字符数、n-gram 重合与次序逆转比例只是诊断，不是质量、AI 味或语义等价分数。
+**Completeness records are not a guarantee of fidelity.** Consistent source unit counts and the appearance of all claim IDs in the coverage only indicate record alignment. Coverage is self-reported by the generator and cannot be used to declare 100% information retention. Character count, n-gram overlap, and order reversal ratios are diagnostic, not scores for quality, AI-likeness, or semantic equivalence.
 
-另一个模型复核了 Stripe 2017 与阮一峰 REST 两篇完整原文、新稿及共 127 条抽取命题，未确认重大遗漏或反转，但记录了两个具体问题：REST 的“列表（数组）”在抽取时变为“列表或数组”，引入轻微格式歧义；Stripe 新稿关于完整回滚的末句可能把充分条件说成必要条件，作为低置信观察项。两项已放在本地审阅页，正文保留原始生成结果。这次模型复核不能外推到其余四篇，也不能代替人评。
+Another model was reviewed, examining the complete original and new drafts of Stripe 2017 and Ruan Yifeng's REST, totaling 127 extracted propositions. No major omissions or reversals were confirmed, but two specific issues were noted: REST's "list (array)" was changed to "list or array" during extraction, introducing slight formatting ambiguity; the last sentence of Stripe's new draft regarding complete rollback may have mistakenly stated a sufficient condition as a necessary condition, as a low-confidence observation. Both issues are on the local review page, and the original generated results are retained in the main text. This model review cannot be extrapolated to the other four papers, nor can it replace human review.
 
-**来源本身也有问题。** Howard 2017 文内同一备忘录存在 2007／2008 年份矛盾，需作为未解决项记录。阮一峰 2018 的 Windows／Unix 文件行为按历史来源保留，技术细节没有独立核验。当前 Stripe 文档的作者来源与初始时间未知。旧日期的文章也只是本次下载快照，并未与历史存档逐字校验。
+**The source itself is also problematic.** Howard's 2017 memo contains a discrepancy between 2007 and 2008, which needs to be recorded as an unresolved issue. Ruan Yifeng's 2018 Windows/Unix file behavior is preserved based on historical sources, but the technical details have not been independently verified. The author's source and initial time of the current Stripe document are unknown. Older articles are merely snapshots of this download and have not been verified word-for-word against historical archives.
 
-**生成环境有边界。** 新会话防止继承本次对话，并通过读取指令限制来源接触；没有另建 OS 级文件沙箱。部分 writer 根据仓库约定先读取根 README，其不包含这些原文。系统写作指令仍影响结果。工具未返回精确 backend checkpoint、token 或金额，这些字段保持空值；固定 seed 只用于内容包排列，不是生成采样 seed。
+**The production environment has boundaries.** New sessions prevent inheritance of the current conversation and restrict source access through read commands; no separate OS-level file sandbox is created. Some writers read the root README first according to repository conventions, which does not contain these original texts. System write commands still affect the results. The tool does not return precise backend checkpoints, tokens, or amounts; these fields remain empty. Fixed seeds are only used for content package arrangement, not for generating sample seeds.
 
-**任务与未来部署的分布还不同。** 当前方向是人类文章 → 内容卡 → AI 新稿。它可以提供候选对和检查方法，但未来模型收到的通常是 AI 草稿。人类原文并不必然胜出；需要人工偏好与语义审阅后，才能决定如何进入 SFT 或 preference 数据。
+The task distribution and future deployment are different. The current approach is human article → content card → AI draft. This provides candidate pairs and checking methods, but the model will typically receive AI drafts in the future. Human original texts do not necessarily win; human preference and semantic review are needed to determine which data enters the SFT or preference dataset.
 
-## 文件与复现
+## Documents and Reproduction
 
-- [内容抽取 prompt](prompts/article-content-extraction.md)
-- [按内容包成文 prompt](prompts/article-from-content.md)
-- [验证并打乱内容包](scripts/prepare_article_packets.py)
-- [生成全文审阅页](scripts/build_article_review.py)
+- [Content extraction prompt](prompts/article-content-extraction.md)
+- [Packaged into a document prompt based on content](prompts/article-from-content.md)
+- [Verify and shuffle the content package](scripts/prepare_article_packets.py)
+- [Generate full-text review page](scripts/build_article_review.py)
 
 ```sh
 python3 scripts/prepare_article_packets.py \
@@ -55,6 +55,6 @@ python3 scripts/prepare_article_packets.py \
 python3 scripts/build_article_review.py /path/to/article-v2/article-results.json
 ```
 
-准备脚本不调用生成模型。每篇 writer 只获得自己的 packet 和成文指令；输出应保存为 `<packet_id>.md` 与 `<packet_id>.coverage.json`。原始来源、运行输入、覆盖自报和生成记录保存在桌面，不提交仓库。旧的段落实验保留在 `human-rewrite-pairs/review-paragraph-v1.html`。
+The preparation script does not call the generative model. Each writer only receives its own packet and writing instructions; the output should be saved as... `<packet_id>.md` and `<packet_id>.coverage.json` The original source, run input, overwrite self-report, and build history are saved on the desktop and not committed to the repository. Older paragraph experiments are retained. `human-rewrite-pairs/review-paragraph-v1.html`.
 
-脚本检查包括 schema、重复 ID、缺失引用、语义依赖环、未覆盖来源单位与固定种子可复现性。页面构建检查全文嵌入、HTML 转义、缺失输入失败及 JavaScript 语法。浏览器交互未完成实际验收；这不是人类写作质量测试。
+Script checks include schema, duplicate IDs, missing references, semantic dependency cycles, uncovered source units, and reproducibility of fixed seeds. Page build checks include full text embedding, HTML escaping, missing input failures, and JavaScript syntax. Browser interaction has not undergone actual acceptance testing; this is not a test of human writing quality.

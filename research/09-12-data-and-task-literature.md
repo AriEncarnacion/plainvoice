@@ -1,45 +1,45 @@
-# 编辑任务、数据来源与行业评测
+# Editing tasks, data sources, and industry evaluations
 
-## 可借鉴的已有工作
+## Existing work that can be referenced
 
-这里的文献支持任务设计，不构成已验证的“去 AI 味儿”数据集。文献检索截至 2026-09-12；未下载或重新分发这些数据集。
+The literature listed here supports task design and does not constitute a validated "de-AI-feeling" dataset. Literature searched as of September 12, 2026; these datasets have not been downloaded or redistributed.
 
-| 工作 | 原始证据与范围 | 对项目的用途和限制 |
+| Work | Original Evidence and Scope | Use and Limitations of the Project |
 |---|---|---|
-| Raheja et al., 2023, **CoEdIT: Text Editing by Task-Specific Instruction Tuning** | 论文训练使用 82K 编辑指令；[公开 train 约 69K](https://github.com/vipulraheja/coedit)，部分样本因许可未公开。含简化、语气和其他编辑任务。论文明确承认主要覆盖句子级编辑，长文效果待验证，统一提示格式也未充分控制每个模型的提示敏感性。[论文](https://aclanthology.org/2023.findings-emnlp.350/) | 支持训练“输入文本＋编辑要求→改稿”。其历史基线表现不能用来预测今天强模型在中英双语长文上的胜负。已读 PDF 方法、实验与 Limitations。 |
-| Du et al., 2022, **Understanding Iterative Revision from Human-Written Text** | IteraTeR 从 Wikipedia、arXiv、Wikinews 收集约 31K 文档修订，并标注编辑意图。后续版本数量不同，应锁定版本。[论文](https://aclanthology.org/2022.acl-long.250/)、[作者代码](https://github.com/vipulraheja/iterater) | 借鉴 edit intent 和多粒度修订；不是营销文案、API 文档或中英混写的现成 gold。后一个版本也不必然在所有维度优于前一个版本。已读方法、语料统计及作者 README。 |
-| Rao & Tetreault, 2018, **Dear Sir or Madam, May I Introduce the GYAFC Dataset: Corpus, Benchmarks and Metrics for Formality Style Transfer** | 从 Yahoo Answers 构建正式／非正式平行改写数据。[论文](https://aclanthology.org/N18-1012/) | 可学多种合法改写及独立评价意义保留；正式程度不是自然感，不能把 informal 当作正例。仅核查官方摘要和元数据；实际使用前需读完整协议及数据条款。 |
-| Wu et al., 2025, **WritingBench: A Comprehensive Benchmark for Generative Writing** | v4：1,000 条任务，445 中文、555 英文，6 大领域、100 子领域；动态任务 rubric。其 300 个独立任务的人评用于检验 judge。[论文](https://arxiv.org/html/2503.05244v4) | 适合借鉴“任务相关评价”。它研究生成写作，并非改写自然感。writer 用 critic 筛选的合成数据训练，相关评测仍处于相同评价体系，必须加独立人工终测。已读 §§3–4 及附录 D。 |
-| Bhat, Browne & Bingemann, 2025, **Creativity Benchmark: A benchmark for marketing creativity for LLM models** | 678 位行业人员作 11,012 次匿名配对比较；100 个品牌；任务为 insights、ideas、wild ideas。LLM judge 与专家排序的一致性较弱且随 judge 变化。[论文](https://arxiv.org/html/2509.09702v1) | 对营销创意，不能直接照搬通用 judge。志愿参与、英语市场人口偏斜、短创意任务和解码设置限制外推；也不测销售转化。已读 §§4–7、9。 |
-| Liu et al., 2025, **LLMs for Customized Marketing Content Generation and Evaluation at Scale** | MarketingFM 用产品／搜索上下文、任务串联与规则＋模型评审，报告离线评审及线上广告实验。[论文](https://arxiv.org/html/2506.17863v1) | 强 harness 应包含真实材料；否则训练组获得更多事实会造成不公平比较。广告相关性改善不能直接解释为自然感提升。已读摘要、架构、实验与 human evaluation 部分。HTML 的 “Received 2009” 是异常模板字段，本条采用 arXiv v1 的 2025-06-22 版本日期。 |
-| Lin & Ma, 2024, **Generating Attractive and Authentic Copywriting from Customer Reviews** | 利用评论中的体验生成产品文案，同时评价吸引力与忠实性。[论文](https://aclanthology.org/2024.naacl-long.259/) | 提醒“更具体”常依赖更好的输入证据。评论中的体验不可自动推广成产品保证。当前仅核查官方摘要；保留为后续完整阅读候选。 |
-| **MCTS: A Multi-Reference Chinese Text Simplification Dataset**, LREC-COLING 2024 | 中文多参考简化数据。[论文与作者元数据](https://aclanthology.org/2024.lrec-main.969/)、[作者仓库](https://github.com/blcuicall/mcts) | 多参考适合验证“可有多个好答案”；简化目标不能替代技术准确或品牌声音。仅核查官方摘要／项目说明；未确认可直接用于目标任务。 |
-| Wang et al., 2022, **CCTC: A Cross-Sentence Chinese Text Correction Dataset for Native Speakers** | 面向母语者，跨句纠错；官方摘要说明母语者与学习者错误分布不同。[论文](https://aclanthology.org/2022.coling-1.294/) | 用作中文纠错的相关工作，不能将语法正确当作没有 AI 味儿。仅核查官方摘要。 |
+| Raheja et al., 2023, **CoEdIT: Text Editing by Task-Specific Instruction Tuning** | The paper training uses 82K editing instructions;[Publicly available trains: approximately 69K](https://github.com/vipulraheja/coedit)Some samples were not disclosed due to licensing restrictions. The tests included simplification, tone adjustment, and other editing tasks. The paper explicitly acknowledges that it primarily covers sentence-level editing; the effectiveness on longer texts remains to be verified, and the uniform prompt format did not adequately control the prompt sensitivity of each model.[paper](https://aclanthology.org/2023.findings-emnlp.350/) Supports training with "input text + editing requirements → revisions". Its historical baseline performance cannot be used to predict the performance of today's strong models on long bilingual (Chinese and English) texts. PDF read: Methods, Experiments, and Limitations.
+| Du et al., 2022, **Understanding Iterative Revision from Human-Written Text** | IteraTeR collected approximately 31K document revisions from Wikipedia, arXiv, and Wikinews, and marked the editorial intent. Subsequent versions vary in number; versions should be locked.[paper](https://aclanthology.org/2022.acl-long.250/),[Author code](https://github.com/vipulraheja/iterater) | This version draws inspiration from edit intents and multi-granular revisions; it's not a ready-made gold copy, API documentation, or a mix of Chinese and English. A later version is not necessarily superior to the previous one in all dimensions. See the methodologies, corpus statistics, and author's README. |
+| Rao & Tetreault, 2018, **Dear Sir or Madam, May I Introduce the GYAFC Dataset: Corpus, Benchmarks and Metrics for Formality Style Transfer** | Constructing formal/informal parallel rewrite data from Yahoo Answers.[paper](https://aclanthology.org/N18-1012/) | Multiple legal rewrites and independent evaluations are possible while preserving meaning; however, formality does not equate to naturalness, and "informal" should not be taken as the standard. Only the official abstract and metadata are verified; the complete agreement and data terms must be read before actual use. |
+| Wu et al., 2025, **WritingBench: A Comprehensive Benchmark for Generative Writing** | v4: 1,000 tasks, 445 in Chinese, 555 in English, 6 major domains, 100 subdomains; dynamic task rubric. Human evaluations of 300 independent tasks are used to evaluate the judges.[paper](https://arxiv.org/html/2503.05244v4) | This approach is suitable for drawing inspiration from "task-related evaluation." It studies generative writing, not rewriting naturalness. The writer is trained using synthetic data selected by the critic, and the relevant evaluations remain within the same evaluation system, requiring an independent final human assessment. I have read §§3–4 and Appendix D. |
+| Bhat, Browne & Bingemann, 2025, **Creativity Benchmark: A benchmark for marketing creativity for LLM models** | 678 industry professionals conducted 11,012 anonymous paired comparisons; 100 brands; the tasks were insights, ideas, and wild ideas. The consistency between the LLM judge and expert rankings was weak and varied with the judge.[paper](https://arxiv.org/html/2509.09702v1) | Marketing creatives cannot be simply copied from generic judges. Factors such as volunteer participation, English-speaking demographic bias, short creative tasks, and limitations in decoding settings and extrapolation must be considered; sales conversion rates should also not be measured. §§4–7, 9 have been read.
+| Liu et al., 2025, **LLMs for Customized Marketing Content Generation and Evaluation at Scale** | MarketingFM uses product/search context, task chaining, and rule + model review to report on offline review and online advertising experiments.[paper](https://arxiv.org/html/2506.17863v1) | Strong harness should include real-world data; otherwise, having more data in the training group would create unfair comparisons. Improved ad relevance cannot be directly interpreted as improved naturalness. Read summary, architecture, experiments, and human evaluation sections. The "Received 2009" field in the HTML is an anomalous template field; this entry uses the arXiv v1 version date of 2025-06-22.
+| Lin & Ma, 2024, **Generating Attractive and Authentic Copywriting from Customer Reviews** | Utilize customer reviews to generate product copy, while evaluating attractiveness and loyalty.[paper](https://aclanthology.org/2024.naacl-long.259/) The reminder that "more specific" often relies on better input evidence. Experiences in reviews cannot be automatically generalized to product guarantees. Currently, only the official summary is being reviewed; it is reserved for later full reading.
+| **MCTS: A Multi-Reference Chinese Text Simplification Dataset**, LREC-COLING 2024 | 中文多参考简简数据.[Paper and author metadata](https://aclanthology.org/2024.lrec-main.969/),[Author's Repository](https://github.com/blcuicall/mcts) Multiple references are suitable for verifying that "there may be multiple good answers"; simplified objectives cannot replace technical accuracy or brand voice. Only verify official summaries/project descriptions; do not confirm that they can be directly used for the target task.
+| Wang et al., 2022, **CCTC: A Cross-Sentence Chinese Text Correction Dataset for Native Speakers** | Targeting native speakers, this work provides cross-sentence error correction; the official abstract explains that the error distribution differs between native speakers and learners.[paper](https://aclanthology.org/2022.coling-1.294/) For work related to Chinese error correction, grammatical correctness should not be equated with the absence of AI-like features. Only the official abstract has been verified.
 
-## Ground truth 应分为四类材料
+## Ground truth should be divided into four categories of materials.
 
-**来源锚点。** 有日期证据的 2022-11-30 之前文本，有助于降低 ChatGPT 辅助写作的混入概率；日期不能证明完全人工写作，也不能证明质量。保留原始发布日期、版本证据、作者／品牌、来源和使用权。网页今天显示的旧日期可能掩盖后续重写，应优先可固定版本的 commit 或档案快照。
+**Source Anchors.** Text prior to November 30, 2022, with date evidence helps reduce the probability of ChatGPT-assisted writing infiltration; dates do not prove entirely human writing, nor do they prove quality. Retain the original release date, version evidence, author/brand, source, and usage rights. Older dates displayed on the webpage today may obscure subsequent rewrites; commits or archive snapshots with fixed versions should be prioritized.
 
-**质量锚点。** 母语领域编辑基于同一 brief 和事实材料评价、修改和解释的文本。写作质量有可争议部分，标签应保留分歧和不同可接受版本。不要强迫一条“标准答案”。
+**Quality Anchors.** Texts evaluated, revised, and interpreted by native-speaker editors based on the same brief and factual material. For sections with debatable writing quality, tags should retain disagreements and different acceptable versions. Do not force a single "standard answer."
 
-**受控对照。** 同一事实包、受众、渠道、长度约束，分别获得人工稿、多模型稿、强提示稿及混合编辑稿。历史作品无法保证重建出其真正 brief，应将此类重建样本单独标记，避免与前瞻性任务混为一谈。
+**Controlled Controls.** Using the same fact package, audience, channel, and length constraints, human-generated drafts, multi-model drafts, strongly prompted drafts, and mixed-edit drafts were obtained. Historical works cannot guarantee a true reconstruction of their briefs; such reconstructed samples should be labeled separately to avoid confusion with forward-looking tasks.
 
-**反事实最小对。** 单独改一个现象：空洞对比、删除关键条件、捏造数字、过度加标题、同义词替换术语、合理对比、必要重复。最小对用于检查 judge 是否理解功能；主测试仍使用真实完整文档，防止只会解人造练习。
+**Counterfactual minimal pair.** Modify a single phenomenon: empty comparisons, deletion of key conditions, fabricated numbers, excessive headings, synonym replacement of terms, reasonable comparisons, and necessary repetition. The minimal pair is used to check if the judge understands the functionality; the main test still uses real, complete documentation to prevent only understanding artificial exercises.
 
-## 数据获取优先级
+## Data acquisition priority
 
-| 来源 | 获取方式 | 质量与使用权处理 |
+| Source | Acquisition Method | Quality and Usage Rights Handling |
 |---|---|---|
-| 新委托的中英领域编辑 | 围绕相同证据包，从零写或改稿 | 明确记录 AI 辅助情况、编辑理由、训练及再分发许可；这是最贴合目标的 gold 候选 |
-| 自有且获授权的旧文案、旧文档及版本差异 | 按作者／品牌／项目成组导入 | 不自动访问公司材料；真实采用前单独确定哪些内容允许进个人仓库和训练集 |
-| 开源项目历史文档 | 选择许可明确的文档路径，固定 commit 和时间 | 文档许可未必等于代码许可；保存每个来源的使用条件，审核修订质量 |
-| 历史营销网站／广告档案 | 先建链接和元数据清单 | “公开可读”“年代久远”不等于已获训练或再分发许可；本轮不复制全文入库 |
-| 公开编辑／简化数据集 | 依任务用途筛选小样本，核实版本与条款 | 作为辅助训练或 sanity check；不把它们命名成已验证的去 AI 味儿数据集 |
+| Newly commissioned Sino-British field editor | Write or revise from scratch based on the same evidence package | Clearly document AI-assisted situations, editing rationale, training, and redistribution permission; this is the most suitable gold candidate |
+| Owned and authorized legacy documents, archives, and version differences | Imported in groups by author/brand/project | Company materials are not automatically accessed; specific content is determined for inclusion in personal repositories and training sets before actual use.
+| Open Source Project History Documentation | Choose document paths with clearly defined licenses, and fix commit times | Documentation licenses are not necessarily equivalent to code licenses; preserve usage conditions for each source and review revision quality |
+| Historical Marketing Websites/Ad Archives | First, establish a link and metadata manifest | "Publicly readable" and "old" do not equate to permission to train or redistribute; full-text copying will not be performed in this round |
+| Publicly edited/simplified datasets | Small samples selected based on task purpose, version and terms verified | Used as auxiliary training or sanity checks; not named as verified, de-AI-featured datasets |
 
-## 需要避免的数据捷径
+## Data shortcuts to avoid
 
-随机按段落切 train/test 会泄漏作者风格、同一文档事实和品牌语言。先按 source family 分组，再切分，再生成变体；翻译、同题不同模型稿、同一次 campaign、相邻版本必须同组。公开历史材料也可能出现在基座预训练中，因此测试集需要相当比例的新委托材料。
+Randomly splitting the train/test dataset by paragraph can reveal author style, factual information from the same document, and brand language. Grouping by source family first, then splitting, and then generating variants is necessary; translations, different model drafts on the same topic, versions from the same campaign, and adjacent versions must be grouped together. Publicly available historical materials may also appear in the base pre-training, therefore the test set needs a significant proportion of new commissioned material.
 
-从优秀人工稿合成“坏稿”再训练反向恢复，可以提供便宜的局部监督，但容易学到特定破坏器的习惯。此类数据必须单独标记，限制占比，终测使用真实模型原生缺陷和真实用户草稿。给每个模型相同事实包，防止模型组因为缺材料而输给原作者。
+Synthesizing "bad drafts" from excellent human drafts and then training them for reverse recovery can provide inexpensive local supervision, but it's prone to learning the habits of specific disruptors. This type of data must be individually labeled and its proportion limited. Final testing should use native defects from the real model and real user drafts. Give each model the same fact bag to prevent model groups from losing to the original authors due to insufficient material.
 
-中文与英文需分别原生写作、原生标注；翻译对只作额外一致性测试。中文不应因使用排比就扣分，英文不应因正式语气或非母语措辞就扣分。所有“AI 特征”都需要语境中的功能证据。
+Chinese and English must be written and annotated in their original source material, respectively; translations will only undergo additional consistency testing. Chinese should not be penalized for using parallelism, and English should not be penalized for formal tone or non-native language. All "AI features" require functional evidence within the context.

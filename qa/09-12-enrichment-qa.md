@@ -1,14 +1,14 @@
-# 低成本 AI 补全核验
+# Low-cost AI enrichment verification
 
-- 848 条新记录的 ID、完整 payload 与内容哈希逐条匹配入库结果。
-- 原有 1,247,043 条记录的 ID／哈希序列完全一致；总库 1,247,891 条、28 组。
-- 新分组的 API 数量、每组首条完整 A/B 文本、中英文搜索及 SQLite quick_check 通过。
-- 47 项离线程序测试、9 项 finalizer 故障注入检查和 9 项增量导入场景通过；未为验证调用付费模型。
-- 独立 agent 抽查发现的 11 稿缺陷只绑定已核对的模型与文本哈希，不继承给同源其他稿件。
-- 未做本轮浏览器交互或视觉实测；本轮检查不代表人工写作质量验收。
+- The IDs, complete payloads, and content hashes of the 848 new records were matched item by item against the ingestion result.
+- The ID/hash sequence of the pre-existing 1,247,043 records is entirely unchanged; the full database holds 1,247,891 records across 28 collections.
+- The API record counts for the new collections, the first complete A/B text in each collection, Chinese and English search, and the SQLite `quick_check` all passed.
+- 47 offline program tests, 9 finalizer fault-injection checks, and 9 incremental import scenarios passed; no paid model was called for verification.
+- The defects found in 11 drafts by the independent agent's spot check are bound only to the specific model and text hash that were checked, and are not inherited by other drafts from the same source.
+- No browser interaction or visual testing was done this round; this round of checks does not constitute acceptance of human writing quality.
 
-长文中已发现观点归属错配、因果或极性变化、技术约定遗漏及重复。Gemini 3.1 在两个中文样本中修复部分具体问题，也产生或保留其他遗漏，不能由此得出总体模型胜率。短单元抽查也发现上下文遗漏和证据归因改变，即使自动 coverage 没有报错。
+Attribution mismatches, changes in causality or polarity, omission of technical conventions, and repetition have been found in the long-form texts. Gemini 3.1 fixed some specific problems in two Chinese samples while also introducing or retaining other omissions, so no overall model win rate can be drawn from this. Spot checks on short units also found context omissions and altered evidence attribution, even where automatic coverage reported no error.
 
-所有候选仍需逐条审阅，不是 ground truth。统计和逐轮费用见 [交付汇总](09-12-enrichment-summary.json)。
+All candidates still require item-by-item review; they are not ground truth. For statistics and per-round cost, see the [delivery summary](09-12-enrichment-summary.json).
 
-新增分组置于侧栏最前，并支持 collection／language／q 链接直达；JavaScript 语法与静态资源检查通过。
+The new collections are placed at the top of the sidebar and support direct `collection` / `language` / `q` deep links; JavaScript syntax and static resource checks passed.
