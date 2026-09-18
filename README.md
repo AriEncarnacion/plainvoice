@@ -1,46 +1,48 @@
 # Plainvoice
 
-研究如何让内容改写更自然、更有信息价值，同时保留事实、用途和作者声音。中文、英文以及 technical docs、marketing 四个场景同等优先。
+[English](README.md) · [简体中文](README.zh-CN.md)
 
-当前阶段：背景研究、数据采集和内容改写试验。最新用 Gemini Flash-Lite 保存 848 条候选与诊断输出，包含完整文章、句段、模型比较和早期诊断；均采用内容抽取后乱序成文。没有已训练模型、已验证 judge、真实 benchmark 分数或经独立人评确认的 gold。
+Research into making content rewriting more natural and more informative while preserving facts, purpose, and the author's voice. Four scenarios have equal priority: Chinese, English, technical docs, and marketing.
 
-## 本地目录与启动
+Current phase: background research, data collection, and content rewriting experiments. Most recently, Gemini Flash-Lite was used to save 848 candidates and diagnostic outputs, covering complete articles, segments, model comparisons, and early diagnostics; all of them use content extraction followed by shuffled recomposition. There is no trained model, no validated judge, no real benchmark score, and no gold confirmed by independent human review.
 
-2026-09-15：完整 Git 仓库迁至 `~/Desktop/plainvoice`，保留原有 Git 历史及 `origin`。代码在 `scripts/`，文献调研在 `research/`。原桌面数据包已移入 `data/local/`，该目录整体由 `.gitignore` 排除；`data/README.md` 继续纳入版本管理。
+## Local directory and startup
 
-双击仓库根目录的 `Open Plainvoice Viewer.command`，或在仓库目录运行：
+2026-09-15: the complete Git repository was moved to `~/Desktop/plainvoice`, preserving the existing Git history and `origin`. Code lives in `scripts/`, and literature research in `research/`. The original desktop data package has been moved into `data/local/`; that directory is excluded in its entirety by `.gitignore`, while `data/README.md` remains under version control.
+
+Double-click `Open Plainvoice Viewer.command` in the repository root, or run this from the repository directory:
 
 ```bash
 python3 scripts/serve_data_viewer.py --database data/local/data-viewer/review.sqlite
 ```
 
-浏览器打开 <http://127.0.0.1:8876/?view=clean>。历史数据和 QA 中的旧绝对路径保留为采集时的 provenance；查找对应文件时，把 `~/Desktop/plainvoice-data-2026-09-12/` 替换为本仓库的 `data/local/`。
+Open <http://127.0.0.1:8876/?view=clean> in your browser. The old absolute paths in historical data and QA are retained as provenance from the time of collection; to locate the corresponding file, replace `~/Desktop/plainvoice-data-2026-09-12/` with this repository's `data/local/`.
 
-## 从这里开始
+## Start here
 
-- **[全库正文清理](09-12-text-cleaning.md)**：统一原文／AI 格式、正文导出、原始版本切换与质量隔离。
+- **[Corpus-wide body-text cleaning](09-12-text-cleaning.md)**: unifying source/AI formats, body-text export, switching to the raw version, and quality quarantine.
 
-- **[统一 Data Viewer](09-12-unified-data-viewer.md)**：全部 1,247,891 条本地记录、28 个分组，支持全文对照、筛选、参考答案、trace、评审导入导出。[本机入口](http://127.0.0.1:8876) 需要先启动资料库；[网上入口](https://plainvoice-data-review.jason62-h.chatgpt.site) 提供来源目录与获许可的示例，访问受 Sites 账户权限控制。
-- **[双语 AI 候选补全与模型对照](09-12-low-cost-ai-enrichment.md)**：新增数量、来源覆盖、实际费用、缺项及语义 QA；先在本机 viewer 的新分组审阅。
-- [全文重写 v2：内容抽取、乱序与独立成文](09-12-article-reconstruction-v2.md)：最新方法、六篇来源、完整性与结构变化的局限，以及可复用的 prompts 和脚本。桌面最新入口为 `human-rewrite-pairs/article-v2/review.html`。
-- [桌面数据包与第一次改写采样](09-12-local-data-and-rewrite-pilot.md)：已下载数据、agentic／技术写作样本，以及可逐组审阅的六个改写候选。
-- [Existing literature：研究脉络与最相关论文](research/09-12-literature-review.md)：先看已有研究做了什么、发现什么、哪些问题仍未解决。
-- [直接相关的 humanizer prior art](research/09-12-humanization-prior-art.md)：DIPPER、HUMPA、CoPA 和社区 Unslopper；区分检测器指标与写作质量。
-- [Ground truth 获取方案](09-12-ground-truth-acquisition.md)：已核查数据集、真实模型稿与人工编辑、盲评和 80 项采集 pilot，以及 SFT／DPO 数据形状。
-- [研究结论与实验方案](09-12-research-and-experiment-plan.md)：批判性审视 ground truth、evaluator、训练方法、模型规模与实验成本。
-- [风格与行业文献](research/09-12-style-literature.md)：AI 味儿的语言学证据、反证、中文和行业边界。
-- [评价文献](research/09-12-evaluation-literature.md)：检测器、人工评价、judge bias 和保真。
-- [训练文献](research/09-12-training-literature.md)：SFT、LoRA/QLoRA、DPO、RL 与模型候选。
-- [数据与任务文献](research/09-12-data-and-task-literature.md)：编辑数据集、写作 benchmark 及 ground truth 来源。
-- [标注协议](09-12-annotation-protocol.md)、[baseline 提示模板](prompts/README.md)、[数据约定与示例](data/README.md)。
-- [研究覆盖与核验记录](qa/09-12-research-qa.md)。
+- **[Unified Data Viewer](09-12-unified-data-viewer.md)**: all 1,247,891 local records across 28 collections, with side-by-side full text, filtering, reference answers, traces, and review import/export. The [local entry point](http://127.0.0.1:8876) requires starting the database first; the [hosted entry point](https://plainvoice-data-review.jason62-h.chatgpt.site) provides a source directory and permission-cleared examples, with access controlled by Sites account permissions.
+- **[Bilingual AI candidate enrichment and model comparison](09-12-low-cost-ai-enrichment.md)**: counts added, source coverage, actual cost, gaps, and semantic QA; review the new collections in the local viewer first.
+- [Full-article rewrite v2: content extraction, shuffling, and independent composition](09-12-article-reconstruction-v2.md): the latest method, six sources, limitations in completeness and structural change, and the reusable prompts and scripts. The latest desktop entry point is `human-rewrite-pairs/article-v2/review.html`.
+- [Desktop data package and the first rewrite sample](09-12-local-data-and-rewrite-pilot.md): data already downloaded, agentic/technical writing samples, and six rewrite candidates that can be reviewed collection by collection.
+- [Existing literature: research context and the most relevant papers](research/09-12-literature-review.md): start with what existing research did, what it found, and which questions remain open.
+- [Directly related humanizer prior art](research/09-12-humanization-prior-art.md): DIPPER, HUMPA, CoPA, and the community Unslopper; distinguishing detector metrics from writing quality.
+- [Ground truth acquisition plan](09-12-ground-truth-acquisition.md): verified datasets, real model drafts and human edits, blind evaluation, an 80-item collection pilot, and SFT/DPO data shapes.
+- [Research conclusions and experiment plan](09-12-research-and-experiment-plan.md): a critical look at ground truth, evaluators, training methods, model scale, and experiment cost.
+- [Style and domain literature](research/09-12-style-literature.md): linguistic evidence for "AI-ese", counter-evidence, and Chinese-language and domain boundaries.
+- [Evaluation literature](research/09-12-evaluation-literature.md): detectors, human evaluation, judge bias, and fidelity.
+- [Training literature](research/09-12-training-literature.md): SFT, LoRA/QLoRA, DPO, RL, and model candidates.
+- [Data and task literature](research/09-12-data-and-task-literature.md): editing datasets, writing benchmarks, and ground truth sources.
+- [Annotation protocol](09-12-annotation-protocol.md), [baseline prompt templates](prompts/README.md), [data conventions and examples](data/README.md).
+- [Research coverage and verification record](qa/09-12-research-qa.md).
 
-## 下一次实验
+## Next experiment
 
-先完成每个场景 20 项、共 80 项的人工 rubric pilot。用人类分歧修订评价标准，再比较强 prompting／harness，然后决定是否训练。最终 success 由独立人工测试和实际用途决定，AI 检测分数只可作为研究诊断。
+First complete a human rubric pilot of 20 items per scenario, 80 items in total. Use human disagreement to revise the evaluation criteria, then compare strong prompting against harness approaches, and only then decide whether to train. Final success is determined by independent human testing and actual use; AI detection scores may serve only as a research diagnostic.
 
-## 工作约定
+## Working conventions
 
-文献事实、作者报告结果、本项目推论和实验建议必须区分。新增结果要注明模型 checkpoint、数据 split、提示版本、随机种子、全部调用成本和限制。不能把示例、自动标签或文献中的分数写成项目实测。
+Literature facts, results reported by authors, this project's inferences, and experiment proposals must be kept distinct. New results must state the model checkpoint, data split, prompt version, random seed, total call cost, and limitations. Examples, automatic labels, and scores from the literature must not be written up as this project's own measurements.
 
-第三方原文与数据只在逐项核实使用权后导入；本轮只保存研究笔记、链接和原创演示。个人项目不自动获得公司资料的使用权。原始数据及未来模型产物保持独立目录并默认不进入 Git。
+Third-party source texts and data are imported only after usage rights have been verified item by item; this round stores only research notes, links, and original demos. A personal project does not automatically inherit usage rights to company materials. Raw data and future model artifacts stay in separate directories and are kept out of Git by default.

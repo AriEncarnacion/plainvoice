@@ -1,64 +1,64 @@
-# Plainvoice：双语 AI 候选补全与模型对照
+# Plainvoice: bilingual AI candidate enrichment and model comparison
 
-2026-09-12 方法与交付记录。本实验为现有英文、中文来源补充 AI 对照稿，保留来源、语义抽取、写作过程及失败记录，供后续审阅与方法比较。**所有生成稿均为待人评 candidate，尚未构成经验证的 gold 数据或模型训练结果。**
+2026-09-12 method and delivery record. This experiment adds AI comparison drafts to existing English and Chinese sources, keeping the source, the semantic extraction, the writing process, and the failure records for later review and method comparison. **Every generated draft is a candidate awaiting human evaluation; none of them yet constitutes verified gold data or a model training result.**
 
-研究记录分为早期 pilot 诊断、Gemini 2.5 Flash-Lite 基线运行，以及 Gemini 3.1 Flash-Lite 的完整文章对照。追加模型比较的范围为六篇完整文章；同一来源的多个模型输出分别保留，不计作新增独立来源。早期提示版本的诊断稿与主批次分组展示，恢复或补充运行也保留各自模型、提示版本、结果状态和账本。
+The research record divides into early pilot diagnostics, the Gemini 2.5 Flash-Lite baseline run, and the full-article comparison on Gemini 3.1 Flash-Lite. The additional model comparison covers six full articles; several model outputs from the same source are kept separately and are not counted as new independent sources. Diagnostic drafts from early prompt versions are shown as a collection separate from the main batch, and recovery or supplementary runs likewise keep their own model, prompt version, result status, and ledger.
 
-实际数量按完整文章、文档或句段单元、模型对照与早期诊断分别统计；目标数、可用候选数、入库数、去重后的来源覆盖数和人工验收数使用不同口径：
+Actual counts are tallied separately for full articles, document or sentence/segment units, model comparisons, and early diagnostics; the target count, the usable candidate count, the ingested count, the deduplicated source-coverage count, and the human-acceptance count use different definitions:
 
-| 本轮口径 | 数量 |
+| Definition used this round | Count |
 |---|---:|
-| 中英文目标来源 | 930 |
-| 已有新版 AI 的独立来源 | 839 |
-| Gemini 2.5 完整文章候选 | 29 |
-| Gemini 2.5 句段／技术片段候选 | 808 |
-| Gemini 3.1 全文模型对照 | 6 |
-| 早期 pilot 诊断稿 | 5 |
-| 新增 viewer 记录 | 848 |
-| 尚未覆盖目标来源 | 91 |
-| 独立人工验收的 gold | 0 |
+| Chinese and English target sources | 930 |
+| Independent sources that already have a new AI version | 839 |
+| Gemini 2.5 full-article candidates | 29 |
+| Gemini 2.5 sentence-segment / technical-fragment candidates | 808 |
+| Gemini 3.1 full-text model comparisons | 6 |
+| Early pilot diagnostic drafts | 5 |
+| New viewer records added | 848 |
+| Target sources not yet covered | 91 |
+| gold accepted by independent human review | 0 |
 
-新增记录语言：中文 352 条、英文 496 条。Viewer 现有 **1,247,891 条、28 组**。这些是有界样本补全，未对原有 125 万条全部生成 AI。详见 [机器可读交付汇总](qa/09-12-enrichment-summary.json)。
+Languages of the new records: 352 Chinese and 496 English. The viewer now holds **1,247,891 records in 28 collections**. These are bounded sample enrichments; AI was not generated for all 1.25 million existing records. See the [machine-readable delivery summary](qa/09-12-enrichment-summary.json) for details.
 
-91 个未覆盖目标中，15 个有失败、拒绝或异常记录；另外 76 个在浏览器会话重置后尚未发起调用。专用凭证仅保存在内存，重置后不可恢复；这 76 个没有产生调用费用，待生成清单保留在本地。本轮按现有 848 条候选交付，生成进程均已停止。
+Of the 91 uncovered targets, 15 have a failure, refusal, or exception record; the other 76 had no call issued after the browser session was reset. The dedicated credential is held in memory only and cannot be recovered after a reset; these 76 incurred no call cost, and the to-be-generated list is kept locally. This round delivers the 848 candidates that exist, and all generation processes have been stopped.
 
-英中均在本轮范围内，日文候选不纳入本轮。完整文章仅指所选来源中完整保留的下载正文或清理后全文。文档修订单元可能是摘要、章节或收集到的修订文本；句子、人类参考改写及函数文档片段继续保留各自类型，不能累计成“全文文章数”。有限来源范围也不保证各语言、各类型数量均衡或具有代表性。
+English and Chinese are both in scope this round; Japanese candidates are not. "Full article" means only the downloaded body text or cleaned full text that is retained in full from the selected sources. A document revision unit may be an abstract, a section, or collected revision text; sentences, human reference rewrites, and function-documentation fragments each keep their own type and cannot be added up into a "full-article count". The limited source scope also does not guarantee that the counts are balanced or representative across languages and types.
 
-补全对象依据原始角色和选定文本确定。已有人工前后版本或多个参考答案，并不代表已有 AI 对照；需要从中明确选择本次重写的源侧。只含 AI 输出的 agent traces、机器伪目标、没有对齐关系的孤立记录，以及明显错配的代码与文档，不进入本轮缺失 AI 对照的来源队列。已有对照的文章参与追加模型比较时，保留“比较”标记。
+What gets enriched is determined by the original role and the selected text. Existing human before/after versions or several reference answers do not mean that an AI comparison already exists; the source side for this rewrite has to be chosen explicitly from among them. agent traces containing only AI output, machine pseudo-targets, orphaned records with no alignment relation, and obviously mismatched code and documentation do not enter this round's queue of sources lacking an AI comparison. When an article that already has a comparison takes part in the additional model comparison, it keeps the "comparison" marker.
 
-来源标签沿用已有出处证据，并保留作者身份的不确定性。社区内容、部分编辑数据及个别既有文章无法逐条证明完全由人类独立撰写；`human`、`reference` 或输入／目标标签也不自动证明质量。原始角色、所选侧、许可、数据 split、内容哈希与这些限制共同保留。
+Source labels follow the existing provenance evidence and preserve the uncertainty about author identity. Community content, some editing data, and a few pre-existing articles cannot be proven item by item to have been written entirely and independently by humans; a `human` or `reference` label, or an input/target label, likewise does not automatically prove quality. The original role, the chosen side, the license, the data split, the content hash, and these limitations are all retained together.
 
-每个来源原则上经过两次上下文隔离的模型调用。第一次读取选定全文或完整源单元，提取主语、谓语、宾语（SVO）及必要限定：主体与对象、否定范围、条件、数值、技术行为、不确定性和观点归属。源段落编号只用于抽取审计，每个单元需对应命题、排除理由或未解决状态；完整文章不会拆成互不关联的逐段改写任务。
+In principle each source goes through two model calls whose contexts are quarantined from each other. The first call reads the selected full text or the complete source unit and extracts subject, predicate, object (SVO) plus the necessary qualifiers: the entity and the object, the scope of negation, conditions, numbers, technical behavior, uncertainty, and attribution of viewpoint. Source paragraph numbers are used only for extraction auditing, and every unit has to map to a proposition, an exclusion reason, or an unresolved status; a full article is not broken up into unrelated paragraph-by-paragraph rewriting tasks.
 
-抽取完成后，脚本按记录种子打乱命题顺序，移除源定位符与原文结构线索，形成内容包。第二次调用只接收该包和写作要求，自行选择标题、结构与措辞，写成同语言的独立正文，并提交逐条命题的覆盖证据和未解决项。写作调用不接收原文正文或抽取调用的聊天历史；两次调用可使用同一个模型，上下文隔离不等于独立质量验证。
+After extraction, the script shuffles the proposition order using the record's seed, removes source locators and structural cues from the original, and forms a content packet. The second call receives only that packet and the writing requirements; it chooses the title, structure, and wording itself, writes an independent body text in the same language, and submits per-proposition coverage evidence and unresolved items. The writing call does not receive the original body text or the chat history of the extraction call; the two calls may use the same model, and context quarantine is not the same as independent quality verification.
 
-机器检查核对 JSON 结构、源单元和命题 ID、证据是否存在于正文、输出是否完整等。Pilot 与独立 agent 抽查已发现语义遗漏、否定或极性变化、观点归属漂移；这类问题在 coverage 自报通过时仍可能出现。抽取阶段漏掉的信息，也可能在后续正文和覆盖表中一起消失。因此，coverage 齐全不能证明全文保真，独立 agent 抽查也不能替代人工验收。
+The machine checks verify the JSON structure, the source unit and proposition IDs, whether the evidence is present in the body text, whether the output is complete, and so on. Pilot and independent agent spot checks have already found semantic omissions, negation or polarity changes, and drift in attribution of viewpoint; problems of this kind can still occur when coverage self-reports as passing. Information dropped at the extraction stage may also disappear from the resulting body text and the coverage table alike. Complete coverage therefore cannot prove full-text fidelity, and independent agent spot checks cannot replace human acceptance.
 
-缺陷标记只适用于核对过的具体稿件，并绑定模型、来源哈希和输出文本哈希。同一来源的其他模型输出或后续版本需另行检查，不能自动继承该缺陷结论，也不能因未被抽中而视为通过。
+A defect marker applies only to the specific draft that was checked, and is bound to the model, the source hash, and the output text hash. Other model outputs or later versions from the same source have to be checked separately; they cannot inherit that defect conclusion automatically, nor can they be treated as passing merely because they were not sampled.
 
-部分完整文章仍可能缺少可用 AI 对照，失败记录包括：请求的结构化 schema 复杂度或格式不被模型／路由接受；生成到达输出上限，发生截断或未正常结束；传输异常导致服务端是否完成、是否计费无法可靠确认；以及模型拒绝或过滤响应。未通过结构或完整性检查的响应不作为合格成稿，结果不明的请求保留 `unknown` 状态，不通过自动重试掩盖缺项。具体未覆盖来源与原因随交付汇总保留。
+Some full articles may still lack a usable AI comparison. The failure records include: the requested structured schema's complexity or format was not accepted by the model/router; generation hit the output limit and was truncated or did not terminate normally; a transport error made it impossible to confirm reliably whether the server completed the request or billed for it; and the model refusing or filtering the response. A response that fails the structure or completeness check does not count as a qualified finished draft; a request whose outcome is unclear keeps the `unknown` status, and gaps are not papered over by automatic retries. The specific uncovered sources and their reasons are retained with the delivery summary.
 
-费用按所有运行的账本统一汇总，包含早期 pilot、基线、模型比较及相关失败请求，分别列出已结算费用、未解决调用的保守保留额和合计费用敞口：
+Costs are aggregated across the ledgers of all runs, covering the early pilot, the baseline, the model comparison, and the associated failed requests, listing separately the settled cost, the conservative reserve for unresolved calls, and the total cost exposure:
 
-用户授权最多 $20。本轮所有运行的已记录费用合计 **$1.08076450**；另有 **$0.16447055** 为结果不明请求保留的预算，不能把它当作确定支出。合计保守敞口 **$1.24523505**，低于已购买的 $10 额度。
+The user authorized up to $20. The recorded cost of all runs this round totals **$1.08076450**; a further **$0.16447055** is budget reserved for requests whose outcome is unclear, and must not be treated as confirmed spending. The total conservative exposure is **$1.24523505**, below the $10 credit already purchased.
 
-| 模型 | 输入 / 百万 token | 输出 / 百万 token |
+| Model | Input / million tokens | Output / million tokens |
 |---|---:|---:|
 | [Gemini 2.5 Flash-Lite](https://openrouter.ai/google/gemini-2.5-flash-lite) | $0.10 | $0.40 |
 | [Gemini 3.1 Flash-Lite](https://openrouter.ai/google/gemini-3.1-flash-lite) | $0.25 | $1.50 |
 
-以上为本轮核验的文本价格；六篇 3.1 对照单独花费 $0.159308。各运行的费用、未结算预留与请求状态全部包含在交付汇总中。
+These are the text prices verified this round; the six 3.1 comparisons cost $0.159308 on their own. The cost, unsettled reserve, and request status of every run are all included in the delivery summary.
 
-每次付费请求前，客户端先持久化输入与最大输出的保守预留；获得可靠用量后才结算。`unknown` 请求继续占用保留额度并停止新调度，不自动释放或补发。恢复流程仅复用能核验为已接受、已结算的保存响应，并检查原队列、提示与预算配置；不能另建账本绕过未知调用。预算上限按单个账本执行；继续未尝试的来源前，另行汇总此前所有已花费与未知预留，再给新运行分配额度。各轮预算上限与实际支出分开记录，模型价格以运行时核验的标识、路由及账本为准。
+Before each paid request, the client first persists a conservative reserve for the input and the maximum output; it settles only once reliable token usage is available. An `unknown` request keeps holding its reserved quota and stops new scheduling; the quota is not released or reissued automatically. The recovery flow reuses only saved responses that can be verified as accepted and settled, and it checks the original queue, prompt, and budget configuration; a second ledger cannot be set up to bypass unknown calls. The budget cap is enforced per individual ledger; before continuing with sources that were never attempted, all prior spending and unknown reserves are aggregated again before quota is allocated to a new run. Each round's budget cap and its actual spending are recorded separately, and model prices follow the identifier, route, and ledger verified at run time.
 
-复现使用确定性队列与版本化提示：`plainvoice_prepare_enrichment.py` 只读原资料库并生成来源清单；`run_ai_enrichment.py` 执行 Gemini 2.5 基线；`run_ai_enrichment_multi.py` 执行限定范围的模型比较。运行元数据保存队列及提示哈希、模型标识、随机种子、源文本哈希、抽取结果、乱序包、成稿、覆盖证据、异常和费用账本。凭证只通过本机转交进入进程内存，不写入公开文档或研究产物。
+Reproduction uses a deterministic queue and versioned prompts: `plainvoice_prepare_enrichment.py` reads the source database read-only and generates the source list; `run_ai_enrichment.py` runs the Gemini 2.5 baseline; `run_ai_enrichment_multi.py` runs the limited-scope model comparison. The run metadata stores the queue and prompt hashes, the model identifier, the random seed, the source text hash, the extraction result, the shuffled packet, the finished draft, the coverage evidence, exceptions, and the cost ledger. Credentials reach process memory only by local hand-off and are not written into public documents or research artifacts.
 
-全部生成进程停止后，`finalize_ai_enrichment.py` 保留原始生成文件，为对应稿件附加有明确作用范围的 QA，并汇总各轮结果与费用。随后由 `plainvoice_ingest_enrichment.py` 导入本地审阅库：同 ID、同内容跳过，同 ID 内容变化报错并回滚，保留已有记录、内容哈希和评审。文章、数据单元、模型比较与早期诊断分别展示；入库表示可审阅，不表示质量已获认可。
+After all generation processes had stopped, `finalize_ai_enrichment.py` kept the raw generation files, attached scope-limited QA to the corresponding drafts, and summarized each round's results and costs. `plainvoice_ingest_enrichment.py` then imports them into the local review database: same ID and same content is skipped, same ID with changed content raises an error and rolls back, and existing records, content hashes, and reviews are preserved. Articles, data units, model comparisons, and early diagnostics are displayed as separate collections; ingestion means reviewable, it does not mean the quality has been accepted.
 
-进入 SFT 或 DPO 前，须由独立人工核对“原文 → 内容卡 → 新正文”的完整链路，评估信息保留、表达质量与实际用途，并确认数据使用权和来源分组边界。DPO 偏好标签需要针对具体稿件的判断，不能预设某模型、AI 稿或来源稿胜出。目前的产物可用于审阅、诊断和设计后续实验，尚不能据此宣称训练有效或获得了可靠的模型排名。
+Before anything enters SFT or DPO, an independent human has to check the full chain "original text → content card → new body text", assess information retention, expression quality, and practical usefulness, and confirm the data usage rights and the source collection boundaries. A DPO preference label requires a judgment about the specific draft; it cannot presuppose that a given model, the AI draft, or the source draft wins. The current artifacts can be used for review, diagnostics, and designing later experiments, but they do not yet support a claim that training is effective or that a reliable model ranking has been obtained.
 
-公开材料提供方法、汇总统计及获许可的示例。第三方全文、未经许可的完整对照稿与原始 trace 保留在本地审阅范围；本说明不包含私人账户、凭证或本机身份信息。
+The public material provides the method, the aggregate statistics, and permitted examples. Third-party full texts, unlicensed complete comparison drafts, and the raw trace stay within the local review scope; this document contains no private account, credential, or local machine identity information.
 
-## 审阅入口
+## Review entry point
 
-打开 [本机全量 viewer](http://127.0.0.1:8876)，默认进入新文章组。左侧最上方的「本轮新增 AI 改写」可直接切换：[完整文章](http://127.0.0.1:8876/?collection=ai-enrichment-articles)、[六篇 Gemini 3.1 对照](http://127.0.0.1:8876/?collection=ai-enrichment-comparison)、[句段与技术片段](http://127.0.0.1:8876/?collection=ai-enrichment-units)。A 为选定原文，B 为对应 AI 稿。原文、生成稿、抽取内容卡、写作包、覆盖表与费用信息均可查看。桌面文件位于 `ai-enrichment/`，总账为 `delivery-summary.json`，每轮 `pairs.jsonl` 为已附 QA 的 viewer 输入；`pairs.generated.jsonl` 或 `pilot-pairs.jsonl` 保留原始生成记录。
+Open the [full local viewer](http://127.0.0.1:8876), which opens on the new-articles collection by default. "New AI rewrites this round" at the top left switches directly between [full articles](http://127.0.0.1:8876/?collection=ai-enrichment-articles), [the six Gemini 3.1 comparisons](http://127.0.0.1:8876/?collection=ai-enrichment-comparison), and [sentence segments and technical fragments](http://127.0.0.1:8876/?collection=ai-enrichment-units). A is the selected original text and B is the corresponding AI draft. The original text, the generated draft, the extracted content card, the writing packet, the coverage table, and the cost information can all be viewed. The desktop files live in `ai-enrichment/`, the master ledger is `delivery-summary.json`, and each round's `pairs.jsonl` is the viewer input with QA already attached; `pairs.generated.jsonl` or `pilot-pairs.jsonl` retains the raw generation record.

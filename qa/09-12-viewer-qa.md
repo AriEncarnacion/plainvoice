@@ -1,13 +1,13 @@
-# 统一 viewer 核验
+# Unified viewer verification
 
-- 六套数据流式解析 1,246,954 条，ID 唯一；全部字段、原文/目标/27,205 个参考答案、来源文件存在性通过检查。95 个 manifest-listed 源文件哈希通过核对。
-- 另外 89 条改写/技术记录无重复 ID，文章中的全部 579 个 claim 与 562 个 trace 消息保留；200 个输入文件均已分类，未出现未归类文件。
-- 归一化后共 1,247,043 条、24 个分组。SQLite quick_check 通过，索引约 2.51 GB。本机 API 核验全部分组数量、每组首条详情、MCTS 全量末页、中英文查询和已评/未评过滤；全部通过。
-- 前端 HTML、静态资源引用与 JavaScript 语法检查通过；来源与文本以 textContent 渲染，不执行来源 HTML、代码或 trace 命令，不加载其中的外链图片。
-- 未进行浏览器点击、视觉或移动端实测，不能把语法/API 检查说成完整交互验收。可选 WebMCP 功能在不支持的浏览器中跳过；当前未获得支持的 WebMCP 验证环境，未宣称运行时验证通过。
-- 原研究仓库 6 个提交、34 个独立历史 blob 已检查，未发现凭据、公司/客户私密资料或第三方文章全文复制。文档中的私人账户邮箱已从将公开的可达分支历史移除，旧历史 bundle 保留在本机、未提交。
-- 未提交已有 untracked `experiments/`。其中 12 个候选副本与本次已有段落实验一致；36 个虚构测试夹具不计入研究数据。
+- Six datasets were stream-parsed to 1,246,954 records with unique IDs; all fields, source/target text, 27,205 reference answers, and source-file existence passed their checks. The hashes of 95 manifest-listed source files were verified.
+- A further 89 rewrite/technical records had no duplicate IDs, and all 579 claims and 562 trace messages in the articles were preserved; all 200 input files were classified, with no unclassified files remaining.
+- After normalization there are 1,247,043 records across 24 collections. The SQLite `quick_check` passed, and the indexes total roughly 2.51 GB. The local API was verified for per-collection counts, the first-record detail of each collection, the final page of the full MCTS set, Chinese and English queries, and reviewed/unreviewed filtering; all passed.
+- Front-end HTML, static resource references, and JavaScript syntax checks passed; sources and text are rendered via `textContent`, source HTML, code, and trace commands are not executed, and external images referenced within them are not loaded.
+- No browser click, visual, or mobile testing was performed; the syntax and API checks must not be described as full interactive acceptance. Optional WebMCP functionality is skipped on browsers that do not support it; no supported WebMCP verification environment was available, so no runtime verification is claimed to have passed.
+- The original research repository's 6 commits and 34 distinct historical blobs were examined, and no credentials, company or client confidential material, or full-text copies of third-party articles were found. A personal account email address in the documentation has been removed from the reachable branch history that will be made public; the old history bundle is retained locally and has not been committed.
+- The existing untracked `experiments/` was not committed. Of its contents, 12 candidate copies match the existing paragraph experiments from this round; 36 fictitious test fixtures are not counted as research data.
 
-这些是数据覆盖和程序检查，不是写作质量、保真度或训练效果的评估。具体本机源文件覆盖报告保存在 `data-viewer/source-coverage.json`。
+These are data coverage and program checks, not assessments of writing quality, fidelity, or training effectiveness. The specific local source-file coverage report is saved in `data-viewer/source-coverage.json`.
 
-后续补全与增量入库见 [低成本 AI 补全核验](09-12-enrichment-qa.md)；以上 1,247,043 条为增量前快照。
+For subsequent enrichment and incremental ingestion, see [Low-cost AI enrichment verification](09-12-enrichment-qa.md); the 1,247,043 records above are a pre-increment snapshot.

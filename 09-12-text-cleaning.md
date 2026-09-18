@@ -1,52 +1,52 @@
-# 全库正文清理
+# Corpus-wide body-text cleaning
 
-全库覆盖 **1,247,891 条记录／28 组**，其中 **214,048 条、397,342 个文本字段**发生格式变化。860 条改写实验中，600 条为待人评候选、260 条隔离；其他记录保留原任务含义。核验见 [QA](qa/09-12-text-cleaning-qa.md)，清理前后计数见 [长度对比](research/clean-text-2026-09-12/length-comparison.md)。
+The corpus covers **1,247,891 records / 28 collections**, of which **214,048 records and 397,342 text fields** changed format. Of the 860 rewrite experiments, 600 are candidates awaiting human evaluation and 260 are quarantined; the remaining records keep their original task meaning. For verification, see the [QA record](qa/09-12-text-cleaning-qa.md); for counts before and after cleaning, see the [length comparison](research/clean-text-2026-09-12/length-comparison.md).
 
-原始数据保留不动，统一生成 `clean-text-v1` 派生库。原文、AI 改写和所有参考答案使用同一套规则；来源、作者、日期、许可、任务说明、模型及 QA 保留在正文外。没有调用模型或重新生成句子。
+The raw data is left untouched, and a unified `clean-text-v1` derived database is generated from it. Source text, AI rewrites, and all reference answers go through the same rule set; source, author, date, license, task description, model, and QA are kept outside the body text. No model was called and no sentences were regenerated.
 
-## 查看与下载
+## Viewing and downloading
 
-[本机 viewer](http://127.0.0.1:8876/?view=clean) 默认显示清理后的 A/B 正文。详情的「文本版本」可切换原始采集／生成稿，「清理记录」显示删掉的内容、原因和待复核问题。左侧可筛选改写候选、已隔离记录和其他原始任务。单条可下载当前所见正文。
+The [local viewer](http://127.0.0.1:8876/?view=clean) shows the cleaned A/B body text by default. In the detail view, "Text version" switches between the raw collected and generated drafts, and "Cleaning record" shows what was removed, why, and which issues still need re-checking. The left side filters rewrite candidates, quarantined records, and other original tasks. Any single item's currently displayed body text can be downloaded.
 
-完整文件位于桌面 `plainvoice/data/local/clean-text-v1/`：
+The complete files live on the desktop at `plainvoice/data/local/clean-text-v1/`:
 
-| 文件 | 用途 |
+| File | Purpose |
 |---|---|
-| `review.sqlite` | 全量清理文本、原配对角色、来源、模型和审计记录 |
-| `text-only/*.jsonl.gz` | 按 28 个分组导出全部记录，字段为 `id,a,b,references` |
-| `rewrite-candidates.jsonl.gz` | 未触发隔离规则的 source/AI 改写候选，仍待人工评审 |
-| `quarantined-rewrites.jsonl.gz` | 失败、语义或格式问题需要处理的 source/AI 记录 |
-| `metadata.jsonl.gz` | 按 ID 对应角色、语言、许可、原始／清理 hash、候选状态及原因 |
-| `format-flags.jsonl.gz` | 全库带格式警告或隔离原因的记录；按 ID／clean hash 连接正文，包括清理后为空的警告 |
-| `summary.json`、`qa/` | 全量计数、规则指纹、精确删除与缺陷范围 |
+| `review.sqlite` | All cleaned text, original pairing roles, sources, models, and audit records |
+| `text-only/*.jsonl.gz` | Exports all records split across the 28 collections, with fields `id,a,b,references` |
+| `rewrite-candidates.jsonl.gz` | Source/AI rewrite candidates that triggered no quarantine rule, still awaiting human review |
+| `quarantined-rewrites.jsonl.gz` | Source/AI records needing attention due to failure, semantic, or formatting problems |
+| `metadata.jsonl.gz` | Role, language, license, raw/cleaned hash, candidate status, and reason, keyed by ID |
+| `format-flags.jsonl.gz` | Corpus-wide records carrying format warnings or quarantine reasons; joined to the body text by ID/clean hash, including warnings for text that is empty after cleaning |
+| `summary.json`, `qa/` | Full counts, rule fingerprint, exact removals, and defect scope |
 
-模型输入只取正文列。`id` 用于连接元数据，不拼进训练文本。`null` 表示未配对，空字符串可能是有效的插入／删除编辑，不能互换。多参考答案保留原来的顺序和角色。
+Model input takes only the body-text columns. `id` is used to join metadata and is not concatenated into the training text. `null` means unpaired, while an empty string may be a valid insertion/deletion edit; the two are not interchangeable. Multi-reference answers preserve their original order and roles.
 
-## 清理范围
+## Scope of cleaning
 
-- 移走明确的 YAML 元数据、文档标题副本、署名日期、面包屑导航、引用／转载说明及空页尾。
-- 去掉普通 Markdown／HTML 排版、装饰分隔线、图片标签；保留链接的可读文字以及有技术含义的 URL。
-- 规范 HTML entities、Unicode、空白和正文标点间距；针对 PDF 来源保守连接段内硬换行。
-- 对已经被 AI 改写成普通句子的网页元数据，使用原文 SHA 和唯一精确片段删除；每一处留有审计。混入实质内容、无法仅靠删除解决的句子保留并隔离。
-- OWID 下载快照含孤立脚注锚点、未附尾注正文：移除这些网页编号，保留研究归属和年份，并标记来源缺少尾注。没有补造引用。
+- Removes unambiguous YAML metadata, duplicated document titles, byline dates, breadcrumb navigation, citation/reprint notices, and empty page footers.
+- Strips ordinary Markdown/HTML layout, decorative rules, and image tags; keeps the readable text of links and URLs that carry technical meaning.
+- Normalizes HTML entities, Unicode, whitespace, and body-text punctuation spacing; for PDF sources, conservatively joins hard line breaks within a paragraph.
+- For webpage metadata the AI has already rewritten into ordinary sentences, removal uses the source SHA and a unique exact fragment; an audit record is left for each one. Sentences that mix in substantive content and cannot be resolved by deletion alone are retained and quarantined.
+- The OWID download snapshot contains orphaned footnote anchors with no endnote body attached: these webpage numbers are removed, the research attribution and year are kept, and the source is flagged as missing its endnotes. No citations were fabricated.
 
-代码、API endpoint、数学表达、科学上下标、单位、否定词、Javadoc、列表顺序和表格结构都属于内容。为保持可重复清理与技术含义，代码围栏、行内代码及公式／表格分隔符有意保留。有效 JSON trace 原样保存，不改造成 prose。arXiv 的 `[MATH]`／`[CITATION]` 保留并标记来源局限。
+Code, API endpoints, mathematical expressions, scientific sub- and superscripts, units, negations, Javadoc, list order, and table structure all count as content. To keep cleaning repeatable and preserve technical meaning, code fences, inline code, and formula/table delimiters are deliberately retained. Valid JSON traces are stored as-is and not converted into prose. arXiv's `[MATH]` and `[CITATION]` are retained and flagged as a source limitation.
 
-仍有少量采集层面的歧义：部分 PDF 段落硬换行、`CO 2`／`B 12` 一类科学记号间距，以及缺失公式／引用的占位符。这些不通过猜测修复；相应来源限制保留，具体例子见本地 QA。
+A few ambiguities remain at the acquisition layer: hard line breaks inside some PDF paragraphs, scientific-notation spacing such as `CO 2` / `B 12`, and placeholders for missing formulas or citations. These are not fixed by guesswork; the corresponding source limitations are retained, and specific examples are in the local QA.
 
-不按“copyright”“cookies”等单个词删除段落，不任意去重正文，不修复事实，不把连写句子或拼写问题猜成新表达。
+Paragraphs are not deleted on the basis of single words like "copyright" or "cookies", body text is not arbitrarily deduplicated, facts are not corrected, and run-on sentences or spelling problems are not guessed into new phrasings.
 
-## 隔离与训练边界
+## Quarantine and training boundaries
 
-只有明确的改写实验进入候选／隔离导出；其他已发表数据保持原任务语义，不能统一当作 human–AI pair。原文的作者身份沿用来源证据，格式清理不会将其升级为“高质量人类 gold”。
+Only explicit rewrite experiments enter the candidate/quarantine export; other published data keeps its original task semantics and cannot be treated uniformly as human–AI pairs. Authorship of source texts follows the source evidence, and format cleaning does not promote it to "high-quality human gold".
 
-已知失败 stub、中文任务生成英文、确认遗漏、过度压缩、相同文本、原有独立语义缺陷及其他需要复核的诊断单独隔离。数字差异等自动标记可能有合理解释；隔离表示需要处理，并不等于每条都是事实错误。没有自动生成 SFT 的正确答案或 DPO 的 chosen/rejected 标签。
+Known failed stubs, Chinese tasks that produced English, confirmed omissions, over-compression, identical text, pre-existing independent semantic defects, and other diagnostics needing re-checking are quarantined separately. Automatic flags such as numeric discrepancies may have legitimate explanations; quarantine means something needs attention, not that every item is a factual error. No SFT correct answers or DPO chosen/rejected labels were generated automatically.
 
-原始 ID 保留，清理后另算内容 hash。旧评审仍对应旧 hash，不会被静默搬到清理后的文本。
+Original IDs are retained, and a separate content hash is computed after cleaning. Old reviews still correspond to the old hash and are not silently carried over to the cleaned text.
 
-## 复现
+## Reproducing
 
-清理脚本要求 Python 3.11+ 和 SQLite FTS5，只有标准库依赖。精确源文本片段的 sidecar 只在本地数据包中，不公开到 GitHub。
+The cleaning script requires Python 3.11+ and SQLite FTS5, with standard-library dependencies only. The sidecar holding exact source text fragments exists only in the local data package and is not published to GitHub.
 
 ```sh
 python3 scripts/clean_data_corpus.py \
@@ -57,7 +57,7 @@ python3 scripts/clean_data_corpus.py \
   --warnings "$HOME/Desktop/plainvoice/data/local/clean-text-v1/qa/review-warnings.json"
 ```
 
-正文构建后，可单独导出便于训练适配器读取的来源警告：
+Once the body text is built, the source warnings can be exported separately in a form that is easy for a training adapter to read:
 
 ```sh
 python3 scripts/export_cleaning_flags.py \
@@ -65,6 +65,6 @@ python3 scripts/export_cleaning_flags.py \
   --output "$HOME/Desktop/plainvoice/data/local/clean-text-v2/format-flags.jsonl.gz"
 ```
 
-输出目录必须不存在；脚本校验 raw 文件 hash、清理幂等性、全量行数及 SQLite 完整性后才发布派生目录。更新版本可通过 viewer 的 `--clean-database` 参数选择。
+The output directory must not already exist; the script validates raw file hashes, cleaning idempotency, total row counts, and SQLite integrity before publishing the derived directory. A newer version can be selected through the viewer's `--clean-database` argument.
 
-后续 `plainvoice_prepare_enrichment.py` 默认优先从清理库准备新队列，并记录清理版本和 raw hash；显式 `--db` 可以复现指定输入版本。旧队列与生成结果不修改。明显损坏的公式／引用占位、维基编辑残留和非正文 trace 会从后续自动改写选样中跳过；其余来源限制随队列保留。
+Subsequently, `plainvoice_prepare_enrichment.py` prepares new queues from the cleaned database by default and records the cleaning version and raw hash; an explicit `--db` can reproduce a specified input version. Existing queues and generated results are not modified. Clearly corrupted formula/citation placeholders, wiki editing residue, and non-body-text traces are skipped when sampling for subsequent automatic rewrites; other source limitations travel with the queue.

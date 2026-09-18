@@ -1,109 +1,109 @@
-# Plainvoice：训练方法、底座规模与 prompting 对照
+# Plainvoice: Training Methods, Base Scale, and Prompting Comparison
 
-执行口径：本备忘录的 B0–B5 编号、400→1,600→4,000 学习曲线为备选设计；统一实验臂及阶段样本采用[主方案](../09-12-research-and-experiment-plan.md)。未实际启动实验。
+Operative scope: the B0–B5 numbering in this memorandum and the 400 → 1,600 → 4,000 learning curve are alternative designs; the unified experimental arm and the phased samples follow the [main plan](../09-12-research-and-experiment-plan.md). The experiment was not actually started.
 
-研究日期：2026-09-12（America/Los_Angeles）。本文件是研究与实验建议；未下载模型、采购算力、创建训练数据或启动训练。中文、英文 × technical docs、marketing 四个分层同等优先。模型存在性、结构和许可证来自官方卡；其通用 benchmark 分数不等于本任务效果。
+Research date: 2026-09-12 (America/Los_Angeles). This document is a set of research and experimental recommendations; no model was downloaded, no compute purchased, no training data created, and no training started. The four layers — Chinese and English × technical docs and marketing — have equal priority. Model existence, structure, and license come from the official card; its general benchmark score does not equal effectiveness on this task.
 
-建议先把任务定义为 **有约束的编辑**：在保持事实、论证关系、用途与作者声音的前提下，减少空泛、机械铺陈和不必要的修辞。首轮训练用 7–9B 档 instruction/post-trained 底座做 SFT + LoRA/QLoRA，同时保留 4B 成本对照和 27B 提示词参照。只有 SFT 仍有稳定、可标注的风格偏好问题，才追加小规模 DPO。现在没有证据支持直接投入在线 RL，也没有证据支持某一个参数规模已经足够。
+The task should first be defined as **constrained editing**: while preserving facts, argument relationships, purpose, and the author's voice, reduce vagueness, mechanical elaboration, and unnecessary rhetoric. The first round of training should do SFT + LoRA/QLoRA on a 7–9B instruction/post-trained base, while keeping a 4B cost control and a 27B prompt reference. Only if SFT still shows stable, annotatable style preference problems should a small-scale DPO be added. There is currently no evidence supporting going straight into online RL, and no evidence that any single parameter scale is already sufficient.
 
-## 1. 原方案中最需要改的训练假设
+## 1. The training assumption in the original plan that most needs changing
 
-**优质人类文章适合提供风格参照，不直接构成改写训练对。** 只在旧文章上做 next-token continued pretraining，教的是该语料的续写分布；它没有教模型如何根据输入保留数字、限制条件、API 名称与论证。将文章包装成随意反推的 prompt，也可能制造输入缺事实、输出却有事实的训练样本。模型会学到“写具体一点”就可以补出不存在的细节。这是任务定义推导出的风险，而不是某篇论文已经测定的失败率。
+**High-quality human articles are suited to providing a style reference; they do not directly constitute rewrite training pairs.** Doing next-token continued pretraining on old articles alone teaches the continuation distribution of that corpus; it does not teach the model how to preserve numbers, constraints, API names, and arguments from the input. Packaging articles into casually reverse-engineered prompts can also create training samples whose input lacks a fact while the output has one. The model will learn that "being more specific" lets it fill in details that do not exist. This is a risk derived from the task definition, not a failure rate some paper has measured.
 
-应优先收集 `原稿 + 使用场景/受众 + 不可改事实/结构约束 → 编辑后稿`，并记录编辑原因。让真人编辑真实模型原稿、真实人的冗长原稿和已经不错的原稿；后一类要允许不改或轻改。没有必要把所有原稿都标成 AI：产品面对的应是具体写作缺陷。
+Collection should prioritize `source draft + use case/audience + immutable facts/structural constraints → edited draft`, and record the reason for each edit. Have real people edit real model source drafts, real people's overlong source drafts, and source drafts that are already good; the last category must be allowed to go unchanged or only lightly edited. There is no need to label every source draft as AI: what the product faces should be specific writing flaws.
 
-把人类佳作“AI 化”后再还原，可以作为合成数据补充，但不应作为主测试集。它容易让模型只学习反转某个生成器的污染规则；原佳作也可能包含生成 prompt 从未提供的事实。同一原文及其所有污染、改写、译文、候选稿必须属于同一数据 split。
+Turning strong human pieces "AI-ish" and then restoring them can serve as supplementary synthetic data, but should not serve as the main test set. It easily leads a model to learn only how to reverse one generator's contamination rules; the original piece may also contain facts the generation prompt never supplied. The same source text and all of its contaminations, rewrites, translations, and candidate drafts must belong to the same data split.
 
-技术文档通常应保留步骤、前置条件、警告、代码和精确术语；marketing 可以保留有效的对比、节奏、品牌口气和情绪。“不是 X，而是 Y”不是自动负例：问题是它有没有解释一个真实区分。把句式禁用规则当成训练目标，会得到另一套模板。
+Technical documentation should normally preserve steps, preconditions, warnings, code, and precise terminology; marketing may preserve effective contrasts, pacing, brand tone, and emotion. “不是 X，而是 Y” (*"not X, but rather Y"*) is not an automatic negative example: the question is whether it explains a real distinction. Treating sentence-pattern bans as a training objective yields another set of templates.
 
-## 2. 与决策直接相关的论文
+## 2. Papers directly related to decision-making
 
-| 来源与日期 | 实际研究结果/方法 | 对本项目的含义及证据边界 |
+| Source and date | Actual research results/methods | Implications for this project and the boundaries of the evidence |
 |---|---|---|
-| [LoRA — Hu et al.，2021-06-17](https://arxiv.org/abs/2106.09685) | 冻结主模型，通过低秩矩阵学习参数更新，是参数高效微调方法。 | LoRA 不是与 SFT/DPO 并列的学习目标；可以用 LoRA 实现 SFT 或 DPO。先用 adapter 便于比较和回滚；论文不能证明低秩更新足以消除四个分层的所有风格问题。 |
-| [QLoRA — Dettmers et al.，2023-05-23](https://arxiv.org/abs/2305.14314) | 在冻结的 4-bit 量化主模型上训练 LoRA，并用 NF4、double quantization、paged optimizers 降低显存需求；论文展示特定设置下 65B 在 48GB GPU 微调。 | 支持先做低成本试验。65B/48GB 是论文具体条件下的结果，不能推出本项目长文训练、现代混合架构或 DPO 都能用同样资源；量化对事实保留需另测。 |
-| [Direct Preference Optimization — Rafailov et al.，2023-05-29；修订 2024-07-29](https://arxiv.org/abs/2305.18290) | 通过同一输入下 preferred/rejected 回答直接优化偏好，不需要单独训练显式 reward model 或在标准离线训练环节 rollout；在 sentiment、summary、dialogue 上实验。 | 适合处理“都正确，但哪一个写法更自然”的成对偏好。没有测试这里的中英技术文档/marketing 编辑任务，也没有证明它必然比精心制作的 SFT 更好。 |
-| [Self-Refine — Madaan et al.，2023-03-30](https://arxiv.org/abs/2303.17651) | 同一 LLM 生成、给出反馈、再修订，不更新模型权重，在七类任务上比较单次生成。 | 应纳入强基线，尤其是定位冗余后局部修改。论文提升不能直接移植到 2026 年底座；每轮可能引入新错，需记录轮数、token、延迟，并与同预算候选选择比较。 |
-| [Improving Iterative Text Revision by Learning Where to Edit from Other Revision Tasks — Kim et al.，EMNLP 2022](https://aclanthology.org/2022.emnlp-main.678/) | 将可编辑 span 与 edit intent 显式建模，再迭代修改；利用其他编辑任务数据。 | 比“整篇重写得像人”更接近技术文档需求。可借鉴 `定位 → 编辑 → 校验` 和 edit-intent 标签；不能据此断言 span editing 必然优于现代 LLM 全文改写，需要配对实验。 |
-| [The Importance of Online Data: Understanding Preference Fine-tuning via Coverage — Song et al.，2024-06-03；修订 2024-07-16](https://arxiv.org/html/2406.01462v2) | 在其理论设定中，离线对比方法需要更强的数据覆盖条件；提出用在线样本做 KL 正则的 HyPO，并在摘要和 general chat 上实验。 | 不应把 DPO 当成与所有在线 RL 完全等价。初期更实际的应对是从当前 SFT 模型采样并补标偏好，再做一轮离线训练；这是本项目的工程建议，不是论文对该工作流的直接验证。 |
-| [Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms — Rafailov et al.，2024-06-05；修订 2024-11-05](https://arxiv.org/html/2406.02900v2) | DPO/IPO/SLiC 也会过优化，性能可随优化推进下降。主实验为 TL;DR 与 Pythia，使用 GPT-4 胜率代理评估，并讨论长度投机。 | “不训练 reward model”不等于没有奖励投机。需要独立人类 holdout、检查长度/删信息、频繁存 checkpoint；论文不是对真实人类偏好的直接、跨域证明。 |
+| [LoRA — Hu et al., 2021-06-17](https://arxiv.org/abs/2106.09685) | Freezing the main model and learning parameter updates through a low-rank matrix is a parameter-efficient fine-tuning method. | LoRA is not a learning objective on a par with SFT/DPO; SFT or DPO can be implemented with LoRA. Using an adapter first makes comparison and rollback easier; the paper cannot prove that low-rank updates suffice to eliminate every style problem across the four layers. |
+| [QLoRA — Dettmers et al., 2023-05-23](https://arxiv.org/abs/2305.14314) | Train LoRA on a frozen 4-bit quantized main model, using NF4, double quantization, and paged optimizers to lower GPU memory requirements; the paper demonstrates fine-tuning a 65B model on a 48GB GPU under specific settings. | Supports running low-cost experiments first. The 65B/48GB figures are results under the paper's specific conditions; they do not imply that this project's long-text training, modern hybrid architectures, or DPO can all run on the same resources; the effect of quantization on fact retention must be tested separately. |
+| [Direct Preference Optimization — Rafailov et al., 2023-05-29; revised 2024-07-29](https://arxiv.org/abs/2305.18290) | Optimizes preferences directly from preferred/rejected answers to the same input, without separately training an explicit reward model or doing rollout in the standard offline training loop; experiments on sentiment, summary, and dialogue. | Suited to pairwise preferences of the form "both are correct, but which phrasing reads more naturally". It did not test the Chinese/English technical docs/marketing editing task considered here, nor did it prove that it must beat a carefully built SFT. |
+| [Self-Refine — Madaan et al., 2023-03-30](https://arxiv.org/abs/2303.17651) | The same LLM generates, gives feedback, and then revises, without updating model weights; compared against single-pass generation on seven classes of task. | Should be included as a strong baseline, especially for local edits after redundancy has been located. The paper's gains cannot be ported directly onto a 2026-era base; each round may introduce new errors, so round count, token, and latency must be recorded and compared against candidate selection at the same budget. |
+| [Improving Iterative Text Revision by Learning Where to Edit from Other Revision Tasks — Kim et al., EMNLP 2022](https://aclanthology.org/2022.emnlp-main.678/) | Explicitly models editable spans and edit intents, then revises iteratively; draws on data from other editing tasks. | Closer to the needs of technical documentation than "rewriting the whole piece to sound human". The `locate → edit → verify` pattern and the edit-intent tags are worth borrowing; this is not grounds for asserting that span editing must beat modern LLM full-text rewriting — paired experiments are needed. |
+| [The Importance of Online Data: Understanding Preference Fine-tuning via Coverage — Song et al., 2024-06-03; revised 2024-07-16](https://arxiv.org/html/2406.01462v2) | In its theoretical setting, offline contrastive methods require stronger data coverage conditions; it proposes HyPO, which uses online samples for KL regularization, and experiments on summarization and general chat. | DPO should not be treated as fully equivalent to all online RL. A more practical early response is to sample from the current SFT model, label the preferences, and then run another round of offline training; this is an engineering recommendation for this project, not the paper's direct validation of that workflow. |
+| [Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms — Rafailov et al., 2024-06-05; revised 2024-11-05](https://arxiv.org/html/2406.02900v2) | DPO/IPO/SLiC can also be over-optimized, and performance can fall as optimization proceeds. The main experiments are TL;DR and Pythia, using a GPT-4 win rate proxy evaluation, and length gaming is discussed. | "Not training a reward model" does not mean there is no reward gaming. An independent human holdout, checks for length and deleted information, and frequent checkpoint saving are required; the paper is not a direct, cross-domain proof about real human preferences. |
 
-这些论文给出方法和失败模式，不能代替专门的任务验证。特别是摘要/对话结论不能直接视作 technical docs 或 marketing 改写结论；中文母语风格判断也不能从英文结果推断。
+These papers give methods and failure modes; they cannot replace dedicated task verification. In particular, conclusions from summarization/dialogue cannot be taken directly as conclusions about rewriting technical docs or marketing; and native Chinese style judgments cannot be inferred from English results.
 
-## 3. 先做哪些 prompting / harness 基线
+## 3. Which prompting / harness baselines to build first
 
-把以下配置在**相同底座、相同冻结测试输入、同一事实约束**下比较。再额外加入一个强商用模型作为产品替代方案；跨模型结果不能归因为“训练优于 prompting”。
+Compare the following configurations under **the same base, the same frozen test input, and the same fact constraints**. Additionally include a strong commercial model as a product alternative; cross-model results cannot be attributed to "training beats prompting".
 
-| 配置 | 实验内容 | 要回答的问题 |
+| Configuration | Experiment content | Question to be answered |
 |---|---|---|
-| B0 原样返回 | 不做改写；保留所有原稿 | 模型是否把好稿改差？改写是否真的有价值？ |
-| B1 简单 prompt | 明确用途、受众、事实约束，要求减少冗余并保持语气 | 产品最低成本能做到什么？ |
-| B2 任务 rubric + few-shot | 每个语言/场景提供若干已授权的编辑前后示例；包含应该保留的句式及不改样例 | 写作偏好能否被少量具体例子表达？ |
-| B3 检索例子 | 只从训练 split 取相同语言、体裁、缺陷类型的编辑对作示例 | 可控的示例库是否比固定 prompt 更有效？不得检索测试原稿或近重复版本。 |
-| B4 定位/改写/校验 | 先指出冗余或虚假对比位置，再有限修改，最后核对事实与代码；最多一轮修复 | 多步骤是否换来足够改善？特别看事实损失和 p95 延迟。 |
-| B5 同预算 best-of-N | 例如生成两份候选，由独立评估器选取，设与 B4 接近的总 token 预算 | B4 的收益究竟来自修订策略，还是只是用了更多推理资源？ |
-| T1 SFT adapter | 同一底座，使用真人审校的编辑对，尽量单次输出 | 能否把可重复的提示词能力压缩成便宜且稳定的模型行为？ |
-| T2 SFT + DPO adapter | 由 T1/current policy 产生同一输入的候选；都过事实门槛后标成对偏好 | 偏好训练是否带来 SFT 之外的增益？ |
+| B0 Return as is | No rewriting; keep all source drafts | Did the model make a good draft worse? Is rewriting really worth it? |
+| B1 Simple prompt | State purpose, audience, and factual constraints explicitly; ask for less redundancy and a consistent tone | What can the product achieve at its lowest cost? |
+| B2 Task rubric + few-shot | Provide several authorized before/after edit examples for each language/scenario; include sentence patterns that should be kept, and unedited examples | Can writing preferences be expressed with a few concrete examples? |
+| B3 Retrieved examples | Take examples only from the training split, using edit pairs of the same language, genre, and defect type | Is a controlled example library more effective than a fixed prompt? Test source drafts and near-duplicate versions must not be retrieved. |
+| B4 Locate/rewrite/verify | First point out where redundancy or false contrasts sit, then make limited edits, and finally check the facts against the code; at most one round of repair | Do the extra steps buy enough improvement? Pay particular attention to fact loss and p95 latency. |
+| B5 Same-budget best-of-N | For example, generate two candidates, picked by an independent evaluator, with a total token budget close to B4's | Does B4's gain come from the revision strategy, or simply from using more inference resources? |
+| T1 SFT adapter | Same base, using edit pairs reviewed by real people, with single-pass output where possible | Can repeatable prompt capability be compressed into cheaper, more stable model behavior? |
+| T2 SFT + DPO adapter | Have T1/current policy produce candidates for the same input; label pairwise preferences once both pass the fact threshold | Does preference training bring gains beyond SFT? |
 
-固定训练/开发/测试划分之后才能调 prompt。为每条输出记录底座 revision、template、thinking 设置、量化方式、sampling seed、输入/输出/思考 token、wall time、失败与重试。先比较 matched compute，再给出各方法实际部署的质量/成本曲线；不能只比一次 SFT 调用与三次 API 调用的风格分数。
+The prompt can only be tuned once the training/dev/test split is fixed. For every output, record the base revision, template, thinking settings, quantization method, sampling seed, input/output/thinking token, wall time, failures and retries. Compare matched compute first, then give the quality/cost curve for each method as actually deployed; do not merely compare the style scores of one SFT call against three API calls.
 
-校验器至少分两层：数字、链接、引用、代码、API/flag 等可进行确定性 diff；因果、条件、范围、可能性/确定性等语义变化交给独立审查及抽样人工验证。事实检查不是一个笼统的 embedding similarity 分数。技术文档可设置关键语义错误直接不合格；marketing 不得用编造客户案例、数据或夸大承诺换取具体感。
+The validator should have at least two layers: numbers, links, references, code, API/flag and the like admit a deterministic diff; semantic changes such as causality, condition, scope, and possibility/certainty go to independent review and sampled human verification. Fact checking is not one blanket embedding similarity score. Technical documentation may treat a key semantic error as an outright failure; marketing must not trade fabricated customer cases, data, or exaggerated promises for a sense of concreteness.
 
-## 4. 底座选择：已核验的候选，不是宣称最优的排名
+## 4. Base selection: verified candidates, not a claimed best ranking
 
-以下官方页面于 2026-09-12 回读。新版架构与旧版传统 decoder 的差异会影响训练工具支持，所以实际训练前还需在固定版本工具链上验证加载、backward、adapter 保存/重载与量化部署。
+The official pages below were re-read on 2026-09-12. Differences between the new architectures and the older conventional decoder affect training-tool support, so before actual training, loading, backward, adapter saving/reloading, and quantized deployment must still be verified on a pinned-version toolchain.
 
-| 档位与精确模型 ID | 官方卡确认的结构和参数 | 许可证 | 建议角色 |
+| Tier and exact model ID | Structure and parameters confirmed by the official card | License | Suggested role |
 |---|---|---|---|
-| 3–4B：[`Qwen/Qwen3.5-4B`](https://huggingface.co/Qwen/Qwen3.5-4B) | 卡片标注 4B **language model**，带 vision encoder；32 层，Gated DeltaNet 与 Gated Attention 混合，FFN；不是 4B active 的 MoE。 | Apache-2.0 | 成本/延迟对照。先验证双语复杂条件保留，不能预设它只能做简单英文任务。 |
-| 7–9B：[`Qwen/Qwen3.5-9B`](https://huggingface.co/Qwen/Qwen3.5-9B) | 9B language model、vision encoder；32 层混合 DeltaNet/Attention，FFN。 | Apache-2.0 | 首选实验规模。是预算与容量的起点判断，不是本任务实测最优。 |
-| 12–14B：[`google/gemma-4-12B-it`](https://huggingface.co/google/gemma-4-12B-it) | 11.95B dense unified；48 层；局部 sliding-window 与全局 attention；统一多模态，无独立 vision/audio encoder。 | Apache-2.0 | 作为不同家族 12B 对照，可检验结果是否只在 Qwen 家族成立。需要独立测中文写作与术语稳定性。 |
-| 12–14B 备选：[`Qwen/Qwen3-14B`](https://huggingface.co/Qwen/Qwen3-14B) | 实际总参数 14.8B，非 embedding 13.2B；40 层、GQA、纯文本 causal LM。 | Apache-2.0 | 较成熟的传统架构对照；它与 9B 是不同代，性能差异不能视作纯参数 scaling。 |
-| 27–32B：[`Qwen/Qwen3.8-27B`](https://huggingface.co/Qwen/Qwen3.8-27B) | 27B language model、vision encoder；64 层混合 DeltaNet/Attention，FFN。 | Apache-2.0 | 较高容量开放权重参照及候选生成器；先跑 baseline，再决定是否花钱训练。 |
+| 3–4B: [`Qwen/Qwen3.5-4B`](https://huggingface.co/Qwen/Qwen3.5-4B) | The card labels it a 4B **language model** with a vision encoder; 32 layers, a mix of Gated DeltaNet and Gated Attention, FFN; not a 4B-active MoE. | Apache-2.0 | Cost/latency control. Verify preservation of complex bilingual constraints first; do not assume it can only handle simple English tasks. |
+| 7–9B: [`Qwen/Qwen3.5-9B`](https://huggingface.co/Qwen/Qwen3.5-9B) | 9B language model, vision encoder; 32-layer hybrid DeltaNet/Attention, FFN. | Apache-2.0 | Preferred experiment scale. It is a starting judgment about budget and capacity, not the measured optimum for this task. |
+| 12–14B: [`google/gemma-4-12B-it`](https://huggingface.co/google/gemma-4-12B-it) | 11.95B dense unified; 48 layers; local sliding-window and global attention; unified multimodal, with no separate vision/audio encoder. | Apache-2.0 | As a 12B control from a different family, it tests whether the results hold only within the Qwen family. Chinese writing and terminology stability need separate testing. |
+| 12–14B alternative: [`Qwen/Qwen3-14B`](https://huggingface.co/Qwen/Qwen3-14B) | Actual total parameters 14.8B, non-embedding 13.2B; 40 layers, GQA, plain-text causal LM. | Apache-2.0 | A more mature conventional-architecture control; it is a different generation from the 9B, so the performance difference cannot be read as pure parameter scaling. |
+| 27–32B: [`Qwen/Qwen3.8-27B`](https://huggingface.co/Qwen/Qwen3.8-27B) | 27B language model, vision encoder; 64-layer hybrid DeltaNet/Attention, FFN. | Apache-2.0 | A higher-capacity open-weight reference and candidate generator; run the baseline first, then decide whether to pay to train. |
 
-发布日期有独立官方依据：[Qwen 官方仓库 News](https://github.com/QwenLM/Qwen3.8) 记录 2026-03-02 发布 3.5-4B/9B、2026-08-14 发布 3.8-27B；[Google 官方公告](https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemma-4-12B/) 日期为 2026-06-03。Qwen3-14B 在这里仅作为已可访问的候选，未另外核定最初公开日期。未声称上述列表覆盖截至研究日所有最新/最强模型。
+The release dates have independent official backing: the [Qwen official repository News](https://github.com/QwenLM/Qwen3.8) records 3.5-4B/9B as released 2026-03-02 and 3.8-27B as released 2026-08-14; the [Google official announcement](https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemma-4-12B/) is dated 2026-06-03. Qwen3-14B is listed here only as an already accessible candidate; its original publication date has not been separately verified. No claim is made that the list above covers every newest/strongest model as of the research date.
 
-不要把 Qwen 全家族介绍里的 MoE 概述错误套到这些 FFN 型号上；也不要把模型名字中的 “4B active/effective” 当成总权重。上表的 Qwen3.5/3.8 参数为卡片 **Language Model** 项，完整 checkpoint 还有视觉等组件，部署/训练占用需另测。
+Do not misapply the MoE overview from the Qwen family introduction to these FFN models; and do not mistake the "4B active/effective" in a model name for total weights. The Qwen3.5/3.8 parameters in the table above are the card's **Language Model** entry; a complete checkpoint also has vision and other components, so deployment/training footprint must be tested separately.
 
-第一轮可以只训练 9B；4B、12B、27B 先跑提示词。如果 4B 通过完整四分层测试且达到成本目标，再训练 4B；若 9B 的事实保留明显落后于 27B，而风格已接近，优先调查容量/输入组织，而非继续提高风格 reward。不同家族、年代的模型比较能帮助选产品底座，但不是干净的 scaling-law 实验。
+The first round can train the 9B only; 4B, 12B, and 27B run prompts first. If the 4B passes the full four-layer test and meets the cost target, then train the 4B; if the 9B's fact retention lags the 27B clearly while style is already close, investigate capacity/input organization first rather than continuing to raise the style reward. Comparing models from different families and eras helps pick a product base, but it is not a clean scaling-law experiment.
 
-## 5. 分阶段训练设计
+## 5. Phased training design
 
-这些数量是用于估算工作量的起始范围，并非文献证明的数据门槛；最终以学习曲线和标注一致性决定。
+These quantities are a starting range for estimating the workload, not a data threshold proven by the literature; the final call is made by the learning curve and annotation consistency.
 
-1. **先校准任务与基线。** 建一个四分层均衡、来源隔离的试验集；各层至少包含原本写得好的稿、真实坏稿、技术/商业关键约束、长度跨度。B0–B5 做人工盲评，允许 tie；记录理由，而非只问“像不像 AI”。若 B2/B4 已达到产品需求，训练的价值主要是降低调用成本、延迟或部署依赖。
-2. **SFT：先小样本学习曲线。** 人工审校 400 → 1,600 → 4,000 个编辑对，每档四层各占 25%；不可复用冻结测试数据。训练目标只覆盖 assistant 的正式改写，不训练模型输出“以下是去 AI 味版本”等包装。训练集中加入不改/轻改案例；具体比例通过过度编辑率选定。预先标注需保留事实，拒收通过删去约束换取流畅的 target。
-3. **参数高效实现。** 先用 LoRA；若设备不足则 QLoRA。候选 rank 16/32，较小 learning-rate 网格、1–2 epoch 起步，按开发集选 checkpoint。数值是待调假设。现代混合 attention 架构不能盲目复用旧模型的 `q_proj/v_proj` 清单；按实际 module 名称决定 adapter 覆盖。只训练文本路径，是否卸载/冻结其他组件需先验证框架支持。
-4. **DPO：只解决剩余偏好。** 由当前模型为同一原稿产生多个候选，人工比较通过事实检查的两个版本。保留语言、体裁、缺陷类型与长度差标签；重点加入“更短但丢事实”“更活泼但过度口语”“保留恰当对比比生硬禁用更好”等难例。可从 1,000–3,000 个偏好对试起；训练早期也评估，不能只保存最后一个 checkpoint。可把直接 DPO 与 SFT→DPO 作小型消融，但不能省掉 SFT-only。
-5. **在线学习放后面。** 若固定偏好集覆盖不足、出现新生成器风格、已校准 evaluator 在新数据仍可信，再考虑当前 policy 采样、补标和迭代 DPO。只有这一过程的收益仍受探索限制、流量和资金足够时，才立项在线 PPO/GRPO。事实硬约束是候选门槛，风格只是通过门槛后的排序项；不采用“AI detector 分数越低 reward 越高”的单目标。
+1. **Calibrate the task and the baseline first.** Build a trial set that is balanced across the four layers and quarantined by source; each layer must contain at least drafts that were already well written, genuinely bad drafts, key technical/business constraints, and a range of lengths. Run blind human evaluation on B0–B5, allowing tie; record the reasons, rather than only asking "does this look like AI". If B2/B4 already meet product requirements, the value of training is mainly to reduce call cost, latency, or deployment dependencies.
+2. **SFT: small-sample learning curve first.** Human-reviewed 400 → 1,600 → 4,000 edit pairs, with the four layers each 25% at every step; frozen test data must not be reused. The training objective covers only the assistant's actual rewrite, and does not train the model to emit wrappers such as "here is the version with the AI-ese removed". Add unedited/lightly edited cases to the training set; the exact proportion is chosen from the over-edit rate. Annotate in advance the facts that must be preserved, and reject targets that buy fluency by deleting constraints.
+3. **Parameter-efficient implementation.** Use LoRA first; use QLoRA if the device is insufficient. Candidate rank 16/32, a smaller learning-rate grid, starting at 1–2 epoch, with the checkpoint chosen on the dev set. The numbers are hypotheses to be tuned. A modern hybrid-attention architecture must not blindly reuse an old model's `q_proj/v_proj` list; which modules the adapter covers is decided by the actual module names. Train the text path only; whether other components can be offloaded/frozen must first be verified as supported by the framework.
+4. **DPO: resolves only the remaining preferences.** Have the current model produce several candidates for the same source draft, and have people compare the two versions that pass fact-checking. Keep labels for language, genre, defect type, and length difference; deliberately include hard cases such as "shorter but drops a fact", "livelier but too colloquial", and "keeping an apt contrast beats banning it outright". It can start from 1,000–3,000 preference pairs; evaluate early in training as well, and do not keep only the last checkpoint. A small ablation between direct DPO and SFT→DPO is possible, but SFT-only must not be skipped.
+5. **Put online learning later.** Only if the fixed preference set's coverage is insufficient, new generator styles appear, and a calibrated evaluator remains trustworthy on new data should sampling from the current policy, extra labeling, and iterative DPO be considered. Online PPO/GRPO should only become a project when the gains of this process are still limited by exploration and there is enough traffic and funding. The hard fact constraint is the candidate threshold; style is only a ranking term once the threshold is passed. Do not adopt the single objective of "the lower the AI detector score, the higher the reward".
 
-如果两个候选一个更自然但有关键事实错误，不能把它作为总体 preferred 样本；应该明确事实优先，或把该比较单独标注成某一个风格维度，避免与总偏好混用。DPO 的训练目标没有自动知道“保真优先”。
+If one of two candidates is more natural but contains a key factual error, it must not be taken as the overall preferred sample; either state fact priority explicitly, or label that comparison separately as one style dimension, to avoid mixing it with overall preference. DPO's training objective does not automatically know that "fidelity comes first".
 
-## 6. 显存与成本：先给公式，再测真实吞吐
+## 6. GPU memory and cost: give the formula first, then measure real throughput
 
-下表是 **十进制 GB 的权重下界与工程规划范围**，不是 benchmark，也不是可装载承诺。4-bit 权重下界按 `参数量 × 0.5 byte`；BF16 按 `参数量 × 2 bytes`。实际还需要量化 metadata、非量化层、adapter、optimizer、activations、workspace，推理另有 KV cache。Qwen 行只用 language-model 标称参数计算，完整 checkpoint 可能更大。
+The table below gives **weight lower bounds in decimal GB and an engineering planning range**, not a benchmark and not a promise that anything will load. The 4-bit weight lower bound follows `parameter count × 0.5 byte`; BF16 follows `parameter count × 2 bytes`. In practice quantization metadata, non-quantized layers, adapter, optimizer, activations, and workspace are also needed, and inference has a separate KV cache. The Qwen rows are computed from the nominal language-model parameters only; a complete checkpoint may be larger.
 
-| LM 参数量 | 4-bit 权重理论下界 | BF16 权重理论下界 | 短序列 QLoRA 训练起始设备规划* |
+| LM parameter count | 4-bit weight theoretical lower bound | BF16 weight theoretical lower bound | Short-sequence QLoRA training start-up device plan* |
 |---|---:|---:|---|
-| 4B | 2 GB | 8 GB | 16–24GB 显存档 |
-| 9B | 4.5 GB | 18 GB | 24–48GB 显存档 |
-| 11.95B | 约 6 GB | 约 23.9 GB | 32–48GB 显存档 |
-| 14.8B | 7.4 GB | 29.6 GB | 48GB 显存档 |
-| 27B | 13.5 GB | 54 GB | 48–80GB 显存档 |
+| 4B | 2 GB | 8 GB | 16–24GB VRAM tier |
+| 9B | 4.5 GB | 18 GB | 24–48GB VRAM tier |
+| 11.95B | approx. 6 GB | approx. 23.9 GB | 32–48GB VRAM tier |
+| 14.8B | 7.4 GB | 29.6 GB | 48GB VRAM tier |
+| 27B | 13.5 GB | 54 GB | 48–80GB VRAM tier |
 
-\* 假设文本总序列长约 2K–4K、microbatch 1、gradient checkpointing、低秩 adapter、只训练文本路径且工具链兼容；只是安排试跑的设备档，不排除优化后更小设备可行，也不保证所列设备在任意配置下可行。长文、吞吐优先的大 batch、双候选 DPO 会改变预算。DPO reference 可通过预计算 reference log-prob 降显存，但 policy 的 chosen/rejected 序列仍需要算力。全参数 Adam 训练常见存储项粗算约 16 bytes/param（BF16 权重/梯度、FP32 master/moments）；9B 仅这些项即约 144GB，尚未算激活，实际随 optimizer/sharding 精度变化。
+\* Assuming a total text sequence length of about 2K–4K, microbatch 1, gradient checkpointing, a low-rank adapter, training the text path only, and a compatible toolchain; this is only the device tier for scheduling a trial run. It does not rule out that a smaller device is workable after optimization, nor does it guarantee that the listed devices are workable under any configuration. Long texts, throughput-first large batch, and two-candidate DPO change the budget. The DPO reference can lower GPU memory by pre-computing reference log-prob, but the policy's chosen/rejected sequences still need compute. Common storage items for full-parameter Adam training come to roughly 16 bytes/param (BF16 weights/gradients, FP32 master/moments); for 9B those items alone are about 144GB, before activations, and the actual figure varies with optimizer/sharding precision.
 
-训练费用必须由试跑测定。例：4,000 对、平均 input+target 共 2,048 token、2 epoch，处理约 16.4M token。若**假设**实际训练吞吐为 100–1,000 token/s，单次 run 约 4.6–45.5 小时；若**假设**算力价为 $1–$3/GPU-hour，则约 $5–$137。两项均为敏感性分析，不是市场报价或某张 GPU 实测；不包括超参搜索、评估、失败重跑、存储、老师模型生成和人工标注。此例不能直接用于 DPO 或在线 RL。
+Training cost must be determined by a trial run. Example: 4,000 pairs, an average of 2,048 token of input + target, 2 epoch, processing about 16.4M tokens. If the actual training throughput is **assumed** to be 100–1,000 tokens/s, a single run takes about 4.6–45.5 hours; if the compute price is **assumed** to be $1–$3/GPU-hour, that is about $5–$137. Both are sensitivity analyses, not a market quote or a measurement on a particular GPU; they exclude hyperparameter search, evaluation, failed reruns, storage, teacher-model generation, and human annotation. This example cannot be applied directly to DPO or online RL.
 
-需要报告 `总训练支出 / 通过事实检查且被人偏好的改写数`、推理每千字成本与 p50/p95 延迟。若训练的一次性成本为 C，每次合格改写比 harness 节省 Δc，粗略回本量是 `C/Δc`；人工数据维护和模型更新成本要计入 C。价格/硬件未选择前，不应给承诺式预算。
+You need to report `total training spend / number of rewrites that pass fact-checking and are human-preferred`, the inference cost per thousand words, and p50/p95 latency. If the one-off cost of training is C and each qualifying rewrite saves Δc versus the harness, the rough break-even volume is `C/Δc`; the cost of human data maintenance and model updates must be counted into C. Before price/hardware is chosen, no committed budget should be given.
 
-## 7. 必须保留的未知项
+## 7. Unknowns that must be retained
 
-- 目前没有本项目四分层上的训练结果；不能断言 post-training 优于强提示词，更不能断言 4B/9B/27B 的质量顺序。
-- 没有证据表明一个统一风格 reward 能兼容 technical docs 的结构需求与 marketing 的品牌声音；应报告每层结果和失败类别，macro average 不能掩盖中文或技术文档退步。
-- 通用写作 benchmark、官方 model-card 分数、LLM judge 胜率可用于筛选，不能作为商业文案转化率或技术文档可执行性的替代证明。
-- 论文上的 QLoRA 内存结果来自不同年代底座；新模型混合 attention 和多模态路径的训练支持必须实测。
-- 人工标注不一致如果来自真实审美差异，应保留条件化偏好、style profile 和 tie，不应把它们都强行压成统一的 gold scalar。
-- 单纯变短、删除标题、避开高频词、增加口语或错误，都可能让部分 judge 认为更像人；需要“信息保留 + 写作质量 + 使用场景有效性”三方面同时验证。
+- There are currently no training results on this project's four layers; it cannot be asserted that post-training beats a strong prompt, still less the quality ordering of 4B/9B/27B.
+- There is no evidence that one unified style reward can accommodate the structural requirements of technical docs and the brand voice of marketing; per-layer results and failure categories should be reported, and a macro average must not mask regressions in Chinese or in technical documentation.
+- General writing benchmarks, official model-card scores, and LLM judge win rates can be used for screening, but cannot serve as a substitute proof of conversion rate for commercial copy or of executability for technical documentation.
+- The QLoRA memory results in the paper come from a base of a different era; training support for the new models' hybrid attention and multimodal paths must be measured in practice.
+- If inconsistency in human annotation comes from genuine differences in taste, conditional preferences, style profile, and tie should be kept, and they must not all be forced into one uniform gold scalar.
+- Merely getting shorter, deleting headings, avoiding high-frequency words, or adding colloquialisms or errors may all make some judges think it is more human; verification is needed on all three of "information retention + writing quality + effectiveness in the use case" at once.
 
-下一步应先产出可讨论的 rubric、四分层样例与冻结 baseline protocol；训练配置只是这些定义稳定后的实现选择。
+The next step should be to produce a discussable rubric, four-layer samples, and a frozen baseline protocol; the training configuration is only an implementation choice once those definitions are stable.

@@ -1,94 +1,94 @@
-# Ground truth 从哪里来，以及怎样变成训练数据
+# Where ground truth comes from, and how it becomes training data
 
-2026-09-12。状态：文献核查和采集方案，尚无已采集、独立人评通过的 Plainvoice gold。下文数量是 pilot 建议，不是已得到的数据或论文证明的最优规模。中文／英文 × 技术文档／营销四格同等优先。评分与异常处理沿用[标注协议](09-12-annotation-protocol.md)和[主方案](09-12-research-and-experiment-plan.md)。
+2026-09-12. Status: literature verification and a collection plan; there is as yet no collected, independently human-evaluated Plainvoice gold. The quantities below are pilot proposals, not data already obtained or an optimal scale proven by any paper. The four cells of Chinese/English × technical documentation/marketing have equal priority. Scoring and anomaly handling follow the [annotation protocol](09-12-annotation-protocol.md) and the [main plan](09-12-research-and-experiment-plan.md).
 
-## 1. 最有用的单位：同一输入下的改写比较
+## 1. The most useful unit: rewrite comparison under the same input
 
-用户提出的“同样内容，一个 AI 味重，一个自然易读”是很好的配对思路。更准确的记录单位是：
+The user's framing — "the same content, one heavy with AI-ese, the other natural and easy to read" — is a good pairing idea. A more precise unit of record is:
 
-`任务与受众 + 原稿 + 内容依据与约束 + 候选 A/B + 独立人评`
+`task and audience + source draft + content basis and constraints + candidates A/B + independent human evaluation`
 
-“同样内容”要落实到事实、意图、条件和确定性，而不只是同一个主题或产品。比较两篇关于同一产品的文章，如果一篇多给了价格、客户故事或功能信息，偏好就混入了内容差异，不能单独归因于写法。
+"The same content" has to be pinned down to facts, intent, conditions, and certainty, not merely to the same topic or product. When two articles about the same product are compared, if one of them supplies extra price, customer-story, or feature information, then content differences have been mixed into the preference and it can no longer be attributed to the writing alone.
 
-作者是人还是模型与质量分开存。人写的也可能套话很多，模型稿也可能无需修改；两边都可以来自模型。不要在评审前预定胜者，也不要强迫每对都产生明显的“好／坏”。保留 tie、两边不合格和无法判断。
+Whether the author is a human or a model is stored separately from quality. A human-written piece can also be full of boilerplate, and a model draft can also need no revision; both sides may come from models. Do not fix a winner before evaluation, and do not force every pair to produce a clear "good/bad" verdict. Retain tie, both-sides-unqualified, and cannot-judge outcomes.
 
-自然感、可读性、实际采用偏好分别评价。技术规范可以正式且重复必要限制，广告可以有节奏或比喻。一个句式不能单凭出现就成为负例。
+Naturalness, readability, and actual adoption preference are evaluated separately. A technical specification may be formal and may repeat necessary constraints; an advertisement may use rhythm or metaphor. A sentence pattern cannot become a negative example merely because it occurs.
 
-严格的“纯风格”子集要求重要命题双向保留。若原稿本身含错误，编辑依据 source pack 纠正它，应另标为事实修复任务；不能把这种改善都算作去 AI 味效果。没有外部依据时只能检查相对原稿的保真，不能宣称现实事实正确。
+A strict "pure style" subset requires that important propositions are preserved in both directions. If the source draft itself contains an error and the editor corrects it on the basis of the source pack, that should be labelled separately as a fact-repair task; such improvements cannot all be counted as the effect of removing AI-ese. Without an external basis, one can only check fidelity relative to the source draft, and cannot claim that the facts are correct in reality.
 
-## 2. 已有论文和公开数据：能拿到什么
+## 2. Existing papers and public data: what can actually be obtained
 
-以下入口在最初研究轮核查；同日后续已按用户要求下载公开数据到桌面，见[实际采集记录](09-12-local-data-and-rewrite-pilot.md)。论文数据可提供候选和辅助任务，复用时仍需补做本项目的人评。
+The entry points below were verified in the initial research round; later the same day, public data was downloaded to the desktop at the user's request — see the [actual collection record](09-12-local-data-and-rewrite-pilot.md). Paper data can supply candidates and auxiliary tasks; when reused, this project's own human evaluation still has to be added.
 
-| 数据与入口 | 实际数据 | 本项目用途与边界 |
+| Data and entry point | Actual data | Use and boundaries for this project |
 |---|---|---|
-| [AdParaphrase v2.0，Findings ACL 2025](https://aclanthology.org/2025.findings-acl.788/)；[作者数据仓库](https://github.com/CyberAgentAILab/AdParaphrase-v2.0) | 日文广告，16,460 对语义等价文案，每对有 10 人的吸引力偏好；另有 8,721 个供 preference tuning 使用的同输入双候选记录。 | 最贴近本项目的数据构造方法，但不是中英文，也没有 AI 味标签。借鉴方法，不能直接当四格 gold。仓库标 CC BY-NC-SA 4.0；商用训练用途不能默认获准。 |
-| [IteraTeR，ACL 2022](https://aclanthology.org/2022.acl-long.250/)；[作者仓库](https://github.com/vipulraheja/iterater) | 英文真实修订。HUMAN 子集 4,018 句对，含人工编辑意图标签；FULL 为 196,987 句对，意图标签由模型预测。 | 优先筛语言与清晰度修改，排除 meaning-changed，再复核后稿是否更好。不能把真人修改视作保证。原版公开；Plus/v2 另需 Newsela 访问与联系作者。根仓库 Apache-2.0 不自动说明各来源原文均适用同一许可。 |
-| [arXivEdits，EMNLP 2022](https://arxiv.org/abs/2210.15067)；[作者仓库](https://github.com/chaojiang06/arXivEdits) | 751 篇论文的 1,039 对相邻版本；另有 1,000 句对中的 2,122 处人工意图标注编辑。 | Improve Language 子集可提供技术写作候选；论文与产品文档仍有领域差异。更新实验或论断的修改须分开。原文许可按论文／版本提供，不能以一个仓库许可覆盖所有文本。 |
-| [MCTS，LREC-COLING 2024](https://aclanthology.org/2024.lrec-main.969/)；[作者仓库](https://github.com/blcuicall/mcts) | 723 个中文新闻原句，每句 5 个人工简化参考。另有 691,474 个机器构造的伪平行训练句对。 | 可读性辅助评价，不是营销／技术文档 gold。简化允许删非重要信息，需重查信息保留。伪平行训练数据不能算人工 gold。同日下载 follow-up 已获取 Git LFS 中的 GPLv3 LICENSE 正文；上游新闻文本的具体用途仍需逐源确认。 |
-| [ASSET，ACL 2020](https://aclanthology.org/2020.acl-main.424/)；[作者仓库](https://github.com/facebookresearch/asset) | 2,359 个英文原句，每句 10 个人工简化参考；官方为 dev/test，没有 train split。 | 展示“一稿可有多个合理改写”，适合简化诊断；不是 AI 味标签，也不能把删减默认视作保真。CC BY-NC 4.0。 |
-| [CoEdIT，EMNLP 2023](https://aclanthology.org/2023.findings-emnlp.350/)；[数据卡](https://huggingface.co/datasets/grammarly/coedit)；[公开版说明](https://github.com/vipulraheja/coedit) | 英文编辑指令／原文／目标改写。论文训练集 82K，公开 train 约 69K；约 13K train 和 1.5K validation 因许可未公开。 | 辅助编辑 SFT。语法、正式化、简化等任务须分开，不能统一当自然风格正例。数据卡标 Apache-2.0，仍记录来源和任务；不要混淆数据与模型权重许可。 |
+| [AdParaphrase v2.0, Findings ACL 2025](https://aclanthology.org/2025.findings-acl.788/); [author data repository](https://github.com/CyberAgentAILab/AdParaphrase-v2.0) | Japanese advertising: 16,460 semantically equivalent copy pairs, each with attractiveness preferences from 10 annotators; plus 8,721 same-input two-candidate records for preference tuning. | The data construction method closest to this project, but it is not Chinese or English and it has no AI-ese labels. Borrow the method; it cannot serve directly as four-cell gold. The repository is marked CC BY-NC-SA 4.0; permission for commercial training use cannot be assumed. |
+| [IteraTeR, ACL 2022](https://aclanthology.org/2022.acl-long.250/); [author repository](https://github.com/vipulraheja/iterater) | Real English revisions. The HUMAN subset has 4,018 sentence pairs with human edit-intent labels; FULL has 196,987 sentence pairs whose intent labels are model-predicted. | Filter first for language and clarity edits, exclude meaning-changed, then re-check whether the later draft is actually better. A human edit cannot be taken as a guarantee. The original version is public; Plus/v2 additionally requires Newsela access and contacting the authors. The root repository's Apache-2.0 does not by itself establish that the source texts from every origin fall under the same license. |
+| [arXivEdits, EMNLP 2022](https://arxiv.org/abs/2210.15067); [author repository](https://github.com/chaojiang06/arXivEdits) | 1,039 adjacent-version pairs from 751 papers; plus 2,122 edits with human intent annotation across 1,000 sentence pairs. | The Improve Language subset can supply technical-writing candidates; papers and product documentation still differ in domain. Edits that update an experiment or a claim must be separated out. Source-text licenses are granted per paper/version; one repository license cannot cover every text. |
+| [MCTS, LREC-COLING 2024](https://aclanthology.org/2024.lrec-main.969/); [author repository](https://github.com/blcuicall/mcts) | 723 original Chinese news sentences, each with 5 human simplification references. Plus 691,474 machine-constructed pseudo-parallel training sentence pairs. | Auxiliary evaluation of readability, not marketing/technical-documentation gold. Simplification is allowed to drop non-essential information, so information retention has to be re-checked. Pseudo-parallel training data cannot count as human gold. The same-day download follow-up obtained the GPLv3 LICENSE body text from Git LFS; the specific permitted use of the upstream news text still has to be verified source by source. |
+| [ASSET, ACL 2020](https://aclanthology.org/2020.acl-main.424/); [author repository](https://github.com/facebookresearch/asset) | 2,359 original English sentences, each with 10 human simplification references; officially dev/test, with no train split. | Shows that "one draft can have several reasonable rewrites" and suits simplification diagnostics; it is not an AI-ese label, and deletion cannot be treated as fidelity by default. CC BY-NC 4.0. |
+| [CoEdIT, EMNLP 2023](https://aclanthology.org/2023.findings-emnlp.350/); [data card](https://huggingface.co/datasets/grammarly/coedit); [public-version notes](https://github.com/vipulraheja/coedit) | English edit instruction / source text / target rewrite. The paper's training set is 82K and the public train split about 69K; roughly 13K train and 1.5K validation are withheld for licensing reasons. | Auxiliary editing SFT. Grammar, formalization, simplification and similar tasks have to be kept apart and cannot be treated uniformly as positive examples of natural style. The data card is marked Apache-2.0, yet source and task are still recorded; do not confuse the data license with the model-weights license. |
 
-AdParaphrase 值得具体复用的是两阶段标注：先由 5 人判断是否释义，按多数筛选，再收集 10 人的吸引力偏好。其 `main` 原始文件保留不等价候选，不能把全表当作通过的 pairs。`pt` 则对同一原稿的两个改写直接收集偏好；不能从两次无关比较拼出 DPO 胜负。[作者仓库中的字段与过滤说明](https://github.com/CyberAgentAILab/AdParaphrase-v2.0)
+What is specifically worth reusing from AdParaphrase is its two-stage annotation: 5 people first judge whether the pair is a paraphrase, filtering by majority vote, and then attractiveness preferences are collected from 10 people. Its `main` raw file retains non-equivalent candidates, so the whole table cannot be treated as passing pairs. `pt`, by contrast, collects preferences directly over two rewrites of the same source draft; a DPO win/loss cannot be assembled from two unrelated comparisons. [Field and filtering notes in the author repository](https://github.com/CyberAgentAILab/AdParaphrase-v2.0)
 
-另有 [CAMERA，ACL 2024](https://aclanthology.org/2024.acl-long.54/) 提供日文 landing-page／query→广告数据，但同一产品可以对应不同诉求；这类生成参考不能不经复核就当成内容等价的风格对。当前没有找到能直接覆盖中英 × 营销／技术文档、同时具备保真和自然感标签的现成完整 gold；这是本轮检索结论，不是“不存在任何相关数据”的断言。
+There is also [CAMERA, ACL 2024](https://aclanthology.org/2024.acl-long.54/), which supplies Japanese landing-page/query → advertising data, but the same product can correspond to different appeals; generation references of this kind cannot be treated as content-equivalent style pairs without review. No off-the-shelf complete gold has been found that directly covers Chinese/English × marketing/technical documentation while also carrying fidelity and naturalness labels; that is the conclusion of this search round, not an assertion that "no relevant data exists".
 
-## 3. 主 gold 的获取：真实模型稿 → 编辑改稿 → 独立盲评
+## 3. Obtaining the main gold: real model draft → editor rewrite → independent blind evaluation
 
-这条路线最贴近实际产品输入，建议作为主来源。
+This route is closest to actual product input and is proposed as the main source.
 
-1. **建立内容依据。** 技术文档使用有明确使用权的版本化文档、接口契约或原创功能说明；营销使用授权／原创产品 brief，列出价格、功能、适用对象、渠道、品牌语气与可支持的承诺。中文英文分别原生采集，不用翻译填满一半样本。
-2. **取得真实分布的原稿。** 从明确同意用于研究的实际写作任务采集，或从同一 source pack 生成多种模型稿。覆盖默认提示与强写作提示；记录完整模型和提示版本。不要专门要求模型“写得特别像 AI”，否则负例过于容易。
-3. **由合适的编辑改写。** 编辑可删除冗余、重排信息、换句式和调整节奏；不能编造案例、数字或承诺。保留改动理由，也允许原样返回。技术编辑负责技术语义；营销编辑需熟悉目标市场。编辑稿先是候选，不自动成为答案。
-4. **独立评审。** 评审隐藏人／模型来源并随机 A/B 顺序，先查约束，再评价自然感和采用偏好。编辑不评自己的稿。pilot 每对先两人独立评分，分歧交第三人处理，原始票永久保留。
-5. **形成不同用途的数据。** 有可信改进且通过约束的改稿可用作 SFT 目标；明确偏好可用于 DPO；平局保留作评价和无需修改的训练素材。错误样本留在失败集，不因不利于效果就从 benchmark 分母删除。
+1. **Establish the content basis.** Technical documentation uses versioned documents with clear usage rights, interface contracts, or original feature descriptions; marketing uses a licensed/original product brief listing price, features, target audience, channel, brand tone, and promises that can be supported. Chinese and English are each collected natively; do not fill half the sample with translations.
+2. **Obtain source drafts with a realistic distribution.** Collect from real writing tasks that are explicitly consented to for research use, or generate several model drafts from the same source pack. Cover both the default prompt and a strong writing prompt; record the full model and prompt version. Do not specifically ask a model to "write in a particularly AI-like way", or the negative examples become too easy.
+3. **Rewritten by a suitable editor.** Editors may delete redundancy, reorder information, change sentence patterns, and adjust pacing; they may not invent cases, numbers, or promises. Keep the reason for each change; returning the text unchanged is also allowed. Technical editors are responsible for technical semantics; marketing editors need to know the target market. An edited draft is a candidate first, not automatically the answer.
+4. **Independent evaluation.** Evaluation hides the human/model origin and randomizes the A/B order; constraints are checked first, then naturalness and adoption preference are judged. Editors do not evaluate their own drafts. In the pilot, each pair is first scored independently by two people, disagreements go to a third person, and the raw votes are kept permanently.
+5. **Form data for different uses.** A rewrite with a credible improvement that passes the constraints can serve as an SFT target; a clear preference can feed DPO; ties are kept as evaluation material and as training material for the no-revision-needed case. Faulty samples stay in the failure set and are not deleted from the benchmark denominator merely because they hurt the numbers.
 
-这一步需要真实的人类编辑和独立判断。我可以准备 source pack、候选生成、比对和标注界面，也可以提出编辑候选；由我写、再由我自评的结果只能算自动候选，不能冒充独立人工 gold。
+This step needs real human editors and independent judgment. I can prepare the source pack, candidate generation, and the comparison and annotation interface, and I can propose edit candidates; a result written by me and then evaluated by me counts only as an automatic candidate and cannot pass itself off as independent human gold.
 
-## 4. 三条补充路线及其偏差
+## 4. Three supplementary routes and their biases
 
-| 路线 | 如何获取 | 为什么不直接算 gold |
+| Route | How to obtain it | Why it does not count directly as gold |
 |---|---|---|
-| 好的人工原稿 → 模型改写 | 使用有权使用的历史或新写文本，让多模型按真实编辑指令处理，形成同内容候选。 | 模型可能改善原稿。不得默认人工稿胜；强制“加 AI 味”的合成退化只作为小比例诊断数据，避免只学会反转某个模型的指纹。 |
-| 自然修订历史 | 从公开且许可合适的版本记录，或作者提供的 before/after 获取；优先只改表达的修订。 | 新版本可能增加功能、改价格或修正事实，不适合纯风格比较。真人后稿也可能更差，仍要复核。 |
-| 同原稿的多模型／多 prompt 候选 | 保持原稿与约束一致，让不同候选方法改写，再做匿名比较。 | 这是高效的 DPO 候选来源，胜者不必来自人。未经独立复核的模型裁判标签属于 silver；最终测试不能由同一个优化目标自证。 |
+| Good human source draft → model rewrite | Use historical or newly written text you have the right to use, and let several models process it under real editing instructions to form same-content candidates. | The model may improve the source draft. The human draft must not be assumed to win; synthetic degradation that forces "adding AI-ese" is used only as a small share of diagnostic data, to avoid learning nothing more than to invert one model's fingerprint. |
+| Natural revision history | Obtain from public, suitably licensed version records, or from before/after pairs supplied by the author; prefer revisions that change expression only. | A new version may add features, change prices, or correct facts, which does not suit a pure-style comparison. A human's later draft may also be worse, so it still has to be re-checked. |
+| Multi-model / multi-prompt candidates from the same source draft | Keep the source draft and the constraints fixed, let different candidate methods rewrite it, then compare anonymously. | This is an efficient source of DPO candidates, and the winner need not come from a human. Model-judge labels that have not been independently re-checked count as silver; the final test cannot be self-certified by the same optimization objective. |
 
-pre-ChatGPT 原文可以帮助确定来源历史，但“年代早”不提供质量保证；旧文本也可能被基础模型预训练见过。新增、未公开的原创测试素材可补充这一缺口。不要只收集经典好文章与平庸模型稿，否则年代、题材、信息量和作者水平都会混入标签。
+Pre-ChatGPT source texts can help establish source history, but "written early" provides no quality guarantee; old text may also have been seen in base-model pretraining. Newly written, unpublished original test material can fill this gap. Do not collect only classic good articles and mediocre model drafts, or period, subject matter, information density, and author skill all get mixed into the label.
 
-## 5. 先做什么：80 个任务的采集 pilot
+## 5. What to do first: an 80-task collection pilot
 
-以下为拟议分配。每格 20 个独立 source task；总数仍为既定的 80，不是另起一套 benchmark。
+The following is the proposed allocation. 20 independent source tasks per cell; the total is still the agreed 80, not a second benchmark started from scratch.
 
-| 采集路线 | 中文技术 | 英文技术 | 中文营销 | 英文营销 | 总数 |
+| Collection route | Chinese technical | English technical | Chinese marketing | English marketing | Total |
 |---|---:|---:|---:|---:|---:|
-| 真实模型原稿＋人工编辑候选 | 10 | 10 | 10 | 10 | 40 |
-| 人工原稿＋自然修订／模型改写候选 | 6 | 6 | 6 | 6 | 24 |
-| 好稿无需修改、合理对比、事实陷阱等诊断任务 | 4 | 4 | 4 | 4 | 16 |
-| 合计 | 20 | 20 | 20 | 20 | 80 |
+| Real model source draft + human edit candidate | 10 | 10 | 10 | 10 | 40 |
+| Human source draft + natural revision / model rewrite candidate | 6 | 6 | 6 | 6 | 24 |
+| Diagnostic tasks: good drafts needing no revision, reasonable comparisons, factual traps | 4 | 4 | 4 | 4 | 16 |
+| Total | 20 | 20 | 20 | 20 | 80 |
 
-每个任务可有多个候选，但初始人评选一对，共 160 次独立 pair 评审，另加分歧裁决；这一数字不含内容准备和 40 项编辑劳动。80 个任务不保证得到 80 个明确胜负的训练 pair。保留全部标签，实际合格率、分歧率和单项耗时决定扩量成本。
+Each task may have several candidates, but the initial human evaluation covers one pair, giving 160 independent pair reviews plus disagreement adjudication; this figure excludes content preparation and 40 items of editing labor. 80 tasks do not guarantee 80 training pairs with a clear winner. Keep every label; the actual pass rate, disagreement rate, and per-item time determine the cost of scaling up.
 
-公开论文数据先作为单独的辅助审查池，抽查内容等价性和任务匹配，不能用其几千个参考答案替代四格目标任务。训练集、judge 校准集与测试集的角色要显式记录；用于改 rubric 或 few-shot 的 pilot 不再充当最终测试。
+Public paper data serves first as a separate auxiliary review pool, spot-checking content equivalence and task fit; its few thousand reference answers cannot replace the four-cell target tasks. The roles of the training set, the judge calibration set, and the test set must be recorded explicitly; a pilot used to revise the rubric or the few-shot examples no longer serves as the final test.
 
-pilot 必须回答：评审能否指出一致的问题？编辑能否稳定改善强 baseline？改善是否只是缩短或修正事实？四格是否出现不同偏好？只有这些结果支持继续，才扩展人工 gold，并用已校准的过滤流程产生较大的 silver 训练集。几千还是几万条由学习曲线决定，论文不能替本任务给出固定答案。
+The pilot has to answer: can evaluators point to consistent problems? Can editors reliably improve a strong baseline? Are the improvements merely shortening or fact correction? Do the four cells show different preferences? Only if these results support continuing do we expand the human gold and use a calibrated filtering pipeline to produce a larger silver training set. Whether it is a few thousand or tens of thousands is decided by the learning curve; papers cannot supply a fixed answer in place of this task.
 
-## 6. 如何确认内容相同、标签可信
+## 6. How to confirm that the content is the same and the labels are credible
 
-- **先查命题。** 列出必须保留的事实与意图，检查新增无依据说法、遗漏条件、数字、否定、程度和确定性变化。代码、命令、URL 和标识符另外检查。自动 diff／模型可辅助，不能单靠 embedding 相似度放行。
-- **记录用途约束。** 保留长度、渠道、受众与品牌要求。更短不能自动获胜；更吸引人也不能弥补错误承诺。未要求补充事实时不要让改稿凭新增内容获得优势。
-- **保留主观差异。** 自然感和总体采用分别投票；要求问题片段与理由，允许 tie／abstain。先看裁决前一致性；多数偏好是给定人群和语境下的证据，不是唯一客观答案。
-- **分组切分。** 同一文档、品牌活动、历史版本、译文和模型派生稿归入同一个 source family，切分后再派生候选。不能把同一原稿的五个改写当五个独立测试样本。
-- **标注来源与使用权。** 保留文件版本、日期、编辑／模型来源和许可；本项目先保存笔记与链接。数据导入、训练和再分发的许可分别核对。
-- **保留失效数据。** 被拒的改稿、平局和难判断案例都有用途；主测试沿用全任务分母与失败规则。不能只报告“保真通过子集”的好看胜率。
+- **Check the propositions first.** List the facts and intents that must be preserved, and check for added unsupported statements, omitted conditions, and changes to numbers, negation, degree, and certainty. Code, commands, url values, and identifiers are checked separately. An automatic diff or a model can assist, but embedding similarity alone cannot be the basis for passing.
+- **Record the use constraints.** Preserve length, channel, audience, and brand requirements. Shorter does not win automatically; more attractive does not make up for a wrong promise. Where no additional facts were requested, do not let a rewrite gain an advantage from added content.
+- **Preserve subjective differences.** Naturalness and overall adoption are voted on separately; require the problem excerpt and the reason, and allow tie/abstain. Look at pre-adjudication agreement first; a majority preference is evidence for a given population and context, not the one objective answer.
+- **Split by collection.** The same document, brand campaign, historical versions, translations, and model-derived drafts all belong to one source family, and candidates are derived only after the split. Five rewrites of the same source draft cannot count as five independent test samples.
+- **Label provenance and usage rights.** Keep the file version, date, editor/model origin, and license; for now this project saves notes and links. Licenses for data import, training, and redistribution are verified separately.
+- **Keep the data that failed.** Rejected rewrites, ties, and hard-to-judge cases all have a use; the main test keeps the full-task denominator and the failure rules. Do not report only the flattering win rate of the "fidelity-passing subset".
 
-## 7. 同一份标注怎样服务 judge、SFT 和 DPO
+## 7. How one body of annotation serves judge, SFT, and DPO
 
-| 用途 | 数据形状 | 关键条件 |
+| Use | Data shape | Key conditions |
 |---|---|---|
-| Judge 校准与评价 | `context, draft, A, B, constraints, 原始各维评分与偏好` | 同输入比较；依据人评检验 judge，而非反过来由 judge 定义全部 gold。最终测试隔离。 |
-| SFT | `context + draft → accepted_rewrite` | 目标稿通过约束且适合任务；可有多个合理目标，也应有无需修改的样本。无需每项都先造一个明显差稿。 |
-| DPO | `context + draft, chosen_rewrite, rejected_rewrite` | 两稿都针对同一输入，直接标偏好，且 chosen 必须通过事实与任务约束。tie、两稿均不合格、未解决的 uncertain 不直接转成胜负。rejected 可失败但须保存失败类型；单独分析两稿均通过约束的风格偏好子集。 |
+| Judge calibration and evaluation | `context, draft, A, B, constraints, original per-dimension scores and preferences` | Same-input comparison; the judge is checked against human evaluation, rather than the judge defining all the gold. The final test is quarantined. |
+| SFT | `context + draft → accepted_rewrite` | The target draft passes the constraints and suits the task; there can be several reasonable targets, and there should also be samples that need no revision. There is no need to manufacture an obviously bad draft for every item first. |
+| DPO | `context + draft, chosen_rewrite, rejected_rewrite` | Both drafts address the same input, the preference is labelled directly, and chosen must pass the factual and task constraints. tie, both-drafts-unqualified, and unresolved uncertain do not convert directly into a win or a loss. rejected may fail, but the failure type has to be stored; analyse separately the style-preference subset in which both drafts pass the constraints. |
 
-一组“AI 原稿 A／编辑稿 B”可以直接构造 SFT 的 A→B。若用于 DPO，可把原样保留 A 作为一个合法候选，与 B 直接比较；更普遍的做法是从 A 生成 B、C，再直接标 B/C 偏好。不能把不同原稿对应的好坏输出随意拼在一起。
+A set of "AI source draft A / edited draft B" can be used directly to build the SFT pair A→B. If it is used for DPO, A can be kept as-is as a legitimate candidate and compared directly with B; the more common approach is to generate B and C from A and then label the B/C preference directly. Good and bad outputs belonging to different source drafts must not be pasted together arbitrarily.
 
-最终交付应包含：有出处的任务与候选、裁决前人评和分歧、适用的训练／评价 split、使用范围，以及每条标签的形成证据。模型生成候选、自动筛选 silver、人工复核 gold 分开计数；本轮交付的是这套采集方案和来源核查，尚未产生这些真实数据。
+The final delivery should contain: tasks and candidates with provenance, pre-adjudication human evaluations and disagreements, the applicable training/evaluation split, the scope of use, and the evidence behind each label. Model-generated candidates, automatically filtered silver, and human-re-checked gold are counted separately; what this round delivers is this collection plan and the source verification — this real data has not been produced yet.

@@ -1,55 +1,55 @@
-# 研究覆盖与核验记录
+# Research coverage and verification record
 
-本轮为有针对性的背景研究，不是 PRISMA 式系统综述。检索截至 2026-09-12；首轮仅研究，后续按用户授权完成桌面数据下载和六组短片段候选生成。独立人评、模型训练及真实 benchmark 尚未执行。目标覆盖中英双语与技术／营销四个同等优先单元；此次六个来源是探索采样，不是四格均衡 benchmark。
+This round is targeted background research, not a PRISMA-style systematic review. The search runs through 2026-09-12; the first round was research only, after which, under the user's authorization, the desktop data download and the generation of six short-fragment candidates were completed. Independent human evaluation, model training, and a real benchmark have not yet been carried out. The goal is to cover four equally prioritized cells — Chinese/English and technical/marketing; the six sources here are exploratory sampling, not a balanced four-cell benchmark.
 
-## 证据范围
+## Scope of the evidence
 
-四份文献备忘录合计列出 40 项论文／数据集研究，以及 5 个官方模型卡和发布佐证。重心包括语言学风格与同质化、AI 来源检测及偏差、编辑与风格迁移、人类／LLM 评价、参数高效训练、偏好优化和行业写作实验。
+The four literature memos list 40 paper/dataset studies in total, plus 5 official model cards and release evidence. The emphasis covers linguistic style and homogenization, AI source detection and bias, editing and style transfer, human/LLM evaluation, parameter-efficient training, preference optimization, and industry writing experiments.
 
-同日 follow-up 增加 literature-first 导读，并补齐首轮弱覆盖的 direct humanization prior art：DIPPER、HUMPA、CoPA 三篇论文，以及单列证据级别的社区 Unslopper model card。CoPA 的人评表和 Unslopper 的质量表已回读，明确相对原稿与相对弱 baseline 的不同结论；没有据此宣称已复现效果。
+A same-day follow-up added a literature-first reading guide and filled in the direct humanization prior art that the first round covered weakly: the three papers DIPPER, HUMPA, and CoPA, plus the community Unslopper model card, listed separately by evidence level. CoPA's human evaluation table and Unslopper's quality table have been read back, making clear the different conclusions relative to the source draft and relative to a weak baseline; no claim of having reproduced the effect is made on that basis.
 
-原始来源主要为 ACL Anthology、arXiv 作者版本、PNAS、Nature、Science Advances、ICML/ICLR 及出版社正文。模型配置来自发布者组织的模型卡与官方发布说明。搜索中的商业宣传、社交帖子及二手解读不承担结论证据。
+The primary sources are mainly ACL Anthology, arXiv author versions, PNAS, Nature, Science Advances, ICML/ICLR, and publisher body text. Model configurations come from the publishing organization's model cards and official release notes. Commercial promotion, social posts, and second-hand interpretation encountered in the search carry no evidential weight for the conclusions.
 
-每份备忘录记录了阅读范围和限制；部分数据集只核查官方摘要与元数据，未伪称完整复现。所有文献分数属于论文指定模型、任务和人群，不属于 Plainvoice。部分 2026 研究尚为 preprint，或正式版与作者版阅读范围不同，已注明。
+Each memo records its reading scope and limits; for some datasets only the official abstract and metadata were verified, and no complete reproduction was falsely claimed. All scores from the literature belong to the models, tasks, and populations the papers specify, not to Plainvoice. Some 2026 studies are still at preprint stage, or the reading scope differs between the published version and the author version, which has been noted.
 
-## 检索方向
+## Search directions
 
-- AI writing style / AI-ese / grammatical and rhetorical variation / lexical overrepresentation / homogenization。
-- Human and LLM judge bias / non-native detection bias / RAID / M4 / style transfer evaluation / factual preservation。
-- Text editing instruction tuning / CoEdIT / IteraTeR / Chinese revision and simplification。
-- WritingBench / marketing creativity / copywriting / technical writing evaluation / real marketing experiments。
-- LoRA / QLoRA / DPO / online preference coverage / reward overoptimization / current official model cards。
+- AI writing style / AI-ese / grammatical and rhetorical variation / lexical overrepresentation / homogenization.
+- Human and LLM judge bias / non-native detection bias / RAID / M4 / style transfer evaluation / factual preservation.
+- Text editing instruction tuning / CoEdIT / IteraTeR / Chinese revision and simplification.
+- WritingBench / marketing creativity / copywriting / technical writing evaluation / real marketing experiments.
+- LoRA / QLoRA / DPO / online preference coverage / reward overoptimization / current official model cards.
 
-## 重要校正
+## Important corrections
 
-1. 句法密集与有效信息不足可以共存，不互相矛盾。
-2. 历史人工来源不自动等于高质量；AI 来源判别不能当作质量标签。
-3. Base/instruct 对照未能隔离 SFT、RLHF 或其他具体后训练因素，不能作单因素因果归因。
-4. 中文“不是，而是”过用在本轮没有找到足够直接实证，保留为待验证产品假设。
-5. Wine Access 的定制小模型和 prompted Claude 位于不同实验轮次，不能当成训练与 prompting 的受控消融。
-6. FActScore 类 precision 不覆盖必要信息 recall；embedding 相似度也不足以证明无立场漂移。
-7. 模型卡提供存在性、结构及许可信息，不能证明所荐规模在该任务最优；Qwen 的 LM 参数不是完整多模态 checkpoint 的总存储。
-8. 显存表区分权重理论下界与实际设备规划；价格示例为假设敏感性分析，没有采购报价或已发生支出。
-9. 各备忘录的量表、学习曲线及 arm 编号是研究选项；统一执行版本在主方案与标注协议，入口已标明。
+1. Dense syntax and a shortage of useful information can coexist; the two are not contradictory.
+2. A historical human source does not automatically equal high quality; AI-source discrimination cannot be used as a quality label.
+3. The base/instruct comparison did not isolate SFT, RLHF, or any other specific post-training factor, so it cannot support single-factor causal attribution.
+4. No sufficient direct empirical evidence was found this round for overuse of the Chinese `不是，而是` (*"not X, but rather Y"*) construction, so it is kept as a product hypothesis awaiting verification.
+5. Wine Access's custom small model and the prompted Claude sit in different experimental rounds, so they cannot be treated as a controlled ablation of training versus prompting.
+6. FActScore-style precision does not capture recall of necessary information; embedding similarity is likewise not enough to prove the absence of stance drift.
+7. A model card supplies existence, structure, and licensing information; it cannot prove that the recommended size is optimal for this task. Qwen's LM parameter count is not the total storage of the complete multimodal checkpoint.
+8. The VRAM table distinguishes the theoretical lower bound for weights from actual device planning; the price example is a hypothetical sensitivity analysis, not a procurement quote or spending already incurred.
+9. The rating scales, learning curves, and arm numbering in each memo are research options; the unified version to be executed is in the main plan and the annotation protocol, whose entry points are marked.
 
-## 独立方法复核
+## Independent methodology review
 
-对主方案另做一次独立 review，发现并补齐三处规则：
+A separate independent review of the main plan found and filled in three rules:
 
-- 双方失败、无法判断、缺评、空输出、评审无多数与事实争议的处理，保留全部任务分母；未决标签用上下界，不能删除。
-- 每格非劣界限与重大错误上限需在终测前确定；未发现显著退化不能解释成已证明非劣。
-- 一致性统计只使用裁决前独立原始评分，不能混入只评价分歧的裁决人。
+- Handling of both sides failing, cases that cannot be judged, missing evaluations, empty output, no majority among reviewers, and factual disputes: keep the full task denominator; undecided labels are given as upper and lower bounds and must not be deleted.
+- The non-inferiority margin and the ceiling on major errors for each cell must be fixed before the final test; finding no significant degradation cannot be read as having proved non-inferiority.
+- Agreement statistics use only the independent raw scores from before adjudication, and must not mix in an adjudicator who only rates disagreements.
 
-复核了 800 项 × 3 人 × 3–5 分钟 = 120–200 小时的标注估算；确认 n=200/格并不足以支持很窄的效果或低错误率承诺。费用与样本量仍需 pilot 校准。
+The annotation estimate of 800 items × 3 people × 3–5 minutes = 120–200 hours was re-checked; n=200 per cell was confirmed to be insufficient to support very narrow effect or low error-rate commitments. Cost and sample size still need pilot calibration.
 
-## 尚未建立的结果
+## Results not yet established
 
-实际采集 follow-up：六套公开数据共 105 文件／610,783,737 bytes；结构、平行行数、ZIP CRC 和清单 SHA-256 通过。MCTS 许可从先前未读到全文更新为已获取 GPLv3 LICENSE 正文，仍不外推上游新闻使用权。六份官方原文、六组独立上下文 subagent 改写均保存在桌面，输出映射与少量技术标识符已核对，所有人评标签为空。CLI 旧版调用失败与实际 subagent 生成分别留档。HTML 本地引用与六个来源框架检查通过；没有声称已通过人评或完整浏览器交互测试。
+Collection follow-up: six public datasets totalling 105 files / 610,783,737 bytes; structure, parallel line counts, ZIP CRC, and manifest SHA-256 all pass. The MCTS license went from previously unread to the body of the GPLv3 LICENSE having been obtained, which still does not extrapolate to upstream news usage rights. The six official source texts and the six independent-context subagent rewrites are all saved on the desktop; the output mapping and a small number of technical identifiers have been checked, and every human-evaluation label is empty. The failed call from the old CLI and the actual subagent generation are archived separately. HTML local references and the six source frames pass their checks; no claim is made of having passed human evaluation or a full browser interaction test.
 
-Ground truth follow-up 核查 AdParaphrase v2.0、IteraTeR、arXivEdits、MCTS、ASSET 和 CoEdIT 的作者入口，新增独立采集方案。区分了广告释义／偏好与 AI 味标签、人工编辑与自动标签、论文使用规模与实际公开规模。MCTS 完整数据许可本轮未核实；CoEdIT 82K 为论文规模，公开 train 约 69K。未下载整套语料，未把提议的 80 项采集方案计作已采集 gold。
+Ground truth follow-up: the author entry points for AdParaphrase v2.0, IteraTeR, arXivEdits, MCTS, ASSET, and CoEdIT were verified, and an independent collection plan was added. It distinguished ad paraphrase/preference labels from AI-ese labels, human editing from automatic labelling, and the scale used in the papers from the scale actually released. The license for the complete MCTS data was not verified this round; CoEdIT's 82K is the paper's scale, while the public `train` split is about 69K. The full corpus was not downloaded, and the proposed 80-item collection plan is not counted as gold already collected.
 
-采集方案经独立方法复核：80 项、四格各 20、两人初评共 160 次 pair 评审的算术成立；明确补入 DPO chosen 必须通过约束，平局、两稿均不合格和未解决的 uncertain 不直接转成普通 DPO 胜负标签。
+The collection plan went through an independent methodology review: the arithmetic of 80 items, 20 in each of the four cells, and 160 pair reviews from two first-pass raters holds. It was made explicit that anything entered as DPO chosen must pass the constraints, and that ties, cases where both drafts fail, and unresolved `uncertain` do not convert directly into ordinary DPO win/loss labels.
 
-没有可信依据宣布一个模型或训练方法在四场景胜出，也没有经过校准的统一“AI 味”分数。没有获取历史营销文案的批量训练许可，没有采集公司资料，没有下载训练权重或启动付费计算。当前仓库是可继续执行的研究起点。
+There is no credible basis for declaring one model or training method the winner across the four scenarios, and there is no calibrated, unified "AI-ese" score. No bulk training license for historical marketing copy has been obtained, no company material has been collected, no training weights have been downloaded, and no paid compute has been started. The current repository is a research starting point that can be carried forward.
 
-Markdown 内部链接、文件清单和 Git 提交差异在推送前检查。只有本项目原创研究文档与模板进入个人仓库，未纳入父级管理工作区文件。
+Markdown internal links, the file listing, and the Git commit diff are checked before pushing. Only this project's original research documents and templates go into the personal repository; the parent management workspace files are not included.

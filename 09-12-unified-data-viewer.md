@@ -1,41 +1,41 @@
-# 统一 Data Viewer
+# Unified Data Viewer
 
-一个界面审阅本项目已下载、生成的全部可归一化记录。全量正文通过本机 SQLite 索引读取，浏览器按页载入；无需把 1.25M 行一次性装入页面。
+A single interface for reviewing every normalizable record this project has downloaded or generated. Full body text is read through a local SQLite index and loaded page by page in the browser; there is no need to load 1.25M rows into the page at once.
 
-## 覆盖范围
+## Coverage
 
-| 来源 | 记录数 |
+| Source | Records |
 |---|---:|
-| 六篇全文改写 v2 + 六组段落改写 v1 | 12 |
-| Agentic / technical 本地样本 | 77 |
+| Six full-article rewrites v2 + six paragraph rewrite sets v1 | 12 |
+| Agentic / technical local samples | 77 |
 | AdParaphrase | 31,058 |
 | IteraTeR | 230,141 |
 | arXivEdits | 219,598 |
 | MCTS | 692,197 |
 | ASSET | 3,177 |
 | CoEdIT | 70,783 |
-| 本轮廉价模型 AI 候选与诊断 | 848 |
-| **总计** | **1,247,891** |
+| This round's low-cost model AI candidates and diagnostics | 848 |
+| **Total** | **1,247,891** |
 
-共有 28 个可筛选分组。记录不是相互独立、已经验证的训练 pair：人类修订、多参考简化、机器合成、同任务报告、偏好标注和未配对文本各自标记。中文、英文、日文均按真实数据标注；AdParaphrase 是日文。单侧样本的 B 栏不伪造答案。
+There are 28 filterable collections in total. The records are not mutually independent, already-validated training pairs: human revisions, multi-reference simplification, machine synthesis, same-task reports, preference annotation, and unpaired text are each marked separately. Chinese, English, and Japanese are all labeled according to the actual data; AdParaphrase is Japanese. For one-sided samples, column B does not fabricate an answer.
 
-保留完整文本、全部参考答案、任务指令、split、文件与行定位、来源 URL 和许可说明。文章 v2 的内容卡与 QA、真实 trace 的全部事件可展开查看。全量复核发现原库有 2,650 个空目标和 116 个空源文本（空白字符串按空计），分别保留删除／插入语义；62,595 个 null 目标保留为未配对。ASSET 的 4,500 条评分和 2,154 条比较标注按样本合并，未丢弃。3,054 个 IteraTeR HUMAN/FULL 精确重叠与 978 个 arXiv 标注重叠合并并保留来源；22 个未匹配 arXiv 标注单列。
+The full text, all reference answers, task instructions, split, file and line location, source URL, and license notes are all preserved. The content cards and QA for article v2, and every event in a real trace, can be expanded and inspected. A full re-check found 2,650 empty targets and 116 empty source texts in the source database (whitespace-only strings count as empty), preserving deletion and insertion semantics respectively; 62,595 null targets are retained as unpaired. ASSET's 4,500 ratings and 2,154 comparison annotations are merged per sample, with none discarded. 3,054 IteraTeR HUMAN/FULL exact overlaps and 978 arXiv annotation overlaps were merged with their sources preserved; 22 unmatched arXiv annotations are listed separately.
 
-技术样本包括 SWE-Hero、SWE-smith、DRB II、CogGen/OWID、FreshWiki、Code2Doc、ResearcherBench，共 77 条。这里的“全部”指此前实际下载的有界样本，不是这些上游数据集全量。已有训练目录中的 12 个候选副本与段落 v1 文本相同，不重复展示；36 个虚构程序测试夹具不作为研究数据。
+The technical samples include SWE-Hero, SWE-smith, DRB II, CogGen/OWID, FreshWiki, Code2Doc, and ResearcherBench, 77 items in total. "All" here means the bounded sample actually downloaded earlier, not these upstream datasets in full. 12 candidate copies in the existing training directory have the same text as paragraph v1 and are not shown twice; 36 fictitious program test fixtures do not count as research data.
 
-新增 AI 对照见 [本轮交付说明](09-12-low-cost-ai-enrichment.md)。共覆盖 839 个目标来源；11 稿附具体语义问题标记，其他稿件也尚未人工验收。默认进入新文章组，旧记录和个人评审不变。
+For the new AI comparisons, see [this round's delivery notes](09-12-low-cost-ai-enrichment.md). 839 target sources are covered in total; 11 drafts carry specific semantic issue flags, and the other drafts have not been through human acceptance either. The viewer opens on the new article collection by default, and old records and individual reviews are unchanged.
 
-## 审阅方式
+## How to review
 
-最新默认使用[清理后的正文](09-12-text-cleaning.md)。可切换原始版本、查看逐条清理记录、按候选／隔离状态筛选，并下载当前对照文本。原始评审与清理后的评审按内容 hash 分开。
+The latest default is the [cleaned body text](09-12-text-cleaning.md). You can switch to the raw version, view the per-item cleaning record, filter by candidate/quarantine status, and download the comparison text currently shown. Reviews of the raw text and of the cleaned text are kept separate by content hash.
 
-选择数据集，按语言、配对方式、关键词或评审状态筛选。A/B 全文各自滚动，也可同步滚动、调整字号、隐藏来源标签。多参考样本可切换 B。J/K 查看下一条或上一条。查询覆盖标题与对照/参考正文；任务上下文和 trace 的附加 JSON 可在详情查看，未纳入全文搜索索引。
+Select a dataset and filter by language, pairing type, keyword, or review status. The A/B full texts scroll independently, and you can also scroll them in sync, adjust font size, and hide source labels. For multi-reference samples you can switch which B is shown. J/K move to the next or previous item. Queries cover titles and the comparison/reference body text; the additional JSON for task context and traces can be inspected in the detail view and is not included in the full-text search index.
 
-每条可记录保留/修改/排除、表达偏好、内容保真、AI 味比较及备注。标注保存在当前浏览器 localStorage，导出 JSON 后可导入恢复。记录 ID、内容哈希、B 候选编号一起标识评审，文本版本变化不会自动继承旧评审。标签仍是个人判断；隐藏来源标签不等于严格盲评，正文可能透露来源身份。
+For each item you can record keep/revise/exclude, expression preference, content fidelity, an AI-ese comparison, and notes. Annotations are saved in the current browser's localStorage, and can be exported as JSON and imported again to restore them. Record ID, content hash, and B-candidate number together identify a review, so a change in text version does not silently inherit the old review. The labels are still personal judgment; hiding source labels is not the same as strict blind evaluation, since the body text may reveal the source's identity.
 
-## 启动完整资料库
+## Starting the full database
 
-需要 Python 3.10+，带 SQLite FTS5；全部使用标准库，无第三方安装步骤。
+Requires Python 3.10+ with SQLite FTS5; everything uses the standard library, with no third-party install step.
 
 ```sh
 python3 scripts/build_data_viewer.py \
@@ -46,14 +46,14 @@ python3 scripts/serve_data_viewer.py \
   --database "$HOME/Desktop/plainvoice/data/local/data-viewer/review.sqlite"
 ```
 
-打开 [本机全量 viewer](http://127.0.0.1:8876)。首次构建读取所有来源，创建约 2.51 GB 的派生索引；之后直接启动第二条命令。输入文件不被修改。服务器仅绑定 loopback，API 为只读，评审不上传服务器。停止后再次运行启动命令即可。
+Open the [full local viewer](http://127.0.0.1:8876). The first build reads every source and creates a derived index of roughly 2.51 GB; after that, run the second command directly. Input files are not modified. The server binds to loopback only, the API is read-only, and reviews are not uploaded to any server. After stopping it, just run the start command again.
 
-## 网上入口与公开代码
+## Hosted entry point and public code
 
-[网上 viewer](https://plainvoice-data-review.jason62-h.chatgpt.site) 使用同一前端，提供 28 个分组的来源目录，以及一篇具备 CC BY 4.0 依据、完整保留署名的 OWID 示例。它可跳转到当前电脑的完整资料库。网上入口沿用 Sites 默认 owner-only 访问；GitHub 仓库的 public 可见性与 Sites 访问权限是两回事。
+The [hosted viewer](https://plainvoice-data-review.jason62-h.chatgpt.site) uses the same front end and provides a source directory for the 28 collections, plus one OWID example that has a CC BY 4.0 basis and its attribution fully preserved. It can link through to the full database on the current computer. The hosted entry point follows the Sites default of owner-only access; the GitHub repository's public visibility and Sites access permissions are two separate things.
 
-GitHub 保存前端、解析器、构建/服务脚本、统计目录和上述许可示例。桌面完整文本、SQLite、原始下载包及个人评审未上传。公开下载并不自动表示适用于任何训练或再分发用途；各记录保留原始权利证据。
+GitHub holds the front end, the parsers, the build/serve scripts, the statistics directory, and the licensed example described above. The full desktop text, the SQLite database, the raw download package, and individual reviews are not uploaded. Being publicly downloadable does not automatically mean something is suitable for any training or redistribution use; each record retains its original evidence of rights.
 
-公开示例：Max Roser, “Smoking: How large of a global problem is it? And how can we make progress against it?”, Our World in Data, 2021-07-14。[原文](https://ourworldindata.org/smoking-big-problem-in-brief)，[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。正文来自 CogGen 下载快照，清理版移除网页元数据与排版，未重新改写措辞。署名、原文链接、许可和修改说明保留在来源信息中；不下载或展示外链图片。
+Public example: Max Roser, "Smoking: How large of a global problem is it? And how can we make progress against it?", Our World in Data, 2021-07-14. [Original](https://ourworldindata.org/smoking-big-problem-in-brief), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The body text comes from the CogGen download snapshot; the cleaned version removes webpage metadata and layout without rewriting the wording. Attribution, the original link, the license, and the modification note are retained in the source information; externally linked images are not downloaded or displayed.
 
-核验范围见 [QA 记录](qa/09-12-viewer-qa.md)。
+For verification scope, see the [QA record](qa/09-12-viewer-qa.md).

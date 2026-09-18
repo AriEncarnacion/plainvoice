@@ -1,163 +1,163 @@
-# AI 写作风格：证据、反证与评估对象
+# AI writing style: evidence, counter-evidence, and the object of evaluation
 
-研究日期：2026-09-12。范围：对「AI 味儿」的语言学解释、后训练相关证据、体裁差异、中文证据及产品评估的含义。以下是有选择的背景研究，不是穷尽式系统综述。只把原论文、正式出版社和作者论文版本作为证据；搜索结果中的媒体、社交讨论、商业“去 AI 味”文案未作为事实依据。
+Research date: 2026-09-12. Scope: linguistic explanations of "AI-ese," post-training-related evidence, genre differences, Chinese-language evidence, and the implications for product evaluation. What follows is selective background research, not an exhaustive systematic review. Only the original papers, official publisher versions, and author versions of papers are treated as evidence; media coverage, social media discussion, and commercial "de-AI-ese" copy found in the search results were not used as a factual basis.
 
-## 先明确产品究竟要改什么
+## First, be clear about what the product is actually supposed to change
 
-「AI 味儿」建议先定义为**特定读者在特定写作任务中，对不合语境、套路化、空泛或失去作者声音的表达的感知**。这是本项目的可检验工作定义，并非已有共识量表。它与作者身份、可检测性、写作质量、事实正确性、体裁适配及商业效果有关，但这些量不能互换。
+"AI-ese" is best defined, to begin with, as **a particular reader's perception, within a particular writing task, of expressions that are contextually inappropriate, formulaic, vague, or stripped of the author's voice**. This is this project's testable working definition, not an existing consensus scale. It is related to authorship, detectability, writing quality, factual accuracy, genre fit, and commercial effectiveness, but these quantities are not interchangeable.
 
-要特别拆开三种常被混用的“信息密度”：
+Three senses of "information density" that are routinely conflated need to be pulled apart:
 
-- **句法／词汇密度**：名词短语、名词化、修饰结构、实词的密集程度；这种密度可能让文章更难读。
-- **有效信息密度**：每段提供多少相关、具体、受材料支持的命题，能否推动读者完成任务。这里需要项目自己的标注和验证。
-- **信息论 surprisal／entropy**：相对于某个模型分布的可预测性；不是内容对读者的价值，也不直接等于事实新颖性。
+- **Syntactic/lexical density**: how densely noun phrases, nominalizations, modifying structures, and content words are packed; this kind of density may make a text harder to read.
+- **Effective information density**: how many relevant, specific, source-supported propositions each paragraph delivers, and whether they move the reader toward completing the task. This requires the project's own annotation and verification.
+- **Information-theoretic surprisal/entropy**: predictability relative to some model's distribution; it is not the value of the content to the reader, nor is it directly equivalent to factual novelty.
 
-第一种密度高与第二种密度低完全可以同时出现。把“更短、更口语、更多罕见词”直接作为去 AI 味奖励，也会诱导另一种固定文风。
+High density of the first kind and low density of the second can perfectly well occur together. Taking "shorter, more colloquial, more rare words" directly as the reward for removing AI-ese would simply induce another fixed writing style.
 
-以下特征应先作为标注假设，而非全局禁用规则：
+The following features should first be treated as annotation hypotheses, not as blanket prohibition rules:
 
-| 候选维度 | 可操作的检查 | 必须保留的反例 |
+| Candidate dimension | Actionable check | Counter-examples that must be preserved |
 |---|---|---|
-| 空泛与重复 | 删除一句后，事实、推理、行动是否损失；有没有只重述题目的开头或结尾 | 教学所需的解释、必要安全前提、总结关键动作 |
-| 无必要的修辞对立 | “不是 X，而是 Y”中的 X 是否有人主张、Y 是否带来真实区分 | 澄清常见误解、定义边界、纠正实际错误 |
-| 不支持的具体性 | 数字、体验、客户案例、因果、保证能否在输入中找到依据 | 用输入事实写得更具体；明确标注假设 |
-| 语体不合 | 写给谁、做什么、读者知道什么；是否像该体裁的优秀实际作品 | 技术规范需要一致术语，营销长文可以合理使用修辞 |
-| 套路与过度修饰 | 反复出现同类开头、排比、夸张形容词；结构是否服务内容 | 必需列表、真正并列的三项、产品真实差异 |
-| 作者声音与立场漂移 | 改写是否改变确信程度、判断、情绪、个人措辞及叙事视角 | 用户明确要求改写立场或改为特定品牌声音 |
-| 跨文档同质化 | 同一模型改写不同作者／不同任务后，结构和观点是否过度趋同 | API reference 的命名和格式应当统一 |
+| Vagueness and repetition | Whether deleting a sentence loses any fact, reasoning step, or action; whether there is an opening or closing that only restates the topic | Explanation needed for teaching, necessary safety preconditions, a summary of the key actions |
+| Unnecessary rhetorical antithesis | In `不是 X，而是 Y` (*"not X, but rather Y"*), whether anyone actually asserts X, and whether Y draws a real distinction | Clarifying a common misconception, defining a boundary, correcting an actual error |
+| Unsupported specificity | Whether figures, experiences, customer cases, causal claims, and guarantees can be grounded in the input | Writing more specifically using facts from the input; labelling assumptions explicitly |
+| Register mismatch | Who it is written for, what it is meant to do, what the reader already knows; whether it reads like good real work in that genre | Technical specifications need consistent terminology; long-form marketing may legitimately use rhetoric |
+| Formulaic patterns and over-ornamentation | Recurring openings of the same kind, parallelism, exaggerated adjectives; whether the structure serves the content | Lists that are genuinely required, a set of three items that really are parallel, real product differences |
+| Author voice and stance drift | Whether the rewrite changes the degree of conviction, the judgments, the emotion, the personal wording, or the narrative perspective | The user explicitly asked for the stance to be rewritten, or for a switch to a particular brand voice |
+| Cross-document homogenization | After the same model rewrites work by different authors and for different tasks, whether structure and viewpoint converge excessively | Naming and formatting in an API reference ought to be uniform |
 
-本轮没有找到足以支持“所有模型都显著过用中文‘不是，而是’且原因已知”的高质量直接实证。用户观察值得进入假设集，但不能假装已经被量化证实，也不能据此推断模型的训练数据或奖励机制。
+This round found no high-quality direct empirical evidence strong enough to support the claim that "all models significantly overuse the Chinese `不是，而是` (*"not X, but rather Y"*), and the cause is known." The user's observation deserves a place in the hypothesis set, but it must not be passed off as already quantitatively confirmed, and it cannot be used to infer anything about a model's training data or reward mechanism.
 
-## 十二篇直接相关的原始研究
+## Twelve directly relevant primary studies
 
-### S1 — 风格偏差与 instruction tuning 的直接比较
+### S1 — Style bias and the direct comparison with instruction tuning
 
-**Alex Reinhart, Ben Markey, Michael Laudenbach, Kachatad Pantusen, Ronald Yurko, Gordon Weinberg, David West Brown. _Do LLMs write like humans? Variation in grammatical and rhetorical styles._ PNAS, 2025；首版预印本 2024。**
+**Alex Reinhart, Ben Markey, Michael Laudenbach, Kachatad Pantusen, Ronald Yurko, Gordon Weinberg, David West Brown. _Do LLMs write like humans? Variation in grammatical and rhetorical styles._ PNAS, 2025; first preprint 2024.**
 
-[正式论文](https://doi.org/10.1073/pnas.2422455122) · [已读全文版本](https://arxiv.org/html/2410.16107v2)
+[Published paper](https://doi.org/10.1073/pnas.2422455122) · [Full-text version read](https://arxiv.org/html/2410.16107v2)
 
-已读 Methods、Results、Discussion。两套英文多体裁平行语料，各从 12,000 篇人写文本开始，给前约 500 词要求同风格续写；比较 GPT-4o/mini、Llama 3 8B/70B 的 base/instruct。66 个 Biber 特征显示 instruct 更偏名词化、分词从句等密集书面结构；更大尺寸没有自动缩小风格差距。**限制**：主要是续写任务；base/instruct 的差异不能隔离 SFT、偏好优化、数据或其他后训练步骤。论文也明确无法精确归因。其“informationally dense”是语法包装，不是有价值事实更多。对项目的意义：测体裁适配，保留 base 对照，不能只靠扩大模型。
+Methods, Results, and Discussion read. Two multi-genre parallel corpora of English, each starting from 12,000 human-written texts; the model was given roughly the first 500 words and asked to continue in the same style; base/instruct versions of GPT-4o/mini and Llama 3 8B/70B were compared. 66 Biber features show that instruct models lean further toward nominalization, participial clauses, and other dense written structures; larger model size did not automatically narrow the style gap. **Limitations**: this is mainly a continuation task; the base/instruct difference cannot isolate SFT, preference optimization, data, or other post-training steps. The paper also states explicitly that precise attribution is not possible. Its "informationally dense" is grammatical packaging, not more valuable facts. Implications for the project: test genre fit, keep a base model as a control, and do not rely on scaling the model alone.
 
-### S2 — “delve” 的来源并未被解释清楚
+### S2 — The origin of “delve” has not been clearly explained
 
-**Tom S. Juzek, Zina B. Ward. _Why Does ChatGPT “Delve” So Much? Exploring the Sources of Lexical Overrepresentation in Large Language Models._ COLING, 2025。**
+**Tom S. Juzek, Zina B. Ward. _Why Does ChatGPT “Delve” So Much? Exploring the Sources of Lexical Overrepresentation in Large Language Models._ COLING, 2025.**
 
-[论文 PDF](https://aclanthology.org/2025.coling-main.426.pdf)
+[Paper PDF](https://aclanthology.org/2025.coling-main.426.pdf)
 
-已读 §§4–7、摘要与 Appendix B/D。研究识别 21 个科学摘要中过度出现的词，并比较候选训练语料、Llama base/chat 及人类偏好实验。后训练有关的证据是间接且混合的：base/chat 比较兼有 SFT 与 RLHF；201 名印度参与者实验没有确定证实偏好词导致奖励偏差。**限制**：不能把“RLHF 导致 delve”或“某国标注员英语导致 AI 味”写成结论。项目应记录词语在体裁内的频率，避免建立跨语言、跨用途的永久黑名单。
+§§4–7, the abstract, and Appendix B/D read. The study identifies 21 words that are overrepresented in scientific abstracts and compares candidate training corpora, Llama base/chat, and a human preference experiment. The evidence bearing on post-training is indirect and mixed: the base/chat comparison bundles SFT together with RLHF; the experiment with 201 Indian participants did not conclusively confirm that preferred words cause a reward bias. **Limitations**: neither "RLHF causes delve" nor "the English of annotators from a particular country causes AI-ese" may be written down as a conclusion. The project should record word frequencies within a genre and avoid building permanent blacklists that span languages and use cases.
 
-### S3 — 同质化可以来自模型贡献，而非用户全部语言变化
+### S3 — Homogenization can come from the model's contribution, not from all of the user's language variation
 
-**Vishakh Padmakumar, He He. _Does Writing with Language Models Reduce Content Diversity?_ ICLR, 2024；首版预印本 2023。**
+**Vishakh Padmakumar, He He. _Does Writing with Language Models Reduce Content Diversity?_ ICLR, 2024; first preprint 2023.**
 
-[ICLR 正式条目](https://proceedings.iclr.cc/paper_files/paper/2024/hash/02dec8877fb7c6aa9a79f81661baca7c-Abstract-Conference.html) · [已读全文](https://arxiv.org/html/2309.05196v2)
+[Official ICLR entry](https://proceedings.iclr.cc/paper_files/paper/2024/hash/02dec8877fb7c6aa9a79f81661baca7c-Abstract-Conference.html) · [Full text read](https://arxiv.org/html/2309.05196v2)
 
-已读 §§1–3、结果摘要和 Appendix A。38 名有写作／编辑经验的英语母语者共写 300 篇论说文，比较无辅助、GPT-3、InstructGPT；记录接受建议与实际保留的模型文本。InstructGPT 组文章间更相似、内容和词汇多样性更低，GPT-3 没有同样显著结果；作者将主要变化定位于模型贡献部分。**限制**：旧模型、短论说文、要求每篇至少请求五次建议。不能推出所有自然使用场景的长期结果；但支持分别测单篇质量与整批内容多样性。
+§§1–3, the results summary, and Appendix A read. 38 native English speakers with writing or editing experience wrote 300 argumentative essays in total, comparing an unassisted condition, GPT-3, and InstructGPT; which suggestions were accepted and how much model text was actually retained were recorded. Essays in the InstructGPT condition were more similar to one another and lower in content and lexical diversity, while GPT-3 showed no comparably significant result; the authors localize the main change to the model-contributed portion. **Limitations**: an old model, short essays, and a requirement to request suggestions at least five times per essay. No long-term conclusion about all natural usage settings can be drawn from this; it does, however, support measuring single-piece quality and whole-batch content diversity separately.
 
-### S4 — 跨体裁与 decoding 都会改变风格指标
+### S4 — Cross-genre and decoding both change style metrics
 
-**Sergio E. Zanotto, Segun Aroyehun. _Linguistic and Embedding-Based Profiling of Texts Generated by Humans and Large Language Models._ EMNLP, 2025。**
+**Sergio E. Zanotto, Segun Aroyehun. _Linguistic and Embedding-Based Profiling of Texts Generated by Humans and Large Language Models._ EMNLP, 2025.**
 
-[正式条目](https://aclanthology.org/2025.emnlp-main.1163/) · [论文 PDF](https://aclanthology.org/2025.emnlp-main.1163.pdf)
+[Official entry](https://aclanthology.org/2025.emnlp-main.1163/) · [Paper PDF](https://aclanthology.org/2025.emnlp-main.1163.pdf)
 
-已读摘要、§3 Data、特征说明、结论与 §8 Limitations。使用 RAID 的八个英文领域、11 个模型、四类 decoding 配置，分析句长、依存关系、词汇与语义特征及 style embeddings。人类与模型都有领域变化，但人类在所测特征上变化更大；较新模型之间的风格更接近。**限制**：模型年代不是随机干预，不能把结果归因于合成训练数据；所用模型不是 2026 年前沿模型；依存特征不等于用户体验。项目 benchmark 需要固定或记录 decoding，并做跨领域测试。
+The abstract, §3 Data, the feature descriptions, the conclusions, and §8 Limitations read. Using RAID's eight English domains, 11 models, and four classes of decoding configuration, the study analyses sentence length, dependency relations, lexical and semantic features, and style embeddings. Both humans and models vary by domain, but humans vary more on the features measured; newer models are closer to one another in style. **Limitations**: model vintage is not a randomized intervention, so the result cannot be attributed to synthetic training data; the models used are not 2026 frontier models; dependency features are not the same thing as user experience. The project's benchmark needs to fix or record the decoding settings and to test across domains.
 
-### S5 — 更近的改写研究：风格压缩与内容保留可同时发生
+### S5 — A more recent rewriting study: style compression and content preservation can occur together
 
-**Zhivar Sourati, Farzan Karimi-Malekabadi, Meltem Ozcan, Colin McDaniel, Alireza Ziabari, Jackson Trager, Ala N Tak, Meng Chen, Fred Morstatter, Morteza Dehghani. _The shrinking landscape of linguistic diversity in the age of large language models._ Nature Human Behaviour, 2026-08-24。**
+**Zhivar Sourati, Farzan Karimi-Malekabadi, Meltem Ozcan, Colin McDaniel, Alireza Ziabari, Jackson Trager, Ala N Tak, Meng Chen, Fred Morstatter, Morteza Dehghani. _The shrinking landscape of linguistic diversity in the age of large language models._ Nature Human Behaviour, 2026-08-24.**
 
-[正式 DOI](https://doi.org/10.1038/s41562-026-02550-0) · [正式摘要](https://pubmed.ncbi.nlm.nih.gov/42637911/) · [已读作者版本](https://arxiv.org/html/2502.11266v2)
+[Official DOI](https://doi.org/10.1038/s41562-026-02550-0) · [Official abstract](https://pubmed.ncbi.nlm.nih.gov/42637911/) · [Author version read](https://arxiv.org/html/2502.11266v2)
 
-正式摘要核验为三项研究、七个数据集；读作者版本 Study 1a/1b、Study 2 和检测方法限制。观察时间序列与让模型润色既有文字相结合，发现写作复杂度方差压缩。**限制**：真实世界 AI 身份由 detector 估计；Granger 预测不证明干预因果；embedding 相似度高不足以证明每个事实、立场均保留。不要把其“语义保留”与 S8 的“语义漂移”看成简单互斥：任务、指标及关注的粒度不同。
+The official abstract was verified as covering three studies and seven datasets; in the author version, Study 1a/1b, Study 2, and the limitations of the detection method were read. Combining observational time series with having models polish existing text, it finds a compression in the variance of writing complexity. **Limitations**: real-world AI authorship is estimated by a detector; Granger prediction does not prove interventional causality; high embedding similarity is not enough to prove that every fact and every stance was preserved. Do not treat its "semantic preservation" and S8's "semantic drift" as simply mutually exclusive: the tasks, the metrics, and the granularity of interest all differ.
 
-### S6 — 反证：出现 AI 偏好词，不代表词汇多样性下降
+### S6 — Counter-evidence: the appearance of AI-preferred words does not mean lexical diversity has declined
 
-**Sarah Fitterer, Dominik Gangl, Jannes Ulbrich. _Testing English News Articles for Lexical Homogenization Due to Widespread Use of Large Language Models._ ACL Student Research Workshop, 2025。**
+**Sarah Fitterer, Dominik Gangl, Jannes Ulbrich. _Testing English News Articles for Lexical Homogenization Due to Widespread Use of Large Language Models._ ACL Student Research Workshop, 2025.**
 
-[正式条目](https://aclanthology.org/2025.acl-srw.95/) · [论文 PDF](https://aclanthology.org/2025.acl-srw.95.pdf)
+[Official entry](https://aclanthology.org/2025.acl-srw.95/) · [Paper PDF](https://aclanthology.org/2025.acl-srw.95.pdf)
 
-已读摘要、结果讨论及 §4 Conclusion。比较 2018 与 2024 英文网络新闻：AI 风格词指标升高，但 MATTR 与 Maas 变化可忽略，MTLD 上升，没有支持“词汇多样性下降”。**限制**：没有每篇真实 AI 使用日志；新闻主题、编辑流程和时间共同变化。它与 S5 测的“复杂度方差”不同。项目不能用一个 lexical diversity 分数概括同质化，更不能预设所有多样性越高越好。
+The abstract, the discussion of results, and §4 Conclusion read. Comparing English online news from 2018 and 2024: metrics for AI-style words rose, but the changes in MATTR and Maas were negligible and MTLD rose, giving no support for a "decline in lexical diversity." **Limitations**: there is no per-article log of actual AI use; news topics, editorial processes, and time all changed together. This is not the same thing as the "complexity variance" S5 measures. The project cannot sum homogenization up in a single lexical diversity score, still less assume that more diversity is always better.
 
-### S7 — 单篇质量提高与集体趋同并不矛盾
+### S7 — Higher quality in the individual piece and collective convergence are not in contradiction
 
-**Anil R. Doshi, Oliver P. Hauser. _Generative AI enhances individual creativity but reduces the collective diversity of novel content._ Science Advances, 2024。**
+**Anil R. Doshi, Oliver P. Hauser. _Generative AI enhances individual creativity but reduces the collective diversity of novel content._ Science Advances, 2024.**
 
-[正式论文](https://doi.org/10.1126/sciadv.adn5290) · [作者机构全文 PDF](https://discovery.ucl.ac.uk/10195027/1/Generative%20AI%20enhances%20individual%20creativity%20but%20reduces%20the%20collective%20diversity%20of%20novel%20content.pdf)
+[Published paper](https://doi.org/10.1126/sciadv.adn5290) · [Full-text PDF at the author's institution](https://discovery.ucl.ac.uk/10195027/1/Generative%20AI%20enhances%20individual%20creativity%20but%20reduces%20the%20collective%20diversity%20of%20novel%20content.pdf)
 
-已读出版社返回的 Results（含故事相似度）和 Discussion。在线实验让写作者无辅助，或取得一个／至多五个 AI 故事点子；盲评中的新颖性、可用性、可读性改善，较低初始创造力作者受益较多，但故事之间更相似。**限制**：普通参与者、微型故事、受限点子交互；不是专业营销改写实验。它反驳“像 AI 的内容一定质量更差”，也说明单篇偏好不能替代整批品牌／作者声音多样性。
+The Results returned by the publisher (including story similarity) and the Discussion read. In an online experiment writers either worked unassisted or received one AI story idea, or up to five; in blind evaluation, novelty, usefulness, and readability improved, and writers with lower initial creativity benefited more, but the stories were more similar to one another. **Limitations**: ordinary participants, miniature stories, restricted interaction with the ideas; this is not a professional marketing rewrite experiment. It refutes the notion that "content that looks like AI must be of lower quality," and it also shows that preference on a single piece cannot stand in for diversity of brand and author voice across a whole batch.
 
-### S8 — 改写可能改变立场；此研究的因果表述要收窄
+### S8 — Rewriting may change the stance; this study's causal claims need to be narrowed
 
-**Marwa Abdulhai, Isadora White, Yanming Wan, Ibrahim Qureshi, Joel Leibo, Max Kleiman-Weiner, Natasha Jaques. _How LLMs Distort Our Written Language._ arXiv 2603.18161, 2026-03-18，预印本。**
+**Marwa Abdulhai, Isadora White, Yanming Wan, Ibrahim Qureshi, Joel Leibo, Max Kleiman-Weiner, Natasha Jaques. _How LLMs Distort Our Written Language._ arXiv 2603.18161, 2026-03-18, preprint.**
 
-[全文](https://arxiv.org/html/2603.18161v1)
+[Full text](https://arxiv.org/html/2603.18161v1)
 
-已读 §3、§4.2–4.3、摘要与讨论。包含 100 人写作实验，以及 2021 年收集的 86 篇 ArgRewrite-v2 文章，使用三家模型和五类编辑指令比较人与模型修订。发现即使限定语法编辑也可能改变论点。**限制**：重度使用由随机分配后的行为划分，不能将该亚组差异当成随机化剂量效应；embedding 位移也混合风格与内容；真实审稿部分依赖 AI detector。项目可复用配对修订思路，但必须另行逐命题核查，不能只凭 embedding 验收。
+§3, §4.2–4.3, the abstract, and the discussion read. It covers a writing experiment with 100 people, plus 86 ArgRewrite-v2 essays collected in 2021, comparing human and model revisions across three vendors' models and five classes of editing instruction. It finds that even edits restricted to grammar may change the argument. **Limitations**: heavy use was defined by behaviour after random assignment, so that subgroup difference cannot be treated as a randomized dose effect; embedding displacement also mixes style with content; the real-review portion relies on an AI detector. The project can reuse the paired-revision design, but must verify claim by claim separately, and cannot sign off on embeddings alone.
 
-### S9 — 技术文档的“完整”必须对齐页面与读者上下文
+### S9 — "Completeness" in technical documentation must be aligned with the page and the reader's context
 
-**Karen de Souza, Alexandre Nikolaev, Maarit Koponen. _Generative AI for Technical Writing: Comparing Human and LLM Assessments of Generated Content._ NoDaLiDa/Baltic-HLT, 2025。**
+**Karen de Souza, Alexandre Nikolaev, Maarit Koponen. _Generative AI for Technical Writing: Comparing Human and LLM Assessments of Generated Content._ NoDaLiDa/Baltic-HLT, 2025.**
 
-[论文 PDF](https://aclanthology.org/2025.nodalida-1.67.pdf)
+[Paper PDF](https://aclanthology.org/2025.nodalida-1.67.pdf)
 
-已读 §§3、4.3、5–7。Nokia Network as Code 文档的 12 个 prompts、三个模型、两种温度产生 72 个 RAG 回答；比较专业 technical writer 的 DQF-MQM、LLM judge、BLEU/ROUGE。一个具体案例中，人认为无需重述别页先决条件，判为正确；LLM 因缺该条件而大幅扣分。**限制**：一名人工评估者、私有 RAG 实现、较旧模型。本研究没有直接测“AI 味”，但说明技术文档 evaluator 需要错误类别、读者任务和上下文，词面相似度／泛化“全面性”会失真。
+§§3, 4.3, and 5–7 read. 12 prompts against the Nokia Network as Code documentation, three models, and two temperatures produced 72 RAG answers; a professional technical writer's DQF-MQM assessment, an LLM judge, and BLEU/ROUGE were compared. In one concrete case, the human held that a prerequisite stated on another page did not need restating and marked the answer correct; the LLM deducted heavily because that condition was absent. **Limitations**: a single human evaluator, a proprietary RAG implementation, and older models. This study does not measure "AI-ese" directly, but it shows that an evaluator for technical documentation needs error categories, the reader's task, and context; surface lexical similarity and a generic notion of "comprehensiveness" will distort the picture.
 
-### S10 — 最贴近营销产品的反例：真实效果与文风偏好需分测
+### S10 — The counter-example closest to a marketing product: real effect and style preference must be tested separately
 
-**Jean-Pierre Dubé, Ariel Xu. _Large Language Models and Creative Content Design: a case study of email marketing at Wine Access._ Quantitative Marketing and Economics, 2026-01-13。**
+**Jean-Pierre Dubé, Ariel Xu. _Large Language Models and Creative Content Design: a case study of email marketing at Wine Access._ Quantitative Marketing and Economics, 2026-01-13.**
 
-[出版社全文](https://link.springer.com/article/10.1007/s11129-025-09303-9)
+[Publisher full text](https://link.springer.com/article/10.1007/s11129-025-09303-9)
 
-已读 §3.1、§4、§5、§6。三轮真实邮件 RCT：前两轮使用基于 3,148 篇历史邮件定制的 Mistral7B，第三轮改用 prompting Claude；比较人工、AI、人工编辑 AI。业务判断考虑收入和写作成本。**限制**：单一酒类品牌、短期；训练与 prompting 跨轮次且换模型，不是等条件方法消融；不显著的效果差异不证明等价；净利润投影依赖人力成本假设。不能据此宣布 prompting 必胜，但足以说明必须比较强 prompting 基线，且“感觉少 AI 味”与转化提升应分开验证。
+§3.1, §4, §5, and §6 read. Three rounds of real-world email RCT: the first two rounds used a Mistral7B customized on 3,148 historical emails, while the third switched to prompting Claude; human-written, AI, and human-edited AI were compared. The business judgment took revenue and writing cost into account. **Limitations**: a single wine brand, short term; training and prompting are spread across rounds and the model changed too, so this is not an equal-conditions ablation of methods; a non-significant difference in effect does not prove equivalence; the net-profit projection depends on assumptions about labour cost. Prompting cannot be declared the winner on this basis, but it does show that a strong prompting baseline must be compared against, and that "feels less like AI-ese" and a lift in conversion should be validated separately.
 
-### S11 — 中文：更复杂不等于更自然或更高质量
+### S11 — Chinese: More complex does not equal more natural or higher quality
 
-**Longhui Zou, Ke Li, Joshua Lamerton, Mehdi Mirzapour. _GenAIese — A Comprehensive Comparison of GPT-4o and DeepSeek-V3 for English-to-Chinese Academic Translation._ PSLT, 2025。**
+**Longhui Zou, Ke Li, Joshua Lamerton, Mehdi Mirzapour. _GenAIese — A Comprehensive Comparison of GPT-4o and DeepSeek-V3 for English-to-Chinese Academic Translation._ PSLT, 2025.**
 
-[正式条目](https://aclanthology.org/2025.pslt-1.1/) · [论文 PDF](https://aclanthology.org/2025.pslt-1.1.pdf)
+[Official entry](https://aclanthology.org/2025.pslt-1.1/) · [Paper PDF](https://aclanthology.org/2025.pslt-1.1.pdf)
 
-已读摘要、§2、§6。11 篇英文语言／文化／文学论文，3,498 句译为中文；DeepSeek-V3 的自动 QE 分数较高，GPT-4o 的词汇丰富度和句法复杂度较高。**限制**：没有人类译文对照，也缺中文母语者的自然度评估；不能据此定义中文 AI 味或排名自然度。它提供左嵌套、名词修饰距离等中文相关特征线索，并提醒不要直接移植英文名词化／分词从句量表。
+The abstract, §2, and §6 read. 11 English-language papers on language, culture, and literature, 3,498 sentences translated into Chinese; DeepSeek-V3 scored higher on automatic QE, while GPT-4o was higher in lexical richness and syntactic complexity. **Limitations**: there is no human translation as a reference, and no naturalness evaluation by native Chinese speakers; Chinese AI-ese cannot be defined on this basis, nor can naturalness be ranked. It does supply clues to Chinese-relevant features such as left-branching and the distance of noun modification, and it is a reminder not to transplant English nominalization and participial-clause scales directly.
 
-### S12 — 中文社媒的来源标签存在循环判断风险
+### S12 — Source labels on Chinese social media carry a risk of circular judgment
 
-**Yulong Ma, Xinsheng Zhang, Jinge Ren, Runzhou Wang, Minghu Wang, Yang Chen. _Linguistic features of AI mis/disinformation and the detection limits of LLMs._ Nature Communications；online 2025-12-11，卷 17／文章 456 为 2026。**
+**Yulong Ma, Xinsheng Zhang, Jinge Ren, Runzhou Wang, Minghu Wang, Yang Chen. _Linguistic features of AI mis/disinformation and the detection limits of LLMs._ Nature Communications; online 2025-12-11, volume 17/article 456 for 2026.**
 
-[出版社全文](https://www.nature.com/articles/s41467-025-67145-1)
+[Publisher full text](https://www.nature.com/articles/s41467-025-67145-1)
 
-已读摘要、RQ1 讨论、数据构造／标注方法。中文 Toutiao 长文及 MCFEND 短文的语言差异依赖内容质量；本文看到的中文依存距离方向不能直接套用英文发现。**关键限制**：Toutiao 人／AI 来源由人工按“有疑似 AI 片段则整篇 AI”判断，质量标签主要来自两个 LLM 加专家仲裁。用这种标签训练 AI 味 judge 会把识别者已有印象循环写入 ground truth；短文本的可控生成部分证据更清楚，但任务是误／虚假信息，不能外推专业营销与技术文档。
+The abstract, the RQ1 discussion, and the data construction and annotation methods read. The linguistic differences between long Chinese Toutiao articles and short MCFEND texts depend on content quality; the direction of the Chinese dependency-distance effect seen here cannot be mapped directly onto the English findings. **Key limitation**: the human/AI source of the Toutiao texts was judged by hand on the rule "if any passage is suspected of being AI, the whole article counts as AI," and the quality labels come mainly from two LLMs plus expert arbitration. Training an AI-ese judge on labels like these would circularly write the identifier's existing impressions into the ground truth; the evidence from the controlled-generation portion for short texts is clearer, but the task there is mis/disinformation and does not extrapolate to professional marketing or technical documentation.
 
-## 对原计划的具体修正
+## Specific revisions to the original plan
 
-1. **保留 pre-ChatGPT 数据，但把它作为来源证据和风格参考，不能自动标“高质量”或“低 AI 味”。** 旧营销文案也有套话；旧技术文档可能已不适用。每条须独立标注质量、体裁、语言、读者、年代、来源与使用许可。
-2. **建立至少四个交叉单元：人类好、人类差、AI 好、AI 差。** AI 与人类来源标签用于诊断，不作为风格质量奖励。加入人工改过的 AI、AI 润色的人文和优秀输入的“无需改写”样本，避免把改动率本身当成功。
-3. **同样的事实材料，再做成对写作／改写。** 只有“相似 prompt”往往遗漏原作者掌握的产品事实、体验与目标读者，模型因此空泛是输入问题。应保留 source packet、写作 brief、原稿、编辑约束和改稿，标出事实缺失由谁引入。
-4. **先人工校准评价，再训练 judge。** 人工不是必须就一个“AI 味 1–5 分”达成完全共识；可以让领域编辑逐段标问题、给成对偏好及理由，报告分歧。自动 judge 只能在独立留出的人评集验证后用于迭代。
-5. **把任务完成和忠实度设为门槛，再优化声音。** 技术文档检查术语、参数、约束、步骤是否可执行；营销检查承诺和产品事实有无膨胀，CTA 与受众是否匹配。两者都不应靠虚构细节增加“人味”。
-6. **文章级与语料级分别测。** 单篇可以更好读，但整批文章全变成一个声音。按作者／品牌留出测试，测同一输入不同采样的变化，也测不同输入被改成同一结构的程度。
-7. **训练方法比较要控制条件。** 原始模型、通用规则 prompting、同体裁 exemplar prompting、带语义检查的分步 harness、SFT／偏好优化，应使用相同输入和 held-out 人评。额外采样、judge 调用、人工时间都要计入成本。先找到 prompting 仍稳定失败的错误群，再决定训练要学什么。
+1. **Keep the pre-ChatGPT data, but treat it as source evidence and style reference; it cannot automatically be labelled "high quality" or "low AI-ese."** Old marketing copy has its own clichés too; old technical documentation may no longer apply. Every item must be independently annotated with quality, genre, language, audience, period, source, and usage licence.
+2. **Build at least four crossed cells: human-good, human-bad, AI-good, AI-bad.** The AI and human source labels are for diagnosis, not as a reward for style quality. Add human-edited AI text, human text polished by AI, and "no rewrite needed" samples of excellent input, so that the edit rate itself is not mistaken for success.
+3. **Build paired writing and rewriting from the same factual material.** A "similar prompt" on its own routinely omits the product facts, the experience, and the target audience the original author had in hand; when the model is vague as a result, that is an input problem. Keep the source packet, the writing brief, the source draft, the editing constraints, and the revised draft, and mark who introduced each missing fact.
+4. **Calibrate the evaluation with humans first, then train a judge.** Human evaluators do not have to reach full consensus on a single "AI-ese, 1–5" score; domain editors can mark problems paragraph by paragraph, give paired preferences with reasons, and report their disagreements. An automatic judge may be used for iteration only after it has been validated on an independently held-out human evaluation set.
+5. **Make task completion and fidelity the gate, and only then optimize voice.** For technical documentation, check the terminology, parameters, constraints, and whether the steps can actually be carried out; for marketing, check whether promises and product facts have been inflated and whether the CTA matches the audience. Neither should lean on invented detail to add a "human touch."
+6. **Measure at the article level and the corpus level separately.** A single piece may read better while a whole batch of articles turns into one voice. Hold out test sets by author and by brand, measure the variation across different samplings of the same input, and also measure the degree to which different inputs get rewritten into the same structure.
+7. **Comparisons of training methods must hold conditions constant.** The original model, prompting with general rules, exemplar prompting within the same genre, a step-by-step harness with semantic checks, and SFT/preference optimization should all use the same inputs and the same held-out human evaluation. Extra sampling, judge calls, and human time all have to be counted as cost. Find the clusters of errors where prompting still reliably fails before deciding what training is supposed to learn.
 
-### 体裁化的第一版人工评估任务
+### A first, genre-specific version of the human evaluation task
 
-| 任务 | 先验应保住的内容 | 主要风格问题 | 合适的人类评价者与外部结果 |
+| Task | Content that should be preserved a priori | Main style problems | Suitable human evaluators and external outcomes |
 |---|---|---|---|
-| API／操作文档 | 参数、返回值、错误、条件、代码、跨页上下文 | 无必要引言、重复前提、空泛 benefits、术语漂移 | technical writer 加真实使用者；找信息或完成操作的成功率与时间 |
-| 产品营销长文 | 已证实功能、受众、定位、报价、承诺边界 | 抽象赞美、同义堆砌、无根据具体化、品牌声音消失 | 熟悉行业与品牌的编辑；后续另测点击、转化与信任 |
-| 短广告／标题 | 真正差异、具体卖点、长度和渠道限制 | 高密度形容词、万能 slogan、无对象 CTA | 熟悉渠道的 copywriter；最终通过随机化业务实验 |
-| 个人论说／专业观点 | 作者原始立场、确信程度、论据、例子 | 自动中立化、假平衡、无来源拔高、声音消失 | 作者本人加盲评编辑；分别测忠实与表达质量 |
+| API / how-to documentation | Parameters, return values, errors, conditions, code, cross-page context | Unnecessary introductions, restated prerequisites, vague benefits, terminology drift | A technical writer plus real users; success rate and time to find information or complete an operation |
+| Long-form product marketing | Verified features, audience, positioning, pricing, the limits of what is promised | Abstract praise, piled-up synonyms, unfounded specificity, the brand voice disappearing | An editor who knows the industry and the brand; clicks, conversion, and trust measured separately later |
+| Short ads / headlines | Genuine differentiation, specific selling points, length and channel constraints | Dense adjectives, a one-size-fits-all slogan, a CTA with no object | A copywriter who knows the channel; settled in the end by a randomized business experiment |
+| Personal essay / professional opinion | The author's original stance, degree of conviction, evidence, examples | Automatic neutralization, false balance, unsourced escalation, the voice disappearing | The author themselves plus a blind-reviewing editor; fidelity and quality of expression measured separately |
 
-以上表格是本项目提出的实验设计，不是十二篇论文已经验证的统一 rubric。
+The table above is an experimental design this project is proposing, not a unified rubric that the twelve papers have already validated.
 
-## 结论与证据对应
+## Conclusions mapped to evidence
 
-| 可说的结论 | 主要依据 | 不应越界的说法 |
+| Conclusions that can be stated | Main basis | Claims that would overreach |
 |---|---|---|
-| 部分模型存在系统性体裁与语法偏差 | S1、S4 | 所有模型、语言、体裁都一样 |
-| 后训练很可能参与风格收窄 | S1、S2、S3 | 已证实某个 RLHF 算法或标注地区是根因 |
-| 更大模型不是风格改善的充分条件 | S1 | 任何任务都只需要小模型 |
-| 单篇质量与整批多样性可分离 | S3、S5、S6、S7 | AI 文本一定词汇贫乏或一定写得差 |
-| 改写忠实度需要单独验证 | S8，S5 的指标限制 | 高 embedding similarity 证明没有语义漂移 |
-| 技术文档必须按上下文评估 | S9 | 越全面越长就越好，或短文一定更好 |
-| 营销风格与业务效果须分测 | S10 | 去 AI 味必然提高转化；某种训练必胜 |
-| 中文需要自己的校准集与特征 | S11、S12 | 用英文 AI 高频词／句法表直接打分中文 |
+| Some models show systematic genre and grammatical bias | S1, S4 | That all models, languages, and genres behave alike |
+| Post-training very likely plays a part in style narrowing | S1, S2, S3 | That a particular RLHF algorithm or annotation region has been confirmed as the root cause |
+| A larger model is not a sufficient condition for better style | S1 | That a small model is all any task needs |
+| Single-piece quality and whole-batch diversity can be separated | S3, S5, S6, S7 | That AI text is necessarily lexically impoverished or necessarily badly written |
+| Rewrite fidelity needs to be verified on its own | S8, plus the metric limitations of S5 | That high embedding similarity proves there is no semantic drift |
+| Technical documentation must be evaluated in context | S9 | That more comprehensive and longer is always better, or that shorter is always better |
+| Marketing style and business effect must be measured separately | S10 | That removing AI-ese necessarily improves conversion; that some particular training approach is bound to win |
+| Chinese needs its own calibration set and its own features | S11, S12 | Scoring Chinese directly with English AI high-frequency word and syntax tables |
 
-未完成的证据工作：尚未找到覆盖中文与英文、technical docs 与 marketing、并经多领域人类标注验证的统一“AI 味”benchmark；本轮也没有训练或复现实验，不能给出 post-training 相对最强 prompting 的实际增益。已有研究充分支持立项做测量和受控比较，尚不支持先押注某种算法、模型尺寸或单一 reward。
+Evidence work still outstanding: no unified "AI-ese" benchmark has yet been found that covers both Chinese and English, both technical docs and marketing, and has been validated by human annotation across multiple domains; this round also ran no training or reproduction experiments, so no figure can be given for the actual gain of post-training relative to the strongest prompting. The existing research amply supports launching a project to do measurement and controlled comparison; it does not yet support betting up front on a particular algorithm, model size, or single reward.

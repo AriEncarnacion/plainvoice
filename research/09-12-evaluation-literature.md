@@ -1,220 +1,220 @@
-# Plainvoice：如何定义 ground truth，并验证「去 AI 味」真的改善了写作
+# Plainvoice: How to define ground truth, and verify that "removing AI-ese" really did improve the writing
 
-执行口径：本备忘录保留文献推导出的备选量表与规模；第一轮统一采用[标注协议 v0.1](../09-12-annotation-protocol.md)的 0–3 问题严重度，以及[主方案](../09-12-research-and-experiment-plan.md)的 80 项 pilot、实验臂编号和统计规则。
+Operative scope: this memorandum keeps the candidate scales and sample sizes derived from the literature; the first round uniformly adopts the 0–3 problem severity of the [annotation protocol v0.1](../09-12-annotation-protocol.md), together with the 80-item pilot, the experiment-arm numbering, and the statistical rules of the [main plan](../09-12-research-and-experiment-plan.md).
 
-研究日期：2026-09-12。范围：中文与英文、technical documentation 与 marketing copy 四个场景同等优先。本备忘录聚焦测量与评估，属于第一轮有针对性的文献调研；不是穷尽到 2026 年的系统综述。文献均链接原始论文或作者发布的正文，未以二手文章作为结论依据。
+Research date: 2026-09-12. Scope: Chinese and English, technical documentation and marketing copy — the four scenarios have equal priority. This memo focuses on measurement and evaluation and belongs to the first round of targeted literature research; it is not an exhaustive systematic review up to 2026. Every reference links to the original paper or to body text published by the authors; no secondary article is used as the basis for a conclusion.
 
-## 核心判断
+## Core judgment
 
-用户提出「先做 evaluator，再训练 rewriter，再和 prompting / harness 比较」的顺序基本合理，但 evaluator 的目标不能设成「检测作者是不是 AI」。至少要分开三件事：
+The order the user proposed — "build the evaluator first, then train the rewriter, then compare against prompting / harness" — is broadly reasonable, but the evaluator's target must not be set to "detect whether the author is an AI." At least three things have to be kept apart:
 
-| 要测的对象 | 标签来源 | 在本项目中的用途 |
+| Object to be measured | Source of labels | Use in this project |
 |---|---|---|
-| Provenance：实际由谁、用什么流程产生 | 可核验的来源、时间戳、生成日志、编辑记录 | 分析数据覆盖和混淆因素，不能直接当优劣标签 |
-| Perceived AI-ness：读者觉得模板化、泛化、机械的程度 | 目标读者盲评，最好附具体文本证据 | 用户感知指标，必须承认文化、语言、场景和个人差异 |
-| Writing utility：是否准确、具体、清楚、适用 | 编辑/领域专家依据 brief 和源材料评估；适用时做客观检查 | 产品主要目标，与内容保真一起作为选择模型的依据 |
+| Provenance: who actually produced it, and by what process | Verifiable sources, timestamps, generation logs, edit records | Analysing data coverage and confounding factors; it cannot be used directly as a quality label |
+| Perceived AI-ness: how templated, generic, and mechanical readers find it | Blind evaluation by target readers, ideally with concrete textual evidence | A user-perception metric; it must acknowledge cultural, linguistic, contextual, and individual differences |
+| Writing utility: whether it is accurate, specific, clear, and fit for purpose | Assessed by editors/domain experts against the brief and source material; objective checks where applicable | The product's primary objective; together with content fidelity it is the basis for choosing a model |
 
-把 pre-ChatGPT 文本标成「好」，把模型生成文本标成「坏」，很容易训练出年代、词汇、网站和排版分类器。高质量的人类文字、糟糕的人类套话、优质 AI 改写、糟糕 AI 文本都应该进入标注范围。AI 来源不是负类，人类来源也不是正类。这是本项目的数据设计建议，不是某一论文已经证明的普适分类法。
+Labelling pre-ChatGPT text "good" and model-generated text "bad" makes it very easy to train a classifier for era, vocabulary, website, and layout. High-quality human writing, bad human boilerplate, good AI rewrites, and bad AI text should all enter the annotation scope. AI provenance is not the negative class, and human provenance is not the positive class. This is a data-design recommendation for this project, not a universal taxonomy that some paper has already proven.
 
-对用户举的「不是 X，而是 Y」，应标注它是否提供真实区分、边界或机制。比如「此操作不是追加写入，而是覆盖现有文件」有重要含义；「这不是一次升级，而是一场革命」在没有证据时可能只增加情绪。句式出现次数可以辅助定位，不能单独决定质量。避免把「去 AI 味」变成另一个固定腔调。
+For the 「不是 X，而是 Y」 (*"not X, but rather Y"*) construction the user raised, annotate whether it supplies a real distinction, boundary, or mechanism. For example, 「此操作不是追加写入，而是覆盖现有文件」 (*"this operation is not an append write, but an overwrite of the existing file"*) carries important meaning, whereas 「这不是一次升级，而是一场革命」 (*"this is not an upgrade, it is a revolution"*) may merely add emotion when no evidence is given. The number of occurrences of the pattern can help locate candidates; it cannot decide quality on its own. Avoid turning "removing AI-ese" into just another fixed register.
 
-## 12 篇关键文献与适用边界
+## 12 key papers and their limits of applicability
 
-### E01. 人类也会把「听起来像人」与真实来源混淆
+### E01. Humans, too, confuse "sounds human" with actual provenance
 
-**Maurice Jakesch, Jeffrey T. Hancock, Mor Naaman. 2023. _Human heuristics for AI-generated language are flawed_. PNAS 120(11), e2208839120.** [论文 DOI](https://doi.org/10.1073/pnas.2208839120) · [作者预印本全文](https://arxiv.org/pdf/2206.07271)
+**Maurice Jakesch, Jeffrey T. Hancock, Mor Naaman. 2023. _Human heuristics for AI-generated language are flawed_. PNAS 120(11), e2208839120.** [Paper DOI](https://doi.org/10.1073/pnas.2208839120) · [Full text of the authors' preprint](https://arxiv.org/pdf/2206.07271)
 
-六个实验共 4,600 名参与者，考察职业、约会与住宿平台的自我介绍。主要实验的来源判断准确率约 50%–52%。第一人称、家庭话题等让读者感觉更像人，却未必真能区分来源。另一方面，让另一组人直接评价「重复」「不通顺」时，可以测到部分真实问题。论文还展示了根据人类感知选出的文本，比实际人类文字更容易被判为人写。
+Six experiments with 4,600 participants in total examined self-presentations on professional, dating, and accommodation platforms. Accuracy at judging provenance in the main experiments was about 50%–52%. First person, family topics, and the like make readers feel the text is more human, yet may not actually distinguish provenance. On the other hand, when a separate set of readers was asked to rate "repetitive" and "not fluent" directly, some real problems could be measured. The paper also shows that text selected on the basis of human perception is judged human-written more readily than actual human writing.
 
-**本项目采用：**把「模板感/空泛/冗余」拆成可定位的编辑问题；另问整体 AI 感，不让来源猜测主导所有评分。
+**Adopted by this project:** break "sense of templatedness / vagueness / redundancy" into locatable editing problems; ask about overall AI-ness as a separate question, so that guesses about provenance do not dominate every score.
 
-**限制：**这是英文 self-presentation、较早模型的研究，不能推出今天专业编辑对中文技术文档也只有随机判断水平。可迁移的是测量警示，不是准确率。
+**Limitations:** this is a study of English self-presentation with an earlier model; it cannot be extended to conclude that today's professional editors are also at chance level on Chinese technical documentation. What transfers is the measurement caution, not the accuracy figure.
 
-**阅读范围：**全文中的实验设置、主结果、启发式分析、优化文本与讨论；未复核附录所有统计模型。
+**Reading scope:** the experimental setup, main results, heuristic analysis, optimized texts, and discussion in the full text; the appendix's statistical models were not re-checked.
 
-### E02. Detector 的低困惑度信号可能惩罚清楚、朴素的非母语英文
+### E02. A detector's low-perplexity signal may penalize clear, plain non-native English
 
-**Weixin Liang, Mert Yuksekgonul, Yining Mao, Eric Wu, James Zou. 2023. _GPT detectors are biased against non-native English writers_. Patterns 4(7), 100779.** [正式全文](https://pmc.ncbi.nlm.nih.gov/articles/PMC10382961/)
+**Weixin Liang, Mert Yuksekgonul, Yining Mao, Eric Wu, James Zou. 2023. _GPT detectors are biased against non-native English writers_. Patterns 4(7), 100779.** [Full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC10382961/)
 
-研究用七种 detector 评估 91 篇 TOEFL 文章与 88 篇美国八年级文章，TOEFL 文章平均误报率为 61.3%；增强词汇后降到 11.6%。这是特定检测器、样本与时间的结果，不是所有现有检测器的现行误报率。它说明稀有词、复杂表达和检测分数有可能绑在一起。
+The study used seven detectors to evaluate 91 TOEFL essays and 88 US eighth-grade essays; the average false-positive rate on the TOEFL essays was 61.3%, dropping to 11.6% after the vocabulary was enriched. This is a result for particular detectors, samples, and a particular moment in time, not the current false-positive rate of every detector in use. It shows that rare words, elaborate expression, and detection scores may be bound together.
 
-**本项目采用：**单列非母语英文切片；把清晰、朴素、专业的英文放进正例。不要训练模型为了「像人」故意增加罕见词、语法错误或口语填充。
+**Adopted by this project:** keep a separate non-native-English slice; put clear, plain, professional English into the positive examples. Do not train the model to deliberately add rare words, grammatical errors, or spoken filler in order to seem "human."
 
-**限制：**两组人的年龄、体裁、写作环境也不一致；该设计不能把全部差异精确归因于母语身份。中文应独立验证，不能直接套用 TOEFL 结论。
+**Limitations:** the two sets of writers also differ in age, genre, and writing environment; the design cannot attribute all of the difference precisely to native-speaker status. Chinese should be validated independently; the TOEFL conclusions cannot simply be carried over.
 
-**阅读范围：**正式全文的样本、误报、词汇干预与讨论。
+**Reading scope:** the samples, false positives, vocabulary intervention, and discussion in the formal full text.
 
-### E03. 多语言 detection 数据集不能直接充当双语文案质量集
+### E03. A multilingual detection dataset cannot serve directly as a bilingual copy-quality set
 
-**Yuxia Wang et al. 2024. _M4: Multi-Generator, Multi-Domain, and Multi-Lingual Black-Box Machine-Generated Text Detection_. EACL.** [正式论文](https://aclanthology.org/2024.eacl-long.83/) · [PDF](https://aclanthology.org/2024.eacl-long.83.pdf)
+**Yuxia Wang et al. 2024. _M4: Multi-Generator, Multi-Domain, and Multi-Lingual Black-Box Machine-Generated Text Detection_. EACL.** [formal paper](https://aclanthology.org/2024.eacl-long.83/) · [PDF](https://aclanthology.org/2024.eacl-long.83.pdf)
 
-M4 覆盖多个生成器、领域及包括中英文在内的七种语言，发现未见领域与生成器上的泛化仍困难。其中文部分是 Baike/Web QA；英文包括 Wikipedia、WikiHow、Reddit、arXiv 与 PeerRead。论文表 1 的总数为 147,895 条人类/机器文本，中文为 9,000 条，其中 3,000 条人类文本；不要把「parallel」理解成逐句忠实改写对。
+M4 covers multiple generators, multiple domains, and seven languages including Chinese and English, and finds that generalization to unseen domains and generators remains difficult. Its Chinese portion is Baike/Web QA; the English portion includes Wikipedia, WikiHow, Reddit, arXiv, and PeerRead. Table 1 of the paper gives a total of 147,895 human/machine texts, of which 9,000 are Chinese, including 3,000 human texts; do not read "parallel" as faithful sentence-by-sentence rewrite pairs.
 
-**本项目采用：**借鉴跨生成器、跨领域和跨语言切分；可用它做外部分布压力测试。
+**Adopted by this project:** borrow its cross-generator, cross-domain, and cross-language splits; it can be used as an external-distribution stress test.
 
-**限制：**中英文领域不匹配，无法仅由整体分数区分语言影响与领域影响；QA 不代表技术文档或营销文案。没有本项目所需的「更好改写」偏好标签。
+**Limitations:** the Chinese and English domains do not match, so language effects and domain effects cannot be separated from the overall scores alone; QA does not stand in for technical documentation or marketing copy. It does not carry the "better rewrite" preference labels this project needs.
 
-**阅读范围：**数据构造、表 1、中文来源、human evaluation 与跨语言实验定义。
+**Reading scope:** data construction, Table 1, the Chinese sources, human evaluation, and the definitions of the cross-language experiments.
 
-### E04. Detection 分数对解码和表面改动很脆弱
+### E04. Detection scores are very fragile with respect to decoding and surface changes
 
-**Liam Dugan, Alyssa Hwang, Filip Trhlík, Andrew Zhu, Josh Magnus Ludan, Hainiu Xu, Daphne Ippolito, Chris Callison-Burch. 2024. _RAID: A Shared Benchmark for Robust Evaluation of Machine-Generated Text Detectors_. ACL.** [正式论文](https://aclanthology.org/2024.acl-long.674/) · [PDF](https://aclanthology.org/2024.acl-long.674.pdf)
+**Liam Dugan, Alyssa Hwang, Filip Trhlík, Andrew Zhu, Josh Magnus Ludan, Hainiu Xu, Daphne Ippolito, Chris Callison-Burch. 2024. _RAID: A Shared Benchmark for Robust Evaluation of Machine-Generated Text Detectors_. ACL.** [formal paper](https://aclanthology.org/2024.acl-long.674/) · [PDF](https://aclanthology.org/2024.acl-long.674.pdf)
 
-RAID 含超过 600 万条 generation/变体，覆盖 11 个生成器、8 个主要领域、11 类攻击和 4 种解码设置；测试 12 个检测器。换采样方式、repetition penalty、生成器或表面形式都会影响检测。主集采用 pre-2022 人类来源；这是一种 provenance 选择，并未把人类文字定义为优秀。
+RAID contains over 6 million generations/variants, covering 11 generators, 8 main domains, 11 classes of attack, and 4 decoding settings; 12 detectors were tested. Changing the sampling method, the repetition penalty, the generator, or the surface form all affect detection. The main set uses pre-2022 human sources; that is a provenance choice, and it does not define human writing as excellent.
 
-**本项目采用：**保留 decoding、模型版本、prompt、来源文档的完整元数据；相同源文的全部生成与改写必须在同一数据分区。
+**Adopted by this project:** retain complete metadata for decoding, model version, prompt, and source document; every generation and rewrite of the same source text must sit in the same data partition.
 
-**限制：**核心任务是 detection，主集不是中文市场文案。某些压力测试会损坏数字等内容，因此「检测分数下降」本身不能说明 rewriter 有益。
+**Limitations:** the core task is detection, and the main set is not Chinese marketing copy. Some stress tests damage content such as numbers, so a "drop in detection score" cannot by itself show that the rewriter is beneficial.
 
-**阅读范围：**数据构建、生成设置、检测器与阈值评估、limitations；未逐项复现攻击。
+**Reading scope:** data construction, generation settings, detector and threshold evaluation, limitations; the attacks were not reproduced item by item.
 
-### E05. Detection 的理论边界不能被夸大成「任何检测都无效」
+### E05. The theoretical limits of detection must not be inflated into "no detection works at all"
 
-**Vinu Sankar Sadasivan, Aounon Kumar, Sriram Balasubramanian, Wenxiao Wang, Soheil Feizi. _Can AI-Generated Text be Reliably Detected?_ 2023 首发；本轮阅读 2025-01-17 v4.** [全文](https://arxiv.org/html/2303.11156v4)
+**Vinu Sankar Sadasivan, Aounon Kumar, Sriram Balasubramanian, Wenxiao Wang, Soheil Feizi. _Can AI-Generated Text be Reliably Detected?_ First released 2023; v4 of 2025-01-17 read this round.** [full text](https://arxiv.org/html/2303.11156v4)
 
-论文研究递归 paraphrasing 对多类 detector 的影响，也指出改写可能轻微降低文本质量。其理论把最佳 detector 的 AUROC 上界与人类/模型文本分布的 total variation distance 联系起来：分布越接近，来源识别越困难。
+The paper studies the effect of recursive paraphrasing on several classes of detector, and also notes that paraphrasing may slightly reduce text quality. Its theory links the AUROC upper bound of the optimal detector to the total variation distance between the human and model text distributions: the closer the distributions, the harder provenance is to identify.
 
-**本项目采用：**detector 只作为诊断指标；自然、准确的 AI 改写也可能难以检测，反之则未必。
+**Adopted by this project:** the detector serves only as a diagnostic indicator; natural, accurate AI rewrites may also be hard to detect, but the converse does not necessarily follow.
 
-**限制：**「模型进步一定让真实世界所有文本分布无限接近」不是该定理直接证明的事实；实际 TV 难以从有限文本精确估计。论文不证明所有给定领域的 detector 都没有用。
+**Limitations:** "model progress must bring every real-world text distribution infinitely close" is not a fact this theorem directly proves; in practice TV is hard to estimate precisely from finite text. The paper does not prove that detectors are useless in every given domain.
 
-**阅读范围：**v4 摘要、paraphrase 质量说明、理论第 4 节、Theorem 1 及假设解释；未逐行检查证明。
+**Reading scope:** the v4 abstract, the note on paraphrase quality, the theory in Section 4, Theorem 1 and the explanation of its assumptions; the proof was not checked line by line.
 
-### E06. 风格迁移已有更合适的多维评估传统
+### E06. Style transfer already has a better-suited multi-dimensional evaluation tradition
 
-**Remi Mir, Bjarke Felbo, Nick Obradovich, Iyad Rahwan. 2019. _Evaluating Style Transfer for Text_. NAACL.** [正式论文](https://aclanthology.org/N19-1049/) · [PDF](https://aclanthology.org/N19-1049.pdf)
+**Remi Mir, Bjarke Felbo, Nick Obradovich, Iyad Rahwan. 2019. _Evaluating Style Transfer for Text_. NAACL.** [formal paper](https://aclanthology.org/N19-1049/) · [PDF](https://aclanthology.org/N19-1049.pdf)
 
-论文区分 style transfer intensity、content preservation、naturalness，主张观察这些目标间的取舍。在 Yelp 情感迁移实验中，自然度的相对判断比绝对分数有更高的标注一致性；但风格强度并没有同样的普遍收益。该实验中的句子困惑度没有与自然度人评显著相关。
+The paper distinguishes style transfer intensity, content preservation, and naturalness, and argues for watching the trade-offs among these objectives. In the Yelp sentiment transfer experiment, relative judgments of naturalness had higher annotation agreement than absolute scores; style intensity, however, showed no comparable general gain. Sentence perplexity in that experiment was not significantly correlated with human evaluation of naturalness.
 
-**本项目采用：**同时记录改写幅度、保真、自然度与任务质量；用 blinded pairwise preference 做主要比较，并用分维度评分诊断原因。
+**Adopted by this project:** record the extent of the rewrite, fidelity, naturalness, and task quality together; use blinded pairwise preference for the main comparison, and per-dimension scores to diagnose the cause.
 
-**限制：**情感转换比开放式「去 AI 味」边界清楚得多；论文提出的词级 masking 和 WMD 不应直接作为技术文档事实检查器。
+**Limitations:** sentiment transfer has far clearer boundaries than open-ended "removing AI-ese"; the word-level masking and WMD the paper proposes should not be used directly as a fact checker for technical documentation.
 
-**阅读范围：**评估定义、human evaluation、结果与 tradeoff 讨论；未复现旧模型。
+**Reading scope:** the evaluation definitions, human evaluation, results, and the tradeoff discussion; the older models were not reproduced.
 
-### E07. 通用 LLM judge 可以有用，但必须先对当前任务做 meta-evaluation
+### E07. A general-purpose LLM judge can be useful, but meta-evaluation on the task at hand must come first
 
-**Lianmin Zheng et al. 2023. _Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena_. NeurIPS Datasets and Benchmarks.** [全文](https://arxiv.org/html/2306.05685)
+**Lianmin Zheng et al. 2023. _Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena_. NeurIPS Datasets and Benchmarks.** [full text](https://arxiv.org/html/2306.05685)
 
-论文系统分析位置、冗长、自我偏好与推理能力限制。GPT-4 judge 在其具体人类偏好数据上达到超过 80% 的一致性；这不是对任何新写作任务、任何新 judge 的准确率保证。它区分 pairwise、单答案打分、带参考答案的评判。
+The paper systematically analyses position bias, verbosity bias, self-preference, and limited reasoning ability. The GPT-4 judge reaches over 80% agreement on its particular human preference data; that is not an accuracy guarantee for any new writing task or any new judge. It distinguishes pairwise comparison, single-answer scoring, and judging with a reference answer.
 
-**本项目采用：**隐藏模型名与来源，随机 A/B，交换顺序重复一部分样本；校准集上比较 judge 与领域编辑的一致性，分别报告四个场景。用不同家族 judge 可以发现分歧，但不能证明偏差独立。
+**Adopted by this project:** hide model names and provenance, randomize A/B, and repeat a portion of the samples with the order swapped; compare the agreement between the judge and domain editors on a calibration set, reporting the four scenarios separately. Using judges from different families can surface disagreement, but cannot prove the biases are independent.
 
-**限制：**通用聊天偏好不等于专业文案效果；人类评价本身也可能偏爱长、整齐和自信的答案。
+**Limitations:** general chat preference is not the same as professional copy performing well; human evaluation itself may also favour long, tidy, confident answers.
 
-**阅读范围：**评估形式、bias 章节、human agreement 与数据定义。
+**Reading scope:** the evaluation formats, the bias sections, human agreement, and the data definitions.
 
-### E08. Rubric judge 的可行起点与自我强化风险来自同一篇论文
+### E08. The workable starting point for a rubric judge and the risk of self-reinforcement come from the same paper
 
-**Yang Liu, Dan Iter, Yichong Xu, Shuohang Wang, Ruochen Xu, Chenguang Zhu. 2023. _G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment_. EMNLP.** [正式论文](https://aclanthology.org/2023.emnlp-main.153/) · [PDF](https://aclanthology.org/2023.emnlp-main.153.pdf)
+**Yang Liu, Dan Iter, Yichong Xu, Shuohang Wang, Ruochen Xu, Chenguang Zhu. 2023. _G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment_. EMNLP.** [formal paper](https://aclanthology.org/2023.emnlp-main.153/) · [PDF](https://aclanthology.org/2023.emnlp-main.153.pdf)
 
-G-Eval 使用任务/维度定义、评价步骤与结构化填表。论文在 SummEval 上报告平均 Spearman 相关 0.514，同时明确提出 judge 可能偏好 LLM 生成的摘要，并警告把这种评价直接用于调优可能强化自身偏好。
+G-Eval uses task/dimension definitions, evaluation steps, and a structured form to fill in. The paper reports an average Spearman correlation of 0.514 on SummEval, while explicitly raising the possibility that the judge favours LLM-generated summaries, and warning that feeding such evaluation straight into tuning may reinforce its own preferences.
 
-**本项目采用：**先用 rubric + 锚点样例 + evidence spans 作为 evaluator baseline；分别校准各维度。让评价输出局部证据和简短理由，并不意味着理由必然正确，仍要抽检。
+**Adopted by this project:** start with rubric + anchor examples + evidence spans as the evaluator baseline; calibrate each dimension separately. Having the evaluation output local evidence and a short rationale does not mean the rationale is necessarily correct; spot checks are still required.
 
-**限制：**偏好 LLM 文本在论文中是初步分析和潜在解释，不是已排除混淆因素的普遍结论；摘要/对话上的相关性不能直接外推。
+**Limitations:** the preference for LLM text is, in the paper, a preliminary analysis and a possible explanation, not a general conclusion with confounders ruled out; correlations on summarization/dialogue cannot be extrapolated directly.
 
-**阅读范围：**方法、SummEval 表 1、LLM 输出偏好分析、limitations。
+**Reading scope:** the method, SummEval Table 1, the analysis of preference for LLM output, and the limitations.
 
-### E09. 控制长度，但不能把「越短越好」换成新的奖励
+### E09. Control for length, but do not turn "shorter is better" into a new reward
 
-**Yann Dubois, Balázs Galambosi, Percy Liang, Tatsunori B. Hashimoto. _Length-Controlled AlpacaEval: A Simple Way to Debias Automatic Evaluators_. 2024 首发；本轮阅读 2025-03-10 v2.** [全文](https://arxiv.org/html/2404.04475v2)
+**Yann Dubois, Balázs Galambosi, Percy Liang, Tatsunori B. Hashimoto. _Length-Controlled AlpacaEval: A Simple Way to Debias Automatic Evaluators_. First released 2024; v2 of 2025-03-10 read this round.** [full text](https://arxiv.org/html/2404.04475v2)
 
-通过回归调整输出长度差，估计相同长度时的偏好；在其 AlpacaEval 实验中，与 Chatbot Arena 排名的 Spearman 相关从 0.94 提升到 0.98。作者明确列出假设与适用边界：英文简单指令、特定 judge prompt、希望比较相同长度的输出。
+Regression is used to adjust away differences in output length and estimate the preference that would hold at equal length; in their AlpacaEval experiment, the Spearman correlation with Chatbot Arena rankings rose from 0.94 to 0.98. The authors state the assumptions and limits of applicability explicitly: simple English instructions, a particular judge prompt, and a wish to compare outputs of the same length.
 
-**本项目采用：**同时报告原始偏好、长度变化、信息保留和长度匹配的敏感性分析。
+**Adopted by this project:** report the raw preference, the change in length, information retention, and a length-matched sensitivity analysis together.
 
-**限制：**本项目的目标之一可能就是删掉废话，长度也是方法实际产生的中介结果。仅报告控制长度后的分数会把真实收益也一起消掉；不能强制技术文档与 tagline 长度相同，也不能把中英文 token 数直接混用。
+**Limitations:** one of this project's goals may be precisely to cut the filler, and length is also a mediating outcome the method genuinely produces. Reporting only the length-controlled score would cancel out the real gain along with it; technical documentation and a tagline cannot be forced to the same length, and Chinese and English token counts cannot simply be pooled.
 
-**阅读范围：**定义、回归控制、主结果、other biases 与 limitations。
+**Reading scope:** the definitions, the regression control, the main results, other biases, and the limitations.
 
-### E10. 用原子事实检查改写，但必须补上 recall
+### E10. Check rewrites with atomic facts, but recall has to be added back
 
-**Sewon Min, Kalpesh Krishna, Xinxi Lyu, Mike Lewis, Wen-tau Yih, Pang Koh, Mohit Iyyer, Luke Zettlemoyer, Hannaneh Hajishirzi. 2023. _FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation_. EMNLP.** [正式论文](https://aclanthology.org/2023.emnlp-main.741/) · [PDF](https://aclanthology.org/2023.emnlp-main.741.pdf)
+**Sewon Min, Kalpesh Krishna, Xinxi Lyu, Mike Lewis, Wen-tau Yih, Pang Koh, Mohit Iyyer, Luke Zettlemoyer, Hannaneh Hajishirzi. 2023. _FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation_. EMNLP.** [formal paper](https://aclanthology.org/2023.emnlp-main.741/) · [PDF](https://aclanthology.org/2023.emnlp-main.741.pdf)
 
-FActScore 把长文拆成原子事实，逐条检查可信来源是否支持，再计算 factual precision。论文明确说明它不衡量 recall：少说甚至不说，可以减少出错机会却仍不满足任务。
+FActScore breaks long text into atomic facts, checks one by one whether a trustworthy source supports each, and then computes factual precision. The paper states explicitly that it does not measure recall: saying less, or saying nothing, can cut the chance of error and still fail the task.
 
-**本项目采用：**对改写做两个方向的检查：输出新增/改变的断言是否有材料支持，以及原文要求保留的断言是否仍完整存在。另检查数字、单位、否定、条件、版本、API 标识符与承诺强度。
+**Adopted by this project:** check rewrites in both directions — whether the assertions the output adds or changes are supported by the source material, and whether the assertions the source draft requires to be kept are still present in full. Also check numbers, units, negations, conditions, versions, API identifiers, and the strength of commitments.
 
-**限制：**输入文本本身可能错误；「忠于原文」与「真实世界正确」要区分。严谨模式应提供 source pack 或经人确认的 claim ledger。营销比喻和观点不能全部当成事实去打分。
+**Limitations:** the input text may itself be wrong; "faithful to the source draft" and "correct in the real world" must be kept apart. Strict mode should supply a source pack or a human-confirmed claim ledger. Marketing metaphors and opinions cannot all be scored as if they were facts.
 
-**阅读范围：**定义、知识源假设、biography 范围、precision/recall 限制。
+**Reading scope:** the definitions, the knowledge-source assumptions, the biography scope, and the precision/recall limitations.
 
-### E11. Judge 要能拒绝「好听但没完成任务」
+### E11. The judge must be able to reject "sounds good but did not do the task"
 
-**Zhiyuan Zeng, Jiatong Yu, Tianyu Gao, Yu Meng, Tanya Goyal, Danqi Chen. 2024. _Evaluating Large Language Models at Evaluating Instruction Following_. ICLR.** [全文](https://arxiv.org/html/2310.07641v2) · [作者数据仓库](https://github.com/princeton-nlp/LLMBar)
+**Zhiyuan Zeng, Jiatong Yu, Tianyu Gao, Yu Meng, Tanya Goyal, Danqi Chen. 2024. _Evaluating Large Language Models at Evaluating Instruction Following_. ICLR.** [full text](https://arxiv.org/html/2310.07641v2) · [Authors' data repository](https://github.com/princeton-nlp/LLMBar)
 
-LLMBar 有 419 个成对样本，100 个 natural、319 个 adversarial。每对中一个遵守指令，另一个偏离，但可能更有吸引力、更流畅。作者以此检查 judge 是否被表面质量误导，并测试改进评价的 prompting 方法。
+LLMBar has 419 paired samples: 100 natural and 319 adversarial. In each pair one member follows the instruction and the other departs from it, yet may be more appealing and more fluent. The authors use this to check whether the judge is misled by surface quality, and to test prompting methods that improve evaluation.
 
-**本项目采用：**构造「更口语但漏条件」「更具体但捏造数据」「去掉套话但改错含义」「更有情绪但不符合品牌」等 challenge pairs。把约束失败与风格偏好分开记录。
+**Adopted by this project:** construct challenge pairs such as "more colloquial but drops a condition," "more specific but fabricates data," "removes the boilerplate but gets the meaning wrong," and "more emotive but off-brand." Record constraint failures separately from style preference.
 
-**限制：**LLMBar 的偏好尽可能客观，本项目的自然度与品牌适配是主观的；不能假定每一对改写都有唯一赢家。
+**Limitations:** LLMBar's preferences are as objective as they can be made, whereas this project's naturalness and brand fit are subjective; it cannot be assumed that every rewrite pair has a single winner.
 
-**阅读范围：**任务定义、419 条构成、adversarial construction 与 prompting 设计。
+**Reading scope:** the task definition, the composition of the 419 items, the adversarial construction, and the prompting design.
 
-### E12. 多采样挑最好也会过拟合 reward，不只是 RL
+### E12. Sampling many and picking the best also overfits the reward — this is not confined to RL
 
-**Leo Gao, John Schulman, Jacob Hilton. 2023. _Scaling Laws for Reward Model Overoptimization_. ICML.** [正式论文](https://proceedings.mlr.press/v202/gao23h.html) · [PDF](https://proceedings.mlr.press/v202/gao23h/gao23h.pdf)
+**Leo Gao, John Schulman, Jacob Hilton. 2023. _Scaling Laws for Reward Model Overoptimization_. ICML.** [formal paper](https://proceedings.mlr.press/v202/gao23h.html) · [PDF](https://proceedings.mlr.press/v202/gao23h/gao23h.pdf)
 
-论文在 synthetic 设置下，以一个固定 gold reward model 代替人类，训练 proxy reward model。优化 proxy 时，gold score 可能先升后降；研究同时覆盖 RL 和 best-of-n。因此「无训练 harness」也有过优化 evaluator 的风险。
+In a synthetic setting, the paper substitutes a fixed gold reward model for humans and trains a proxy reward model. As the proxy is optimized, the gold score may rise and then fall; the study covers both RL and best-of-n. A "training-free harness" therefore also carries the risk of over-optimizing the evaluator.
 
-**本项目采用：**训练/选样 judge 与最终盲评隔离；留出从未用于 prompt 迭代、选 checkpoint、选 n 的测试集。观察人工质量随优化强度是否下降。
+**Adopted by this project:** keep the training/sampling judge separate from the final blind evaluation; hold out a test set never used for prompt iteration, checkpoint selection, or choosing n. Observe whether human-rated quality falls as optimization pressure rises.
 
-**限制：**gold 仍是模型，论文没有完整捕捉人类标签与真实需求之间的偏差；不能把其 scaling law 系数直接用于本项目预算预测。
+**Limitations:** gold is still a model, and the paper does not fully capture the gap between human labels and real needs; its scaling-law coefficients cannot be applied directly to this project's budget forecasts.
 
-**阅读范围：**研究设置、RL/best-of-n 定义及 4.5 limitations；未复现实验。
+**Reading scope:** the study setup, the RL/best-of-n definitions, and the 4.5 limitations; the experiments were not reproduced.
 
-## 建议的 ground truth 结构
+## Suggested ground truth structure
 
-以下是基于文献的项目设计建议，尚未做真实采集或验证。
+The following are project design recommendations based on the literature; no real collection or verification has been done yet.
 
-1. **来源记录。** 保存 URL、抓取/存档日期、原始发布日期、作者/品牌、许可证、允许使用范围、语言、领域、篇幅和 source pack。pre-ChatGPT 页面应使用当时快照或可核验版本，不能仅凭页面上一个旧日期；旧文字也可能已进入模型预训练语料。
-2. **内容约束。** 每个输入对应一个人工核实的 claim ledger：不可丢的事实、数字、条件、术语、证据、CTA、语气与长度约束。技术文档保留可执行性；营销材料保留卖点依据与承诺边界。
-3. **质量标签。** 由目标读者/编辑独立评价，不让他们看到 human/AI 标签、模型名、生成时间或 detector 分数。保存分维度结果、胜负/平局、证据片段和分歧，不能把无共识样本自动删除。
-4. **改写对。** 同一 source pack 下，包含原稿、人工最小修改、较大重写、不同模型/不同 prompt 的输出。高质量原稿需要「无需改写/轻微修改」标签，防止模型每次都强行改动。
+1. **Source records.** Save the URL, the fetch/archive date, the original publication date, the author/brand, the licence, the permitted scope of use, the language, the domain, the length, and the source pack. Pre-ChatGPT pages should use a snapshot from that time or a verifiable version, not merely an old date printed on the page; old text may also already have entered a model's pre-training corpus.
+2. **Content constraints.** Each input has one human-verified claim ledger: facts that must not be dropped, numbers, conditions, terminology, evidence, CTA, tone, and length constraints. Technical documentation keeps its executability; marketing material keeps the grounds for its selling points and the boundaries of its promises.
+3. **Quality labels.** Evaluated independently by target readers/editors, who are not shown the human/AI label, the model name, the generation time, or detector scores. Keep the per-dimension results, the win/loss/tie, evidence fragments, and disagreements; samples without consensus must not be deleted automatically.
+4. **Rewrite pairs.** Under the same source pack, include the source draft, a minimal human edit, a larger rewrite, and outputs from different models and different prompts. A high-quality source draft needs a "no rewrite needed / minor edit" label, to stop the model from forcing a change every time.
 
-必须避免的最主要混淆是：人类原文获得完整事实背景，AI 却只拿到标题或一句 generic prompt，然后 evaluator 奖励人类的具体信息。主实验应给所有方法同样的 source pack、受众、目的、长度预算。仅凭标题重建人类原文的任务可以保留，但只能作为另一种任务。
+The single most important confound to avoid is this: the human source text gets the complete factual background while the AI gets only a title or a one-line generic prompt, and the evaluator then rewards the human's specificity. The main experiment should give every method the same source pack, audience, purpose, and length budget. A task of reconstructing the human source text from the title alone can be kept, but only as a different task.
 
-四个场景各占相同数量的核心测试单元；中文应有独立原生来源和评审，不只翻译英文。需要把简体/繁体、地区市场、英文非母语表达作为元数据或后续切片，不能在样本不足时声称全面覆盖。
+The four scenarios each account for the same number of core test units; Chinese needs its own native sources and reviewers, not just translated English. Simplified/traditional characters, regional markets, and non-native English expression should be carried as metadata or as later slices; comprehensive coverage must not be claimed while the sample is too small.
 
-## 初版 rubric：先判约束，再看读者体验
+## Initial rubric: judge the constraints first, then the reader's experience
 
-建议每维使用 1–5 级并提供该场景的锚点；不要预先把所有维度压成一个未经验证的「AI 味 0–100 分」。下列是初版标签定义，权重与门槛待小规模人评校准。
+The recommendation is 1–5 levels per dimension with anchors supplied for that scenario; do not collapse every dimension in advance into an unvalidated "AI-ese score of 0–100." Below are the initial label definitions; the weights and thresholds await calibration by small-scale human evaluation.
 
-| 维度 | 差的表现 | 好的表现 | 记录方式 |
+| Dimension | Poor performance | Good performance | How it is recorded |
 |---|---|---|---|
-| 事实与意图保留 | 捏造信息、删条件、改变否定、把可能说成保证 | 保留必要信息、因果、边界与不确定性 | 重大失败/轻微问题/通过；证据定位 |
-| 信息贡献 | 同义重复、空泛开场、结尾复述、没有作用的评价词 | 每段提供事实、解释、判断依据或必要过渡 | 1–5；冗余 span；遗漏 claim |
-| 具体与可验证 | 假具体、凭空编数字、给所有品牌都适用的话 | 具体到场景、对象、机制、证据与下一步 | 1–5；标明所依赖材料 |
-| 结构与句子自然度 | 对称模板、机械三点式、滥用反转句与小标题 | 结构服从内容，句子长短与重点自然 | 1–5；不得靠错字获得高分 |
-| 场景适配 | 技术文档抒情；营销文案堆实现细节；不符读者背景 | 技术内容可操作，营销内容有明确受众与承诺 | 1–5；使用场景 rubric |
-| 品牌/作者声音 | 所有来源改成同一种语气，伪造个人经历 | 保留必要个性和术语，符合给定参考 | 1–5；无参考时可 abstain |
-| 主观 AI 感 | 读者觉得明显泛化、模板化 | 读者觉得自然、有内容、有明确目的 | 独立 1–5；不解释成来源概率 |
-| 整体可用性 | 仍需大量改写，或不敢使用 | 可直接采用或只需小改 | A/B/平局/两者均不可用 + 采用理由 |
+| Fact and intent preservation | Fabricating information, deleting conditions, flipping negations, stating a possibility as a guarantee | Preserving necessary information, causality, boundaries, and uncertainty | Major failure / minor issue / pass; evidence location |
+| Information contribution | Synonymous repetition, empty openings, closing restatement, evaluative words that do nothing | Every paragraph supplies a fact, an explanation, grounds for a judgement, or a necessary transition | 1–5; redundant span; missing claim |
+| Specific and verifiable | False specificity, numbers invented out of thin air, lines that would fit any brand | Specific to the scenario, the object, the mechanism, the evidence, and the next step | 1–5; state the material relied on |
+| Structure and sentence naturalness | Symmetrical templates, mechanical rule-of-three, overuse of reversal sentences and subheadings | Structure follows content; sentence length and emphasis feel natural | 1–5; a high score must not be earned through typos |
+| Scenario fit | Technical documentation waxing lyrical; marketing copy piling up implementation detail; mismatched to the reader's background | Technical content is actionable; marketing content has a clear audience and a clear promise | 1–5; per-scenario rubric |
+| Brand/author voice | Rewriting every source into one tone; fabricating personal experience | Keeping the necessary individuality and terminology, consistent with the given reference | 1–5; may abstain when there is no reference |
+| Subjective AI-ness | Readers find it plainly generic and templated | Readers find it natural, substantive, and clearly purposeful | Independent 1–5; not to be read as a probability of provenance |
+| Overall usability | Still needs extensive rewriting, or you would not dare use it | Can be used as is, or needs only a small edit | A/B/tie/neither usable + reason for the choice |
 
-技术文档的专属检查：前置条件、命令与参数、返回值、异常和边界、版本、权限及错误恢复信息。若原文包含代码，可做语法或相关示例执行检查；不要为纯文字变换编造形式主义测试。
+Checks specific to technical documentation: preconditions, commands and parameters, return values, exceptions and boundaries, versions, permissions, and error-recovery information. If the source contains code, a syntax check or execution of the relevant examples can be run; do not invent formalistic tests for purely textual transformations.
 
-Marketing 的专属检查：受众、问题/利益点、差异化理由、证据、品牌声音、CTA 与禁止承诺。不要把文案人评偏好当成 CTR/CVR；真实转化需要独立实验，并控制受众、渠道、offer 等因素。
+Checks specific to marketing: audience, problem/benefit, reason for differentiation, evidence, brand voice, CTA, and forbidden promises. Do not treat human evaluation preference on copy as CTR/CVR; real conversion requires a separate experiment with audience, channel, offer, and similar factors controlled.
 
-## 最小 evaluator 校准与模型 benchmark
+## Minimum evaluator calibration and model benchmark
 
-**校准阶段。** 建议起步每个场景 30–50 个 brief/source 单元，共 120–200 个；这是预算友好的设计建议，不是统计功效保证。每个单元选择少量质量有差异的输出对，至少三位合适评审做盲评，Jason 提供一部分锚点和偏好即可。技术与营销分别邀请有该领域经验、且熟悉相应语言的评审。记录一致性和分歧原因，再改 rubric。
+**Calibration phase.** The suggested starting point is 30–50 brief/source units per scenario, 120–200 in total; this is a budget-friendly design recommendation, not a guarantee of statistical power. For each unit, pick a small number of output pairs that differ in quality and have at least three suitable reviewers evaluate them blind; it is enough for Jason to supply a portion of the anchors and preferences. For technical and for marketing separately, invite reviewers who have experience in that domain and are familiar with the language in question. Record the agreement and the reasons for disagreement, then revise the rubric.
 
-**Judge 选择。** 比较简单规则特征、单模型 rubric judge、另一个家族 judge；仅在校准数据证明有益时采用 ensemble。至少报告各维度与人类的一致性、pairwise accuracy（在有人类共识的子集）、平局处理、A/B 翻转率、非母语/语言切片、强制约束漏检率。对同一模型重复 prompt 不算独立证据。
+**Judge selection.** Compare simple rule-based features, a single-model rubric judge, and a judge from another family; adopt an ensemble only where the calibration data shows it helps. Report at least per-dimension agreement with humans, pairwise accuracy (on the subset where humans agree), how ties are handled, the A/B flip rate, the non-native and per-language slices, and the miss rate on hard constraints. Repeating a prompt against the same model does not count as independent evidence.
 
-**挑战集。** 纳入本来就好的文本、允许的有效对比句、非常朴素但正确的英文、中文正式技术规范、短 slogan、长文档，以及好听但有重大事实错误的改写。特别检查「只删内容」「改数字」「故意错字」「加入无来源轶事」「把所有句子口语化」是否会骗过 judge。
+**Challenge set.** Include text that was already good, permitted and genuinely effective contrast sentences, very plain but correct English, formal Chinese technical specifications, short slogan copy, long documents, and rewrites that read well but carry a major factual error. Check specifically whether "delete content only," "change the numbers," "introduce deliberate typos," "add an unsourced anecdote," and "make every sentence colloquial" can fool the judge.
 
-**公平比较。** 同一 frozen 测试集上比较 no-op、基础 rewrite prompt、rubric + examples prompt、critique–rewrite harness、best-of-n、SFT、偏好调优。每个方法只在开发集调参；评估时给相同事实材料与任务约束。分别报告相同单次推理预算和实际质量–成本曲线；harness 额外调用数、延迟、训练摊销不能隐去。最终 judge 不要兼任所有方法的选样 reward。
+**Fair comparison.** On the same frozen test set, compare no-op, a basic rewrite prompt, a rubric + examples prompt, a critique–rewrite harness, best-of-n, SFT, and preference tuning. Each method is tuned only on the dev set; at evaluation time every method gets the same factual material and task constraints. Report separately at an equal single-inference budget and as an actual quality–cost curve; the harness's extra calls, its latency, and amortized training cost must not be hidden. The final judge must not double as the sampling reward for all the methods.
 
-**主结果。** 优先报告「改写整体采用偏好」与「重大保真失败率」两个结果，并保留四个场景独立表格及等权平均。对有错误但读起来更顺的样本，记录原始偏好同时按照预设重大失败规则判不合格；不能先过滤失败样本再只宣传幸存者胜率。辅助结果报告冗余减少、必要事实 recall、unsupported claim rate、编辑工时、长度变化、主观 AI 感。
+**Main results.** Report two results first — "overall adoption preference for the rewrite" and "major fidelity failure rate" — and keep the four scenarios in separate tables alongside an equally weighted average. For a sample that reads better but contains an error, record the raw preference and at the same time mark it as failing under the pre-defined major-failure rule; failed samples must not be filtered out first so that only the survivors' win rate is advertised. Supporting results report redundancy reduction, recall of necessary facts, unsupported claim rate, editing hours, length change, and subjective AI-ness.
 
-**统计与切分。** 按 source/brief 为单位划分 train/dev/test，作者、品牌、站点和派生版本尽量整体隔离；再做留出生成器与新日期数据测试。置信区间应按 source 聚类重采样，避免把同一个源文的多个改写当成独立样本。使用至少两种不同随机种子的训练运行用于验证候选结果时，不应把种子输出混成独立文本样本。样本量应在 pilot 后依据实际变异与期望最小收益做功效规划；不能用一小批「看起来不错」宣布优于 prompting。
+**Statistics and splits.** Split train/dev/test by source/brief, quarantining authors, brands, sites, and derived versions as whole units as far as possible; then add a held-out-generator test and a new-date test. Confidence intervals should be resampled with clustering by source, to avoid treating multiple rewrites of one source text as independent samples. Where training runs with at least two different random seeds are used to validate a candidate result, the seeds' outputs must not be pooled as independent text samples. Sample size should be power-planned after the pilot from the observed variance and the minimum benefit worth detecting; a small batch that "looks good" cannot be used to declare superiority over prompting.
 
-**继续训练的判断。** 先证明人类能稳定辨别期望改写、judge 能捕捉这种偏好，再做训练。若强 prompt/harness 已达到目标，post-training 的价值可能主要是成本、延迟、稳定性与部署方式；若只有自动 judge 分数变好而人评没有改善，不应继续加大同一个 reward 的优化。
+**Deciding whether to go on to training.** First show that humans can reliably tell the desired rewrite apart and that the judge can capture that preference; only then train. If a strong prompt/harness already reaches the goal, the value of post-training may lie mainly in cost, latency, stability, and how it is deployed; if only the automatic judge score improves while human evaluation does not, optimization against that same reward should not be pushed further.
 
-## 尚未建立的证据
+## Evidence not yet established
 
-- 这 12 篇论文不能证明中文与英文、technical docs 与 marketing 存在一个统一「AI 味」标量，也不能证明用同一个 reward 可以同时改善四个场景。
-- 尚未采集授权语料、做真实人评、校准 judge、测模型或运行训练；文中数字来自各原论文，不是 Plainvoice 实验结果。
-- 专业创意评价与一般写作评价可能显著不同。主研究另行覆盖 2025 年 _Creativity Benchmark_ 等营销相关工作，不应只依据 MT-Bench / G-Eval 决定营销 judge。
-- 本轮为定向 background research，重点是使第一轮实验不把错误代理指标优化得更好；最终基座、训练方法与成本选择需结合另一份训练调研和实测。
+- These 12 papers cannot prove that a single unified "AI-ese" scalar exists across Chinese and English, or across technical docs and marketing, nor that one and the same reward can improve all four scenarios at once.
+- No licensed corpus has been collected yet, no real human evaluation has been run, no judge has been calibrated, no model has been tested, and no training has been run; the figures in this memo come from the original papers and are not Plainvoice experimental results.
+- Professional creative evaluation may differ substantially from general writing evaluation. The main research separately covers marketing-related work such as the 2025 _Creativity Benchmark_; the marketing judge should not be decided on MT-Bench / G-Eval alone.
+- This round is targeted background research, and its point is to keep the first round of experiments from getting better at optimizing the wrong proxy metric; the final base model, training method, and cost choices need to be made together with the separate training literature review and with real measurements.

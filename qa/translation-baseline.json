@@ -1,0 +1,102 @@
+{
+ "09-12-annotation-protocol.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-article-reconstruction-v2.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-ground-truth-acquisition.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-local-data-and-rewrite-pilot.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-low-cost-ai-enrichment.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-research-and-experiment-plan.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-text-cleaning.md": {
+  "hard": [],
+  "soft": []
+ },
+ "09-12-unified-data-viewer.md": {
+  "hard": [],
+  "soft": [
+   "hedge markers 1 vs zh 2 — a dropped caveat turns a hypothesis into a finding"
+  ]
+ },
+ "README.md": {
+  "hard": [],
+  "soft": []
+ },
+ "data/README.md": {
+  "hard": [],
+  "soft": []
+ },
+ "prompts/README.md": {
+  "hard": [],
+  "soft": []
+ },
+ "prompts/article-content-extraction.md": {
+  "hard": [],
+  "soft": []
+ },
+ "prompts/article-from-content.md": {
+  "hard": [],
+  "soft": []
+ },
+ "qa/09-12-enrichment-qa.md": {
+  "hard": [],
+  "soft": []
+ },
+ "qa/09-12-research-qa.md": {
+  "hard": [],
+  "soft": []
+ },
+ "qa/09-12-text-cleaning-qa.md": {
+  "hard": [],
+  "soft": []
+ },
+ "qa/09-12-viewer-qa.md": {
+  "hard": [],
+  "soft": []
+ },
+ "research/09-12-agentic-technical-datasets.md": {
+  "hard": [],
+  "soft": []
+ },
+ "research/09-12-data-and-task-literature.md": {
+  "hard": [],
+  "soft": [
+   "14: check term — likely collection (分组 — the live URL parameter is `collection`)"
+  ]
+ },
+ "research/09-12-evaluation-literature.md": {
+  "hard": [],
+  "soft": []
+ },
+ "research/09-12-style-literature.md": {
+  "hard": [],
+  "soft": []
+ },
+ "research/09-12-training-literature.md": {
+  "hard": [],
+  "soft": []
+ },
+ "research/clean-text-2026-09-12/length-comparison.md": {
+  "hard": [],
+  "soft": []
+ },
+ "research/length-analysis-2026-09-12/report.md": {
+  "hard": [],
+  "soft": []
+ }
+}

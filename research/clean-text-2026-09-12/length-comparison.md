@@ -1,27 +1,27 @@
-# 清理格式后：原文与 AI 稿的长度变化
+# After format cleaning: length change between source and AI draft
 
-本次读取 848 条已生成候选。之前 Gemini 2.5 主统计排除了失败短稿，N=836；本次另外排除一条误写成英文的中文任务，主分析 N=835。下表每一行的原始版、清理版使用完全相同的记录 ID，避免把换样本造成的变化当成清理效果。
+This run reads the 848 already-generated candidates. The earlier Gemini 2.5 main statistics excluded the failed short draft, giving N=836; this run additionally excludes one Chinese task mistakenly written in English, giving a main analysis of N=835. The raw and cleaned versions in each row below use exactly the same record IDs, so that changes caused by swapping samples are not mistaken for an effect of cleaning.
 
-计数沿用之前口径：中文只计汉字；英文计字母词，词内撇号不拆、连字符拆开，数字不计。先逐条计算 AI / 原文 − 1，再取中位数。代码、公式和有内容意义的标题可能保留，因此也不是模型 token 数。
+Counting follows the previous definition: Chinese counts Han characters only; English counts letter-words, with word-internal apostrophes not split and hyphenated words split, and digits not counted. AI / source − 1 is computed per item first, then the median is taken. Code, formulas, and headings that carry content meaning may be retained, so these are not model token counts either.
 
-| 同一批样本 | N | 原文平均：清理前 → 后 | AI 平均：清理前 → 后 | AI 相对原文变化中位数：清理前 → 后 |
+| Same sample batch | N | Source mean: before → after cleaning | AI mean: before → after cleaning | Median AI change vs source: before → after |
 |---|---:|---:|---:|---:|
-| 中文短句 · 2.5 | 345 | 45.7 → 45.7 | 49.9 → 49.9 | +7.0% → +7.0% |
-| 英文句段／技术片段 · 2.5 | 462 | 129.3 → 129.3 | 127.1 → 127.1 | +0.0% → +0.0% |
-| 英文全文 · 2.5 | 26 | 2317.3 → 2008.9 | 1251.3 → 1172.2 | -43.6% → -43.7% |
-| 中文全文 · 2.5 | 2 | 1196.5 → 1189.5 | 1302.5 → 1294.5 | +17.5% → +17.9% |
-| 英文全文 · 3.1 对照 | 4 | 4559.8 → 4551.0 | 493.2 → 490.8 | -76.4% → -76.3% |
-| 中文全文 · 3.1 对照 | 2 | 1196.5 → 1189.5 | 750.0 → 750.0 | -33.4% → -32.8% |
+| Chinese short sentences · 2.5 | 345 | 45.7 → 45.7 | 49.9 → 49.9 | +7.0% → +7.0% |
+| English sentence segments / technical snippets · 2.5 | 462 | 129.3 → 129.3 | 127.1 → 127.1 | +0.0% → +0.0% |
+| English full articles · 2.5 | 26 | 2317.3 → 2008.9 | 1251.3 → 1172.2 | -43.6% → -43.7% |
+| Chinese full articles · 2.5 | 2 | 1196.5 → 1189.5 | 1302.5 → 1294.5 | +17.5% → +17.9% |
+| English full articles · 3.1 comparison | 4 | 4559.8 → 4551.0 | 493.2 → 490.8 | -76.4% → -76.3% |
+| Chinese full articles · 3.1 comparison | 2 | 1196.5 → 1189.5 | 750.0 → 750.0 | -33.4% → -32.8% |
 
-格式与网页杂项对计数的影响：
+How formatting and webpage miscellany affect the counts:
 
-- 中文同一批 347 条：原文合计 -14 汉字（-0.08%），AI 稿合计 -16 汉字（-0.08%）；分别有 2、1 条计数发生变化。
-- 英文同一批 488 条：原文合计 -8,021 词（-6.69%），AI 稿合计 -2,055 词（-2.25%）；分别有 27、15 条计数发生变化。
+- Same batch of 347 Chinese items: sources total −14 Han characters (−0.08%), AI drafts total −16 Han characters (−0.08%); 2 and 1 items respectively changed count.
+- Same batch of 488 English items: sources total −8,021 words (−6.69%), AI drafts total −2,055 words (−2.25%); 27 and 15 items respectively changed count.
 
-英文全文清理后仍然更常缩短：25/26 条比原文短、1/26 条变长。相对长度变化中位数由 -43.6% 变为 -43.7%。这说明格式杂项确实影响计数，但篇幅变化本身不能说明保真或写作质量。
+After cleaning, English full articles still shorten more often: 25/26 are shorter than the source and 1/26 is longer. The median relative length change moves from −43.6% to −43.7%. This shows that formatting miscellany does affect the counts, but a change in length by itself says nothing about fidelity or writing quality.
 
-质量边界：这里只比较格式清理的影响；除失败短稿与错误语言两条外，其余已隔离的语义风险样本仍留在同 ID 的描述统计中。它们不能因此进入训练候选或变成 ground truth。中文短句来源集中于 MCTS，中英文差异不能归因于语言本身。中文全文样本很少。
+Quality boundary: only the effect of format cleaning is compared here; apart from the two excluded items — the failed short draft and the wrong-language one — the remaining quarantined semantic-risk samples stay in the same-ID descriptive statistics. That does not let them enter the training candidates or become ground truth. The Chinese short sentences are concentrated in MCTS as a source, so the Chinese/English difference cannot be attributed to language itself. There are very few Chinese full-article samples.
 
-六条 Gemini 3.1 对照与五条早期诊断稿单独保留在 JSON 分组中，不并入 Gemini 2.5 主统计。所有数字由脚本计算；报告不含原文或生成正文。之前的统计文件保持不变。
+Six Gemini 3.1 comparisons and five early diagnostic drafts are kept separately in their own JSON collections and are not merged into the Gemini 2.5 main statistics. All figures are computed by script; the report contains no source or generated body text. The previous statistics files are unchanged.
 
-数据：`length-comparison.json` 包含逐条前后计数、分组结果、原始／清理后内容哈希和两条排除原因。脚本：`scripts/analyze_cleaned_lengths.py`。
+Data: `length-comparison.json` holds per-item before/after counts, collection-level results, raw and cleaned content hashes, and the reasons for the two exclusions. Script: `scripts/analyze_cleaned_lengths.py`.

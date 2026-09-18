@@ -1,23 +1,23 @@
-# AI 改写长度：本地候选的描述统计
+# AI rewrite length: descriptive statistics for local candidates
 
-统计 848 条已保存中英文候选。主分析为 Gemini 2.5 批次：排除一条确定失败输出后 836 条；6 条 Gemini 3.1 对照与 5 条早期 pilot 单列。未生成的目标不纳入。
+Statistics over the 848 saved Chinese and English candidates. The main analysis covers the Gemini 2.5 batch: 836 items after excluding one confirmed failed output; 6 Gemini 3.1 comparisons and 5 early pilot items are listed separately. Targets that were never generated are excluded.
 
-中文计汉字，不计标点、空格、数字和拉丁字母。英文计字母构成的词，撇号缩写算一个词、连字符词拆开；数字不算词。以 A/B 正文原样计数，未清理其中标题、引用、代码或 URL 字母串。中文与英文不合并求总长度。
+Chinese is counted in Han characters, excluding punctuation, spaces, digits, and Latin letters. English is counted in words made of letters; apostrophe contractions count as one word and hyphenated words are split; digits do not count as words. Counts are taken from the A/B body text as-is, without stripping headings, quotations, code, or URL letter strings. Chinese and English are not combined into a single total length.
 
-百分比变化 =（AI 长度 / 原文长度 − 1）× 100%；“变化中位数”先逐条计算百分比，再取中位数，和总字数变化不是同一个量。
+Percentage change = (AI length / source length − 1) × 100%. The "median change" is computed per item first and then taken as a median, which is not the same quantity as the change in total character count.
 
-| 批次 / 类型 | N | 原文 → AI 平均长度 | 变长 | 不变 | 变短 | 变化中位数 |
+| Batch / type | N | Source → AI mean length | Longer | Unchanged | Shorter | Median change |
 |---|---:|---:|---:|---:|---:|---:|
-| 中文短句 · 2.5 | 346 | 45.7 → 49.7 | 240（69.4%） | 23 | 83 | +6.9% |
-| 英文句段／技术片段 · 2.5 | 462 | 129.3 → 127.1 | 228（49.4%） | 43 | 191 | +0.0% |
-| 英文全文 · 2.5 | 26 | 2317.3 → 1251.3 | 1（3.8%） | 0 | 25 | -43.6% |
-| 中文全文 · 2.5（仅 2 篇） | 2 | 1196.5 → 1302.5 | 1（50.0%） | 0 | 1 | +17.5% |
-| 英文全文 · 3.1（仅 4 篇） | 4 | 4559.8 → 493.2 | 0（0.0%） | 0 | 4 | -76.4% |
-| 中文全文 · 3.1（仅 2 篇） | 2 | 1196.5 → 750.0 | 0（0.0%） | 0 | 2 | -33.4% |
+| Chinese short sentences · 2.5 | 346 | 45.7 → 49.7 | 240 (69.4%) | 23 | 83 | +6.9% |
+| English sentence segments / technical snippets · 2.5 | 462 | 129.3 → 127.1 | 228 (49.4%) | 43 | 191 | +0.0% |
+| English full articles · 2.5 | 26 | 2317.3 → 1251.3 | 1 (3.8%) | 0 | 25 | -43.6% |
+| Chinese full articles · 2.5 (only 2) | 2 | 1196.5 → 1302.5 | 1 (50.0%) | 0 | 1 | +17.5% |
+| English full articles · 3.1 (only 4) | 4 | 4559.8 → 493.2 | 0 (0.0%) | 0 | 4 | -76.4% |
+| Chinese full articles · 3.1 (only 2) | 2 | 1196.5 → 750.0 | 0 (0.0%) | 0 | 2 | -33.4% |
 
-英文来源分层（主分析；不把技术片段与长篇文章混在一起）：
+English sources broken out (main analysis; technical snippets are not mixed in with long-form articles):
 
-| 来源 | N | 变长比例 | 变化中位数 |
+| Source | N | Share longer | Median change |
 |---|---:|---:|---:|
 | arxivedits-alignment | 60 | 38.3% | +0.0% |
 | asset-references | 59 | 39.0% | +0.0% |
@@ -28,10 +28,10 @@
 | iterater-human-doc | 268 | 53.4% | +0.7% |
 | rewrite-article-v2 | 2 | 0.0% | -20.7% |
 
-结论：本批次中文短句更常略微变长；英文句段没有普遍膨胀；英文全文通常显著缩短。Code2Doc 技术片段仅 15 条，其中 10 条变长，中位数 +17.4%，说明具体来源与任务类型很重要。
+Conclusion: in this batch, Chinese short sentences more often grew slightly longer; English sentence segments showed no general inflation; English full articles were usually shortened substantially. There are only 15 code2doc technical snippets, of which 10 grew longer with a median of +17.4%, which shows that the specific source and task type matter.
 
-限制：中文短句全部来自 MCTS，不能将中英文差异归因于语言本身。本实验只有特定模型与 SVO 抽取→乱序→重写流程，不能推广为所有 AI。人类作者身份沿用来源标注，并未逐条认证。缩短可能来自语义遗漏、正文/元数据混杂或过度概括，不能视为质量提高。
+Limitations: the Chinese short sentences all come from MCTS, so the Chinese/English difference cannot be attributed to language itself. This experiment covers only a specific model and the SVO extraction → shuffling → rewriting pipeline, and does not generalize to all AI. Human authorship follows the source annotation and was not certified item by item. Shortening may come from semantic omission, body-text/metadata contamination, or over-generalization, and must not be read as a quality improvement.
 
-数据质量发现：一条 OWID 长文的输出只有 “The article”（2 词），ID 为 `plainvoice-enrichment-svo-v3:68d31c2616d399a6570c761d`。它虽曾被保存为候选，实质上没有完成改写，已从主要统计排除，但原始数据未被改动。包含该条时，英文全文 N=27，26 条变短，中位数 −44.3%；排除后 N=26，25 条变短，中位数 −43.6%，主要方向不变。
+Data quality finding: the output for one long OWID article is only "The article" (2 words), with ID `plainvoice-enrichment-svo-v3:68d31c2616d399a6570c761d`. Although it was saved as a candidate, it did not in substance complete a rewrite; it has been excluded from the main statistics, but the raw data was left unchanged. Including it, English full articles are N=27 with 26 shorter and a median of −44.3%; excluding it, N=26 with 25 shorter and a median of −43.6%, leaving the main direction unchanged.
 
-逐条计数见 `pair-lengths.csv`；分组汇总与输入文件哈希见 `summary.json`。没有调用模型，没有修改原文、生成稿或个人评审。
+Per-item counts are in `pair-lengths.csv`; collection summaries and input file hashes are in `summary.json`. No model was called, and no changes were made to source texts, generated drafts, or individual reviews.
